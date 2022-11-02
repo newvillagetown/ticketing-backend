@@ -3,21 +3,37 @@ name: buildNdeploy
 on:
   push:
     branches:
-      - stg
+      - dev
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: build n deploy
+    runs-on: self-hosted
+    env:
+      REGION: ap-northeast-2
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
-
-    - name: Build
-      run: go build -v ./...
-
-    - name: Test
-      run: go test -v ./...
+      - name: check path
+        run: pwd
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+  auto-merge:
+    name: auto merge to main branch
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: prepare
+        id: vars
+        run: |
+          echo "::set-output name=BRANCH::${GITHUB_REF#refs/heads/}"
+          echo "::set-output name=COMMIT::$(git rev-parse --short ${GITHUB_SHA})"
+      - name: merge
+        run: |
+          git remote set-url origin https://RyanBreathings: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@github.com/newvillagetown/ticketing-backend.git
+          git fetch --unshallow
+          git checkout main
+          git pull
+          git merge --no-ff ${{ steps.vars.outputs.BRANCH }} -m ${{ steps.vars.outputs.COMMIT }}
+          git push
