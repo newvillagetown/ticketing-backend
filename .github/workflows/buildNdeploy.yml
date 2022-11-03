@@ -23,12 +23,13 @@ jobs:
     needs: build
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: prepare
         id: vars
         run: |
-          echo "::set-output name=BRANCH::${GITHUB_REF#refs/heads/}"
-          echo "::set-output name=COMMIT::$(git rev-parse --short ${GITHUB_SHA})"
+          echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          echo "COMMIT=$(git rev-parse --short ${GITHUB_SHA})" >> $GITHUB_OUTPUT
+          echo ${{ secrets.BACKEND_GH_TOKEN }}
       - name: merge
         run: |
           git remote set-url origin https://RyanBreathings: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@github.com/newvillagetown/ticketing-backend.git
