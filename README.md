@@ -64,4 +64,7 @@ $ air -c .air.toml
 With go 1.16 or higher:
 <pre>
 $ go install github.com/cosmtrek/air@latest
+
+# 1.16 or newer
+$ go install github.com/swaggo/swag/cmd/swag@latest
 </pre>
