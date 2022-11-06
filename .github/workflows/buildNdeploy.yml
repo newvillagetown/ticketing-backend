@@ -52,9 +52,24 @@ jobs:
           docker rmi ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_${{ steps.vars.outputs.COMMIT }}
           docker rmi ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_latest
           docker image prune -f
+      - name: create new task definition # ecs 작업 정의 생성
+        run: |
+          echo "deploy digest : ${{ steps.image.outputs.DIGEST }}"
+          TASK_JSON=$(cat ./src/deployment/taskDefinition.json)
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__REPO_DOMAIN__/${REPO_DOMAIN}/g")
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__REPO_URL__/${REPO_URL}/g")
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__ENV__/${{ steps.vars.outputs.BRANCH }}/g")
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__MEM__/${{ steps.vars.outputs.MEM }}/g")
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__REGION__/${REGION}/g")
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__PRD_PREFIX__//g")
+          TASK_JSON=$(echo ${TASK_JSON} | sed "s/__IMAGE_DIGEST__/${{ steps.image.outputs.DIGEST }}/g")
+          echo ${TASK_JSON} | tee ./src/deployment/tmp_taskDefinition.json
+      - name: register new task definition  # 새로 만든 작업 정의 등록
+        run: |
+          aws ecs register-task-definition --region "${REGION}" --family ${{ steps.vars.outputs.TASK_DEFINITION_NAME }} --cli-input-json file://./src/deployment/tmp_taskDefinition.json
 
   auto-merge:
-    name: auto merge to main branch
+    name: auto merge to main branch   # main 자동 머지
     runs-on: self-hosted
     needs: build
     steps:
