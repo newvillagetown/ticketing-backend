@@ -39,9 +39,8 @@ The figure below shows the entire infrastructure.
 **Backend Infrastructure.**
 
 <p align="center">
-  <img width="1370" alt="infra" src="https://user-images.githubusercontent.com/85932211/199739365-618e2f31-de19-4a28-9c1c-aa9813de113c.png">
+    <img width="1296" alt="infra" src="https://user-images.githubusercontent.com/85932211/200167218-fb9d89fc-aefa-43fa-8043-1728bf6def63.png">
 </p>
-
 ## Features
 
 These are the back-end work done on the project:
