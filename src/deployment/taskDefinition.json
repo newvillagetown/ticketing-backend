@@ -44,7 +44,7 @@
       "privileged": false
     }
   ],
-  "taskRoleArn": "arn:aws:iam::190009833917:role/ecsTaskExec___ENV___ticketing___REGION__",
+  "taskRoleArn": "arn:aws:iam::190009833917:role/ecsTask___ENV___ticketing___REGION__",
   "executionRoleArn": "arn:aws:iam::190009833917:role/ecsTaskExec___ENV___ticketing___REGION__",
   "networkMode": "awsvpc",
   "volumes": [],
