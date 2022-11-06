@@ -10,7 +10,7 @@
         { "name" : "PROJECT", "value" : "ticketing"},
         { "name" : "PORT", "value" : "80"},
         { "name" : "ENV", "value" : "__ENV__"},
-        { "name" : "REGION", "value" : "__REGION__"},
+        { "name" : "REGION", "value" : "__REGION__"}
       ],
       "portMappings": [
         {
