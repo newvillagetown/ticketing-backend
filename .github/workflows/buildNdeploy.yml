@@ -9,14 +9,50 @@ jobs:
   build:
     name: build n deploy
     runs-on: self-hosted
-    env:
-      REGION: ap-northeast-2
+    env:  #필요한 환경변수 셋팅
+      REPO_DOMAIN: 190009833917.dkr.ecr.us-east-1.amazonaws.com
+      REPO_URL: ryan
+      CLUSTER_NAME: RyanCluster
+      REGION: us-east-1
     steps:
       - name: check path
         run: pwd
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+      - name: prepare envs
+        id: vars
+        # branch = dev, prd
+        # task_definition_name = {branch}_ticketing
+        # service_name = {branch}_ticketing
+        # mem = 384
+        run: | 
+          echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          echo "COMMIT=$(git rev-parse --short ${GITHUB_SHA})" >> $GITHUB_OUTPUT
+          echo "TASK_DEFINITION_NAME=${GITHUB_REF#refs/heads/}_ticketing" >> $GITHUB_OUTPUT
+          echo "SERVICE_NAME=${GITHUB_REF#refs/heads/}_ticketing" >> $GITHUB_OUTPUT
+          echo "MEM=384" >> $GITHUB_OUTPUT
+      - name: login to ECR  # ecr 로그인
+        run: aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${REPO_DOMAIN}
+      - name: build & tag image   # docker build & image
+        run: |
+          V=$(echo $(TZ=":Asia/Seoul" date '+%y%m%d_%H%M%S'))-${{ steps.vars.outputs.COMMIT }}
+          echo $V
+          docker build -t ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_${{ steps.vars.outputs.COMMIT }} --build-arg VERSION=${V} -f ./src/deployment/Dockerfile ./src/
+          docker tag ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_${{ steps.vars.outputs.COMMIT }} ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_latest
+      - name: push image # ecr 이미지 푸시
+        id: image
+        run: |
+          DIGEST=$(docker push ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_${{ steps.vars.outputs.COMMIT }} | tail -1 | awk '{ print $3 }')
+          docker push ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_latest
+          echo "digest of ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_${{ steps.vars.outputs.COMMIT }} is ${DIGEST}"
+          echo "DIGEST=${DIGEST}" >> $GITHUB_OUTPUT
+      - name: clean up # 실행 도커 삭제
+        run: |
+          docker rmi ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_${{ steps.vars.outputs.COMMIT }}
+          docker rmi ${REPO_DOMAIN}/${REPO_URL}:${{ steps.vars.outputs.BRANCH }}_latest
+          docker image prune -f
+
   auto-merge:
     name: auto merge to main branch
     runs-on: self-hosted
