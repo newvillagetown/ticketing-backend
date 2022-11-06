@@ -18,9 +18,8 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
-
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+	e.GET("/health", func(c echo.Context) error {
+		return c.NoContent(http.StatusOK)
 	})
 	swaggerDocs.SwaggerInfo.Host = "localhost:3000"
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
