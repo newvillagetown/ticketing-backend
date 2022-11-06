@@ -44,8 +44,8 @@
       "privileged": false
     }
   ],
-  "taskRoleArn": "arn:aws:iam::190009833917:role/__PRD_PREFIX__idea_ecsTask___ENV___medical___REGION__",
-  "executionRoleArn": "arn:aws:iam::190009833917:role/__PRD_PREFIX__idea_ecsTaskExec___ENV___medical___REGION__",
+  "taskRoleArn": "arn:aws:iam::190009833917:role/ecsTaskExec___ENV___ticketing___REGION__",
+  "executionRoleArn": "arn:aws:iam::190009833917:role/ecsTaskExec___ENV___ticketing___REGION__",
   "networkMode": "awsvpc",
   "volumes": [],
   "placementConstraints": [],
