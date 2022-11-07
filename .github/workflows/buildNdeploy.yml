@@ -67,6 +67,9 @@ jobs:
       - name: register new task definition  # 새로 만든 작업 정의 등록
         run: |
           aws ecs register-task-definition --region "${REGION}" --family ${{ steps.vars.outputs.TASK_DEFINITION_NAME }} --cli-input-json file://./src/deployment/tmp_taskDefinition.json
+      - name: update service # ecs 업데이트 실행
+        run: |
+          aws ecs update-service --region ${REGION} --cluster ${CLUSTER_NAME} --service ${{ steps.vars.outputs.SERVICE_NAME }} --task-definition ${{ steps.vars.outputs.TASK_DEFINITION_NAME }}
 
   auto-merge:
     name: auto merge to main branch   # main 자동 머지
