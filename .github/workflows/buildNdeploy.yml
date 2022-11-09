@@ -12,7 +12,7 @@ jobs:
     env:  #필요한 환경변수 셋팅
       REPO_DOMAIN: 190009833917.dkr.ecr.us-east-1.amazonaws.com
       REPO_URL: ryan
-      CLUSTER_NAME: Ryan
+      CLUSTER_NAME: Ticketing
       REGION: us-east-1
     steps:
       - name: check path
