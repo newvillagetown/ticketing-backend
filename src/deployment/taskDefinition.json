@@ -22,7 +22,7 @@
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
-          "awslogs-group" : "ecs-__PRD_PREFIX__-__ENV___ticketing",
+          "awslogs-group" : "ecs-__ENV___ticketing",
           "awslogs-region" : "__REGION__"
         }
       },
