@@ -31,7 +31,7 @@ func GoogleOauthInit() error {
 	*/
 	clientID := "850218569266-agoojlqbo5ffuvmb0t6m0j431pl3p5v8.apps.googleusercontent.com"
 	clientSecret := "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"
-	callbackURL := "http://localhost:3000/v0.1/auth/google/signin/callback"
+	callbackURL := "https://dev-ticketing.breathings.net/v0.1/auth/google/signin/callback"
 	OAuthConf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
