@@ -16,17 +16,12 @@ type envStruct struct {
 // Env : Environment
 var Env envStruct
 
-var envVarNames = [5]string{"PORT", "PROJECT", "ENV", "REGION", "IS_LOCAL"}
-
 func InitEnv() error {
-	var ok bool
-	envs := map[string]string{}
-	for _, envVarName := range envVarNames {
-		if envs[envVarName], ok = os.LookupEnv(envVarName); !ok {
-			return fmt.Errorf("init env error")
-		}
+	envVarNames := InitVarNames()
+	envs, err := getOSLookupEnv(envVarNames)
+	if err != nil {
+		return err
 	}
-	fmt.Println(envs)
 	Env = envStruct{
 		Port:    envs["PORT"],
 		Project: envs["PROJECT"],
@@ -42,4 +37,26 @@ func envIsLocal(isLocal string) bool {
 	} else {
 		return true
 	}
+}
+
+func getOSLookupEnv(envVarNames []string) (map[string]string, error) {
+	result := map[string]string{}
+	var ok bool
+	for _, envVarName := range envVarNames {
+		if result[envVarName], ok = os.LookupEnv(envVarName); !ok {
+			return nil, fmt.Errorf("os lookup get failed")
+		}
+	}
+	return result, nil
+}
+
+func InitVarNames() []string {
+
+	result := make([]string, 0)
+	result = append(result, "PORT")
+	result = append(result, "PROJECT")
+	result = append(result, "ENV")
+	result = append(result, "REGION")
+	result = append(result, "IS_LOCAL")
+	return result
 }
