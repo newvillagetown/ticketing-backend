@@ -18,6 +18,10 @@ func main() {
 		fmt.Println("서버 에러 발생")
 		return
 	}
+	if err := common.InitAws(); err != nil {
+		fmt.Println("aws 초기화 에러")
+		return
+	}
 	if err := common.GoogleOauthInit(); err != nil {
 		fmt.Println("구글 초기화 에러")
 		return
