@@ -51,6 +51,14 @@ func envIsLocal(isLocal string) bool {
 	}
 }
 
+func PointTrue() *bool {
+	result := true
+	return &result
+}
+func PointFalse() *bool {
+	result := false
+	return &result
+}
 func getOSLookupEnv(envVarNames []string) (map[string]string, error) {
 	result := map[string]string{}
 	var ok bool
