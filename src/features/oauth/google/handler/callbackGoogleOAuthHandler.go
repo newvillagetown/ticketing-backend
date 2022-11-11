@@ -35,7 +35,7 @@ func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error
 	//인증서버에 액세스 토큰 요청
 	token, err := common.OAuthConf.Exchange(oauth2.NoContext, c.FormValue("code"))
 	if err != nil {
-		return nil
+		return err
 	}
 	fmt.Println(token)
 	//1. 토큰 검증하고
