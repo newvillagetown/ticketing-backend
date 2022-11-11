@@ -38,7 +38,7 @@ func main() {
 	})
 	//핸드러 초기화
 	features.InitHandler(e)
-
+	fmt.Println(common.OAuthConf.AuthCodeURL("state"))
 	// swagger 초기화
 	if common.Env.IsLocal {
 		swaggerDocs.SwaggerInfo.Host = "localhost:3000"
