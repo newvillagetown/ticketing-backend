@@ -16,6 +16,18 @@ type envStruct struct {
 // Env : Environment
 var Env envStruct
 
+// 사용하는 환경 변수 네임 설정 함수
+func InitVarNames() []string {
+	result := make([]string, 0)
+	result = append(result, "PORT")
+	result = append(result, "PROJECT")
+	result = append(result, "ENV")
+	result = append(result, "REGION")
+	result = append(result, "IS_LOCAL")
+	return result
+}
+
+// 사용할 환경 변수 값들 초기화해주는 함수
 func InitEnv() error {
 	envVarNames := InitVarNames()
 	envs, err := getOSLookupEnv(envVarNames)
@@ -48,15 +60,4 @@ func getOSLookupEnv(envVarNames []string) (map[string]string, error) {
 		}
 	}
 	return result, nil
-}
-
-func InitVarNames() []string {
-
-	result := make([]string, 0)
-	result = append(result, "PORT")
-	result = append(result, "PROJECT")
-	result = append(result, "ENV")
-	result = append(result, "REGION")
-	result = append(result, "IS_LOCAL")
-	return result
 }
