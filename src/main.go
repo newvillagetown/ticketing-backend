@@ -15,15 +15,15 @@ import (
 
 func main() {
 	if err := common.InitEnv(); err != nil {
-		fmt.Println("서버 에러 발생")
+		fmt.Sprintf("서버 에러 발생 : %s", err.Error())
 		return
 	}
 	if err := common.InitAws(); err != nil {
-		fmt.Println("aws 초기화 에러")
+		fmt.Sprintf("aws 초기화 에러 : %s", err.Error())
 		return
 	}
 	if err := common.GoogleOauthInit(); err != nil {
-		fmt.Println("구글 초기화 에러")
+		fmt.Sprintf("구글 초기화 에러 : %s", err.Error())
 		return
 	}
 	e := echo.New()

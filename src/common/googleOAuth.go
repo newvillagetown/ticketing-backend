@@ -18,16 +18,22 @@ const (
 func GoogleOauthInit() error {
 	clientID, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientid", Env.Env, Env.Project))
 	if err != nil {
+		fmt.Println("clientID 에러 발생??")
 		return err
 	}
+	fmt.Println(clientID)
 	clientSecret, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientsecret", Env.Env, Env.Project))
 	if err != nil {
+		fmt.Println("secret 에러 발생??")
 		return err
 	}
+	fmt.Println(clientSecret)
 	callbackURL, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-callbackurl", Env.Env, Env.Project))
 	if err != nil {
+		fmt.Println("콜백 에러 !!")
 		return err
 	}
+	fmt.Println(callbackURL)
 	if Env.IsLocal == true {
 		callbackURL = "http://localhost:3000/v0.1/auth/google/signin/callback"
 	}
