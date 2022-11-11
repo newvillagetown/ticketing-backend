@@ -12,19 +12,11 @@ func InitAws() error {
 	var awsConfig aws.Config
 	var err error
 
-	if Env.IsLocal {
-		awsConfig, err = AwsConfig.LoadDefaultConfig(context.TODO(),
-			AwsConfig.WithRegion(Env.Region),
-			AwsConfig.WithSharedConfigProfile("breathings"))
-		if err != nil {
-			return fmt.Errorf("init aws - region : %s / profile : breathings", Env.Region)
-		}
-	} else {
-		awsConfig, err = AwsConfig.LoadDefaultConfig(context.TODO(),
-			AwsConfig.WithRegion(Env.Region))
-		if err != nil {
-			return fmt.Errorf("init aws - region : %s", Env.Region)
-		}
+	awsConfig, err = AwsConfig.LoadDefaultConfig(context.TODO(),
+		AwsConfig.WithRegion(Env.Region),
+		AwsConfig.WithSharedConfigProfile("breathings"))
+	if err != nil {
+		return fmt.Errorf("init aws - region : %s / profile : breathings", Env.Region)
 	}
 
 	AwsClientSsm = ssm.NewFromConfig(awsConfig)
