@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
@@ -15,23 +16,20 @@ const (
 )
 
 func GoogleOauthInit() error {
-	/*
-		clientID, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientid", Env.Env, Env.Project))
-		if err != nil {
-			return err
-		}
-		clientSecret, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientsecret", Env.Env, Env.Project))
-		if err != nil {
-			return err
-		}
-		callbackURL, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-callbackurl", Env.Env, Env.Project))
-		if err != nil {
-			return err
-		}
-	*/
-	clientID := "850218569266-agoojlqbo5ffuvmb0t6m0j431pl3p5v8.apps.googleusercontent.com"
-	clientSecret := "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"
-	callbackURL := "https://dev-ticketing.breathings.net/v0.1/auth/google/signin/callback"
+	fmt.Println(Env)
+	clientID, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientid", Env.Env, Env.Project))
+	if err != nil {
+		return err
+	}
+	clientSecret, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientsecret", Env.Env, Env.Project))
+	if err != nil {
+		return err
+	}
+	callbackURL, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-callbackurl", Env.Env, Env.Project))
+	if err != nil {
+		return err
+	}
+	fmt.Println(clientID)
 	OAuthConf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
