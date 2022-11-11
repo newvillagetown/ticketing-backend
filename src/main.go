@@ -47,7 +47,6 @@ func main() {
 		swaggerDocs.SwaggerInfo.Host = fmt.Sprintf("%s-%s.breathings.net", common.Env.Env, "ticketing")
 		e.GET("/swagger/*", echoSwagger.WrapHandler)
 	}
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.HideBanner = true
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", common.Env.Port)))
 }
