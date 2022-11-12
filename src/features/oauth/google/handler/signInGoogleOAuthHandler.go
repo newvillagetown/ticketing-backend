@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"main/common"
+	"main/common/oauth/google"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -27,13 +27,13 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} common.ResError
-// @Failure 500 {object} common.ResError
+// @Failure 400 {object} error.ResError
+// @Failure 500 {object} error.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	//콜백 url을 호출
 	fmt.Println("signIn")
-	fmt.Println(common.OAuthConf.AuthCodeURL("state"))
-	c.Redirect(http.StatusMovedPermanently, common.OAuthConf.AuthCodeURL("state"))
+	fmt.Println(google.OAuthConf.AuthCodeURL("state"))
+	c.Redirect(http.StatusMovedPermanently, google.OAuthConf.AuthCodeURL("state"))
 	return c.JSON(http.StatusOK, true)
 }
