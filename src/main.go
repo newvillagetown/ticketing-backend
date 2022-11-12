@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"main/common"
+	"main/common/db"
 	_ "main/docs"
 	swaggerDocs "main/docs"
 	"main/features"
@@ -26,6 +27,14 @@ func main() {
 		fmt.Sprintf("구글 초기화 에러 : %s", err.Error())
 		return
 	}
+	if err := db.InitMongoDB(); err != nil {
+		fmt.Sprintf("mongoDB 초기화 에러 : %s", err.Error())
+		return
+	}
+	if err := db.InitMySQL(); err != nil {
+		fmt.Sprintf("mysql 초기화 에러 : %s", err.Error())
+		return
+	}
 	e := echo.New()
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -38,7 +47,6 @@ func main() {
 	})
 	//핸드러 초기화
 	features.InitHandler(e)
-	fmt.Println(common.OAuthConf.AuthCodeURL("state"))
 	// swagger 초기화
 	if common.Env.IsLocal {
 		swaggerDocs.SwaggerInfo.Host = "localhost:3000"
