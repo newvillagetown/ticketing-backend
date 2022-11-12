@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
-	"main/common"
+	"main/common/oauth/google"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -28,12 +28,12 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} common.ResError
-// @Failure 500 {object} common.ResError
+// @Failure 400 {object} error.ResError
+// @Failure 500 {object} error.ResError
 // @Tags auth
 func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error {
 	//인증서버에 액세스 토큰 요청
-	token, err := common.OAuthConf.Exchange(oauth2.NoContext, c.FormValue("code"))
+	token, err := google.OAuthConf.Exchange(oauth2.NoContext, c.FormValue("code"))
 	if err != nil {
 		return err
 	}

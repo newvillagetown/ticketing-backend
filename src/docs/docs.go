@@ -36,13 +36,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.ResError"
+                            "$ref": "#/definitions/error.ResError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/common.ResError"
+                            "$ref": "#/definitions/error.ResError"
                         }
                     }
                 }
@@ -68,13 +68,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.ResError"
+                            "$ref": "#/definitions/error.ResError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/common.ResError"
+                            "$ref": "#/definitions/error.ResError"
                         }
                     }
                 }
@@ -82,7 +82,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "common.ResError": {
+        "error.ResError": {
             "type": "object",
             "properties": {
                 "errType": {
