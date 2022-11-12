@@ -16,7 +16,6 @@ const (
 )
 
 func GoogleOauthInit() error {
-	fmt.Println(Env)
 	clientID, err := AwsGetParam(fmt.Sprintf("%s-%s-google-oauth-clientid", Env.Env, Env.Project))
 	if err != nil {
 		return err
@@ -29,7 +28,6 @@ func GoogleOauthInit() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(clientID)
 	OAuthConf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
