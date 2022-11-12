@@ -27,8 +27,6 @@
 - [AWS 인프라 설계도](#Infrastructure Design)
 - [Getting started](#Getting started)
 - [Installation](#Installation)
-- [Configuration](#Configuration)
-- [Environment variables](#Environment variables)
 
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -41,6 +39,7 @@
 * CI/CD 구축
 * 클린 아키텍처 적용
 * 공통 모듈 제대로 사용해보기
+* Go 컨벤션 작업을 통한 Go스럽게 사용해보기
 
 ## Features
 
@@ -55,7 +54,6 @@ These are the back-end work done on the project:
 ## Infrastructure Design
 
 The figure below shows the entire infrastructure.
-## Backend Infrastructure.
 
 <p align="center">
     <img width="1307" alt="스크린샷 2022-11-12 오전 3 41 26" src="https://user-images.githubusercontent.com/85932211/201409200-a7a69173-e255-4150-a148-9ee41ec6890c.png">
