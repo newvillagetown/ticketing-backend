@@ -28,8 +28,8 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} error.ResError
-// @Failure 500 {object} error.ResError
+// @Failure 400 {object} errorSystem.ResError
+// @Failure 500 {object} errorSystem.ResError
 // @Tags auth
 func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error {
 	//인증서버에 액세스 토큰 요청
