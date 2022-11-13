@@ -3,12 +3,13 @@ package logging
 import (
 	"github.com/rs/zerolog/log"
 	"main/common/env"
+	"main/common/errorSystem"
 	"time"
 )
 
 type Logging interface {
 	MakeLog() error
-	MakeErrorLog() error
+	MakeErrorLog(requestParam map[string]interface{}) error
 }
 
 type Log struct {
@@ -26,7 +27,7 @@ type Log struct {
 type ErrorInfo struct {
 	Stack        string                 `json:"stack"`
 	ErrorType    string                 `json:"errorType"`
-	Err          string                 `json:"err"`
+	Msg          string                 `json:"msg"`
 	From         string                 `json:"from"`
 	RequestParam map[string]interface{} `json:"requestParam"`
 }
@@ -42,18 +43,38 @@ func (l *Log) MakeLog(userID string, url string, method string, startTime time.T
 	l.RequestID = requestID
 	return nil
 }
-func (l *Log) MakeErrorLog() error {
+func (l *Log) MakeErrorLog(requestParam map[string]interface{}, resError errorSystem.Err) error {
 	l.Type = "error"
-
+	errInfo := ErrorInfo{
+		RequestParam: requestParam,
+		Stack:        resError.Trace,
+		ErrorType:    resError.ErrType,
+		From:         resError.From,
+		Msg:          resError.Msg,
+	}
+	l.ErrorInfo = errInfo
 	return nil
 }
 
 func (l *Log) InfoLog() error {
-	log.Info().Str("project", l.Project)
-	//	log.Info().Str("URI", url).Int("state", 200).Int64("latency", time.Since(startTime).Milliseconds()).Str("METHOD", "POST").Msg("hi")
+	log.Info().Str("project", l.Project).
+		Str("type", l.Type).
+		Str("userID", l.UserID).
+		Str("url", l.Url).
+		Str("method", l.Method).
+		Int64("latency", l.Latency).
+		Int("httpCode", l.HttpCode).
+		Str("requestID", l.RequestID)
 	return nil
 }
 func (l *Log) ErrorLog() error {
-	log.Error().Str("project", l.Project)
+	log.Error().Str("project", l.Project).
+		Str("type", l.Type).
+		Str("userID", l.UserID).
+		Str("url", l.Url).
+		Str("method", l.Method).
+		Int64("latency", l.Latency).
+		Int("httpCode", l.HttpCode).
+		Str("requestID", l.RequestID)
 	return nil
 }
