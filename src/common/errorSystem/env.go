@@ -2,6 +2,21 @@ package errorSystem
 
 import "net/http"
 
+// 프론트엔드 받을 에러 형식
+type ResError struct {
+	ErrType string `json:"errType,omitempty"`
+	Msg     string `json:"msg,omitempty"`
+}
+
+// 에러 로깅을 위한 에러 형식
+type Err struct {
+	HttpCode int    `json:"httpCode,omitempty"`
+	ErrType  string `json:"errType,omitempty"`
+	Msg      string `json:"msg,omitempty"`
+	Trace    string `json:"trace,omitempty"`
+	From     string `json:"from,omitempty"`
+}
+
 // 에러 타입을 구분
 type ErrType string
 
