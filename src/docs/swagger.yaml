@@ -1,5 +1,5 @@
 definitions:
-  error.ResError:
+  errorSystem.ResError:
     properties:
       errType:
         type: string
@@ -25,11 +25,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/error.ResError'
+            $ref: '#/definitions/errorSystem.ResError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/error.ResError'
+            $ref: '#/definitions/errorSystem.ResError'
       summary: google 로그인
       tags:
       - auth
@@ -49,11 +49,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/error.ResError'
+            $ref: '#/definitions/errorSystem.ResError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/error.ResError'
+            $ref: '#/definitions/errorSystem.ResError'
       summary: google login callback
       tags:
       - auth

@@ -27,8 +27,8 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} error.ResError
-// @Failure 500 {object} error.ResError
+// @Failure 400 {object} errorSystem.ResError
+// @Failure 500 {object} errorSystem.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	//콜백 url을 호출
