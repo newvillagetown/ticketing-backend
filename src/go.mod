@@ -8,6 +8,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.32.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/labstack/echo/v4 v4.9.1
+	github.com/labstack/gommon v0.4.0
+	github.com/rs/zerolog v1.28.0
 	github.com/swaggo/echo-swagger v1.3.4
 	github.com/swaggo/swag v1.8.5
 	go.mongodb.org/mongo-driver v1.11.0
@@ -39,9 +41,8 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
-	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/mattn/go-colorable v0.1.11 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/pkg/errors v0.9.1 // indirect
