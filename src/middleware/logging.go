@@ -17,6 +17,9 @@ func RestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		requestParam := GetJSONRawBody(c)
 		req := c.Request()
 		url := req.URL.Path
+		if req.Method == "GET" && url == "/health" {
+			return next(c)
+		}
 		rID := random.String(32)
 		c.Set("rID", rID)
 		err := next(c)
