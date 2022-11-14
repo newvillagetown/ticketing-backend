@@ -9,7 +9,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /v0.1/auth/google/signin:
+  /google:
     get:
       description: |-
         ■ errCode with 500
@@ -33,7 +33,7 @@ paths:
       summary: google 로그인
       tags:
       - auth
-  /v0.1/auth/google/signin/callback:
+  /google/callback:
     get:
       description: |-
         ■ errCode with 500

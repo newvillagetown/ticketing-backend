@@ -15,7 +15,7 @@ func InitHandler(e *echo.Echo) error {
 	e.GET("/health/ok", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, "ok")
 	})
-	gApiV01 := e.Group("/v0.1")
+	gApiV01 := e.Group("/google")
 	gApiV01.Use(middleware.RestLogger)
 	googleOAuthHandler.RegisterGoogleOAuthHandler(gApiV01)
 	return nil

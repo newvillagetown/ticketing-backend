@@ -6,7 +6,6 @@ import (
 
 func RegisterGoogleOAuthHandler(e *echo.Group) {
 	handler := NewGoogleOAuthHandler()
-	api := e.Group("/auth/google")
-	api.GET("/signin", handler.SignInGoogleOAuthHandler.SignInGoogle)
-	api.GET("/signin/callback", handler.CallbackGoogleOAuthHandler.GoogleSignInCallback)
+	e.GET("/signin", handler.SignInGoogleOAuthHandler.SignInGoogle)
+	e.GET("/signin/callback", handler.CallbackGoogleOAuthHandler.GoogleSignInCallback)
 }

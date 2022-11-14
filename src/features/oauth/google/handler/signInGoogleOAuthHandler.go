@@ -19,7 +19,7 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 }
 
 // GoogleSignin
-// @Router /v0.1/auth/google/signin [get]
+// @Router /google [get]
 // @Summary google 로그인
 // @Description
 // @Description ■ errCode with 500
