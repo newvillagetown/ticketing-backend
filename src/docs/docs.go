@@ -16,7 +16,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/google": {
+        "/google/callback": {
             "get": {
                 "description": "■ errCode with 500\nINTERNAL_SERVER : 내부 로직 처리 실패\nINTERNAL_DB : DB 처리 실패",
                 "produces": [
@@ -25,7 +25,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "google 로그인",
+                "summary": "google login callback",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -48,7 +48,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/google/callback": {
+        "/google/signin": {
             "get": {
                 "description": "■ errCode with 500\nINTERNAL_SERVER : 내부 로직 처리 실패\nINTERNAL_DB : DB 처리 실패",
                 "produces": [
@@ -57,7 +57,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "google login callback",
+                "summary": "google 로그인",
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -9,30 +9,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /google:
-    get:
-      description: |-
-        ■ errCode with 500
-        INTERNAL_SERVER : 내부 로직 처리 실패
-        INTERNAL_DB : DB 처리 실패
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: boolean
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/errorSystem.ResError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/errorSystem.ResError'
-      summary: google 로그인
-      tags:
-      - auth
   /google/callback:
     get:
       description: |-
@@ -55,6 +31,30 @@ paths:
           schema:
             $ref: '#/definitions/errorSystem.ResError'
       summary: google login callback
+      tags:
+      - auth
+  /google/signin:
+    get:
+      description: |-
+        ■ errCode with 500
+        INTERNAL_SERVER : 내부 로직 처리 실패
+        INTERNAL_DB : DB 처리 실패
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorSystem.ResError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorSystem.ResError'
+      summary: google 로그인
       tags:
       - auth
 swagger: "2.0"

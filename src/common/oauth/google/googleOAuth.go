@@ -33,7 +33,7 @@ func GoogleOauthInit() error {
 	if env.Env.IsLocal == true {
 		callbackURL = "http://localhost:3000/google/signin/callback"
 	} else {
-		callbackURL = "http://localhost:80/google/signin/callback"
+		callbackURL = "https://dev-ticketing.breathings.net/google/signin/callback"
 	}
 	OAuthConf = &oauth2.Config{
 		ClientID:     clientID,
