@@ -42,5 +42,6 @@ func GoogleOauthInit() error {
 		Scopes:       []string{ScopeEmail, ScopeProfile},
 		Endpoint:     google.Endpoint,
 	}
+	fmt.Println(OAuthConf.RedirectURL)
 	return nil
 }
