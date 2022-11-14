@@ -18,14 +18,16 @@ func InitMiddleware(e *echo.Echo) error {
 		LogURI:    true,
 		LogStatus: true,
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			if v.URI == "/health" {
+				return nil
+			}
 			logger.Info().
 				Str("URI", v.URI).
 				Int("status", v.Status).
 				Msg("request")
-
 			return nil
 		},
 	}))
-
+	e.Use(RestLogger)
 	return nil
 }
