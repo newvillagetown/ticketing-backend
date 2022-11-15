@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"main/common/oauth/google"
 	"main/features/oauth/google/repository"
@@ -19,7 +18,7 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 }
 
 // GoogleSignin
-// @Router /google/signin [get]
+// @Router /v0.1/auth/google/signin [get]
 // @Summary google 로그인
 // @Description
 // @Description ■ errCode with 500
@@ -32,7 +31,6 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	//콜백 url을 호출
-	fmt.Println("google login")
 	c.Redirect(http.StatusMovedPermanently, google.OAuthConf.AuthCodeURL("state"))
 	return c.JSON(http.StatusOK, true)
 }
