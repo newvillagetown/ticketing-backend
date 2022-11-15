@@ -20,7 +20,7 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 }
 
 // google signin callback
-// @Router /google/signin/callback [get]
+// @Router /v0.1/auth/google/signin/callback [get]
 // @Summary google login callback
 // @Description
 // @Description ■ errCode with 500
