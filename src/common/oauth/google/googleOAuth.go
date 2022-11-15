@@ -30,7 +30,9 @@ func GoogleOauthInit() error {
 	if err != nil {
 		return err
 	}
-	callbackURL = fmt.Sprintf("http://localhost:%s/google/signin/callback", env.Env.Port)
+	if env.Env.IsLocal == true {
+		callbackURL = fmt.Sprintf("http://localhost:%s/google/signin/callback", env.Env.Port)
+	}
 	OAuthConf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
