@@ -3,6 +3,7 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/random"
 	"io"
@@ -17,6 +18,8 @@ func RestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		requestParam := GetJSONRawBody(c)
 		req := c.Request()
 		url := req.URL.Path
+		fmt.Println(req.URL)
+		fmt.Println(url)
 		if req.Method == "GET" && url == "/health" {
 			return next(c)
 		}
@@ -28,6 +31,7 @@ func RestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		logData := logging.Log{}
 		//TODO 추후 userID 어떤식으로 관리할지 정해지면 그때 넣는걸로
 		logData.MakeLog("", url, req.Method, startTime, c.Response().Status, rID)
+		fmt.Println(err)
 		//여기 나와야 로그를 찍을 수 있으니 로그 데이터를 만든다.
 		if err != nil {
 			resError := errorSystem.ErrorParsing(err.Error())

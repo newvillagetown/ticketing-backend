@@ -4,13 +4,14 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"main/common"
 	"main/common/env"
 	_ "main/docs"
 	swaggerDocs "main/docs"
 	"main/features"
-	"main/middleware"
+	mw "main/middleware"
 )
 
 func main() {
@@ -19,8 +20,10 @@ func main() {
 		return
 	}
 	e := echo.New()
+	e.Pre(middleware.HTTPSRedirect())
+
 	//미들웨어 초기화
-	err := middleware.InitMiddleware(e)
+	err := mw.InitMiddleware(e)
 	if err != nil {
 		fmt.Println(err)
 		return
