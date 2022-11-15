@@ -32,7 +32,7 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	//콜백 url을 호출
-	fmt.Println("구글 사인 들어온다.")
+	fmt.Println("구글 사인 들어온다.!")
 	fmt.Println(google.OAuthConf.AuthCodeURL("state"))
 	c.Redirect(http.StatusMovedPermanently, google.OAuthConf.AuthCodeURL("state"))
 	return c.JSON(http.StatusOK, true)
