@@ -4,7 +4,6 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"main/common"
 	"main/common/env"
@@ -20,7 +19,6 @@ func main() {
 		return
 	}
 	e := echo.New()
-	e.Pre(middleware.HTTPSRedirect())
 
 	//미들웨어 초기화
 	err := mw.InitMiddleware(e)
