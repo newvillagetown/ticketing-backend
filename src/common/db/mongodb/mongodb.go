@@ -26,6 +26,7 @@ func InitMongoDB() error {
 	}
 
 	//TODO 컬렉션 초기화
+	fmt.Println("mongodb connect")
 
 	return err
 }
@@ -45,7 +46,7 @@ func GetEnvMongoDB() ([]string, error) {
 func MakeMongoDBConnURI(connInfos []string) string {
 	database := env.Env.Env + "_" + env.Env.Project
 	result := fmt.Sprintf("mongodb://%s:%s@%s/%s?retryWrites=true&w=majority&authSource=admin", connInfos[0], connInfos[1], connInfos[2], database)
-
+	fmt.Println(result)
 	return result
 }
 
