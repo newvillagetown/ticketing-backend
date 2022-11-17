@@ -3,10 +3,13 @@ package middleware
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"main/common/jwtCommon"
 )
+
+var Store = sessions.NewCookieStore([]byte("secret"))
 
 func InitMiddleware(e *echo.Echo) error {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -20,7 +23,7 @@ func InitMiddleware(e *echo.Echo) error {
 	}))
 	signingKey := jwtCommon.JwtSecretKey
 
-	config := middleware.JWTConfig{
+	jwtCommon.JwtConfig = middleware.JWTConfig{
 		TokenLookup: "query:token",
 		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
 			keyFunc := func(t *jwt.Token) (interface{}, error) {
@@ -41,8 +44,6 @@ func InitMiddleware(e *echo.Echo) error {
 			return token, nil
 		},
 	}
-
-	e.Use(middleware.JWTWithConfig(config))
 
 	return nil
 }

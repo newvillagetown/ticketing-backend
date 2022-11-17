@@ -1,6 +1,9 @@
 package jwtCommon
 
-import "github.com/golang-jwt/jwt"
+import (
+	"github.com/golang-jwt/jwt"
+	"github.com/labstack/echo/v4/middleware"
+)
 
 type jwtCustomClaims struct {
 	Email string `json:"email"`
@@ -8,6 +11,7 @@ type jwtCustomClaims struct {
 }
 
 var JwtSecretKey []byte
+var JwtConfig middleware.JWTConfig
 
 func InitJwt() error {
 	secret := "secret"

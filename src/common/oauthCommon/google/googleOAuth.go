@@ -1,6 +1,8 @@
 package google
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -10,7 +12,11 @@ import (
 
 var OAuthConf *oauth2.Config
 
-// TODO 추후 config 정보는 awsCommon ssm에서 관리할 예정
+type User struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
 const (
 	UserInfoAPIEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo"
 	ScopeEmail          = "https://www.googleapis.com/auth/userinfo.email"
@@ -41,4 +47,14 @@ func GoogleOauthInit() error {
 		Endpoint:     google.Endpoint,
 	}
 	return nil
+}
+
+func GetLoginURL(state string) string {
+	return OAuthConf.AuthCodeURL(state)
+}
+
+func RandToken() string {
+	b := make([]byte, 32)
+	rand.Read(b)
+	return base64.StdEncoding.EncodeToString(b)
 }
