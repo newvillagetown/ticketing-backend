@@ -7,6 +7,7 @@ import (
 	"golang.org/x/oauth2"
 	"io/ioutil"
 	"main/common/oauthCommon/google"
+	"main/features/oauth/google/model/response"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -30,14 +31,13 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
-// @Success 200 {object} bool
+// @Success 200 {object} response.ResCallbackGoogleOAuth
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error {
 	session, _ := middleware.Store.Get(c.Request(), "session")
 	state := session.Values["state"]
-	fmt.Println(state)
 
 	delete(session.Values, "state")
 	session.Save(c.Request(), c.Response())
@@ -50,7 +50,6 @@ func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error
 		return err
 	}
 
-	//1. 토큰 검증하고
 	client := google.OAuthConf.Client(oauth2.NoContext, token)
 	userInfoResp, err := client.Get(google.UserInfoAPIEndpoint)
 	if err != nil {
@@ -63,11 +62,10 @@ func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error
 	}
 	var authUser google.User
 	json.Unmarshal(userInfo, &authUser)
-	//2. dbCommon 저장 유저 정보 업데이트
-	fmt.Println(authUser.Name)
-	fmt.Println(authUser.Email)
 
-	//3. 토큰 생성
-
-	return c.JSON(http.StatusOK, true)
+	accessToken, refreshToken, err := cc.UseCase.CallbackGoogle(authUser)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, response.ResCallbackGoogleOAuth{AccessToken: accessToken, RefreshToken: refreshToken})
 }

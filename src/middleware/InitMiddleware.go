@@ -21,7 +21,7 @@ func InitMiddleware(e *echo.Echo) error {
 		LogStatus:     true,
 		LogValuesFunc: RestLogger,
 	}))
-	signingKey := jwtCommon.JwtSecretKey
+	signingKey := jwtCommon.AccessToknenSecretKey
 
 	jwtCommon.JwtConfig = middleware.JWTConfig{
 		TokenLookup: "query:token",
@@ -32,7 +32,6 @@ func InitMiddleware(e *echo.Echo) error {
 				}
 				return signingKey, nil
 			}
-
 			// claims are of type `jwtCommon.MapClaims` when token is created with `jwtCommon.Parse`
 			token, err := jwt.Parse(auth, keyFunc)
 			if err != nil {

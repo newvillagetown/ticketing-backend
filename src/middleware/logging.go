@@ -32,7 +32,7 @@ func RestLogger(c echo.Context, v middleware.RequestLoggerValues) error {
 	logData.MakeLog("", url, req.Method, startTime, c.Response().Status, rID)
 	//여기 나와야 로그를 찍을 수 있으니 로그 데이터를 만든다.
 	//로그 찍는다. (local 일때만 찍는걸로 데이터 쌓이면 돈 많이 나가니..)
-	logger.Info().
+	logger.Info().Err(v.Error).
 		Str("URI", v.URI).
 		Int("status", v.Status).
 		Msg("request")

@@ -62,7 +62,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "boolean"
+                            "$ref": "#/definitions/response.ResCallbackGoogleOAuth"
                         }
                     },
                     "400": {
@@ -89,6 +89,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ResCallbackGoogleOAuth": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
                     "type": "string"
                 }
             }
