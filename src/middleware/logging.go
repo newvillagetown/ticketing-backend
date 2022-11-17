@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/random"
 	"github.com/rs/zerolog"
-	"main/common/logging"
+	"main/common/loggingCommon"
 	"os"
 	"time"
 )
@@ -27,7 +27,7 @@ func RestLogger(c echo.Context, v middleware.RequestLoggerValues) error {
 	c.Set("rID", rID)
 
 	//로그 데이터 생성한다.
-	logData := logging.Log{}
+	logData := loggingCommon.Log{}
 	//TODO 추후 userID 어떤식으로 관리할지 정해지면 그때 넣는걸로
 	logData.MakeLog("", url, req.Method, startTime, c.Response().Status, rID)
 	//여기 나와야 로그를 찍을 수 있으니 로그 데이터를 만든다.

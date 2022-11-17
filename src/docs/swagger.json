@@ -24,13 +24,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     }
                 }
@@ -56,13 +56,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     }
                 }
@@ -70,7 +70,7 @@
         }
     },
     "definitions": {
-        "errorSystem.ResError": {
+        "errorCommon.ResError": {
             "type": "object",
             "properties": {
                 "errType": {

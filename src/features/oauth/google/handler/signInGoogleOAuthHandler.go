@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/oauth/google"
+	"main/common/oauthCommon/google"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -26,8 +26,8 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} errorSystem.ResError
-// @Failure 500 {object} errorSystem.ResError
+// @Failure 400 {object} errorCommon.ResError
+// @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	//콜백 url을 호출

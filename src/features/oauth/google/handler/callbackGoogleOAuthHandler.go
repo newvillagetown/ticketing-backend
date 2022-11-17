@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
-	"main/common/oauth/google"
+	"main/common/oauthCommon/google"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -28,8 +28,8 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} errorSystem.ResError
-// @Failure 500 {object} errorSystem.ResError
+// @Failure 400 {object} errorCommon.ResError
+// @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error {
 	//인증서버에 액세스 토큰 요청
@@ -40,7 +40,7 @@ func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error
 	fmt.Println(token)
 	//1. 토큰 검증하고
 
-	//2. db 저장 유저 정보 업데이트
+	//2. dbCommon 저장 유저 정보 업데이트
 
 	//3. 토큰 생성
 
