@@ -1,13 +1,18 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
-	"main/common/oauth/google"
+	"io/ioutil"
+	"main/common/dbCommon/mongodb"
+	"main/common/oauthCommon/google"
+	"main/features/oauth/google/model/response"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
+	"main/middleware"
 	"net/http"
 )
 
@@ -16,7 +21,7 @@ type CallbackGoogleOAuthHandler struct {
 }
 
 func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
-	return &CallbackGoogleOAuthHandler{UseCase: usecase.NewCallbackGoogleOAuthUseCase(repository.NewCallbackGoogleOAuthRepository())}
+	return &CallbackGoogleOAuthHandler{UseCase: usecase.NewCallbackGoogleOAuthUseCase(repository.NewCallbackGoogleOAuthRepository(mongodb.TokenCollection))}
 }
 
 // google signin callback
@@ -27,22 +32,41 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
-// @Success 200 {object} bool
-// @Failure 400 {object} errorSystem.ResError
-// @Failure 500 {object} errorSystem.ResError
+// @Success 200 {object} response.ResCallbackGoogleOAuth
+// @Failure 400 {object} errorCommon.ResError
+// @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error {
+	session, _ := middleware.Store.Get(c.Request(), "session")
+	state := session.Values["state"]
+
+	delete(session.Values, "state")
+	session.Save(c.Request(), c.Response())
+	if state != c.FormValue("state") {
+		return fmt.Errorf("Invalid session state")
+	}
 	//인증서버에 액세스 토큰 요청
 	token, err := google.OAuthConf.Exchange(oauth2.NoContext, c.FormValue("code"))
 	if err != nil {
 		return err
 	}
-	fmt.Println(token)
-	//1. 토큰 검증하고
 
-	//2. db 저장 유저 정보 업데이트
+	client := google.OAuthConf.Client(oauth2.NoContext, token)
+	userInfoResp, err := client.Get(google.UserInfoAPIEndpoint)
+	if err != nil {
+		return err
+	}
+	defer userInfoResp.Body.Close()
+	userInfo, err := ioutil.ReadAll(userInfoResp.Body)
+	if err != nil {
+		return err
+	}
+	var authUser google.User
+	json.Unmarshal(userInfo, &authUser)
 
-	//3. 토큰 생성
-
-	return c.JSON(http.StatusOK, true)
+	accessToken, refreshToken, err := cc.UseCase.CallbackGoogle(authUser)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, response.ResCallbackGoogleOAuth{AccessToken: accessToken, RefreshToken: refreshToken})
 }

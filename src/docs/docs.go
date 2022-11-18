@@ -36,13 +36,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     }
                 }
@@ -62,19 +62,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "boolean"
+                            "$ref": "#/definitions/response.ResCallbackGoogleOAuth"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errorSystem.ResError"
+                            "$ref": "#/definitions/errorCommon.ResError"
                         }
                     }
                 }
@@ -82,13 +82,24 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "errorSystem.ResError": {
+        "errorCommon.ResError": {
             "type": "object",
             "properties": {
                 "errType": {
                     "type": "string"
                 },
                 "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ResCallbackGoogleOAuth": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
                     "type": "string"
                 }
             }

@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"main/common"
-	"main/common/env"
+	"main/common/envCommon"
 	_ "main/docs"
 	swaggerDocs "main/docs"
 	"main/features"
@@ -33,13 +33,13 @@ func main() {
 		return
 	}
 	// swagger 초기화
-	if env.Env.IsLocal {
+	if envCommon.Env.IsLocal {
 		swaggerDocs.SwaggerInfo.Host = "localhost:3000"
 		e.GET("/swagger/*", echoSwagger.WrapHandler)
 	} else {
-		swaggerDocs.SwaggerInfo.Host = fmt.Sprintf("%s-%s.breathings.net", env.Env.Env, env.Env.Project)
+		swaggerDocs.SwaggerInfo.Host = fmt.Sprintf("%s-%s.breathings.net", envCommon.Env.Env, envCommon.Env.Project)
 		e.GET("/swagger/*", echoSwagger.WrapHandler)
 	}
 	e.HideBanner = true
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", env.Env.Port)))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", envCommon.Env.Port)))
 }

@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
-	"main/common/oauth/google"
+	"main/common/oauthCommon/google"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
+	"main/middleware"
 	"net/http"
 )
 
@@ -26,11 +28,20 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400 {object} errorSystem.ResError
-// @Failure 500 {object} errorSystem.ResError
+// @Failure 400 {object} errorCommon.ResError
+// @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
+	sess, _ := middleware.Store.Get(c.Request(), "session")
+	sess.Options = &sessions.Options{
+		Path:     "/v0.1/auth/google/signin",
+		MaxAge:   300,
+		HttpOnly: true,
+	}
+	state := google.RandToken()
+	sess.Values["state"] = state
+	sess.Save(c.Request(), c.Response())
 	//콜백 url을 호출
-	c.Redirect(http.StatusMovedPermanently, google.OAuthConf.AuthCodeURL("state"))
+	c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
 	return c.JSON(http.StatusOK, true)
 }

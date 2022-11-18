@@ -2,19 +2,19 @@ package common
 
 import (
 	"fmt"
-	"main/common/aws"
-	"main/common/db/mongodb"
-	"main/common/db/mysql"
-	"main/common/env"
-	"main/common/oauth/google"
+	"main/common/awsCommon"
+	"main/common/dbCommon/mongodb"
+	"main/common/dbCommon/mysql"
+	"main/common/envCommon"
+	"main/common/oauthCommon/google"
 )
 
 func InitServer() error {
-	if err := env.InitEnv(); err != nil {
+	if err := envCommon.InitEnv(); err != nil {
 		fmt.Sprintf("서버 에러 발생 : %s", err.Error())
 		return err
 	}
-	if err := aws.InitAws(); err != nil {
+	if err := awsCommon.InitAws(); err != nil {
 		fmt.Sprintf("aws 초기화 에러 : %s", err.Error())
 		return err
 	}
@@ -22,6 +22,7 @@ func InitServer() error {
 		fmt.Sprintf("구글 초기화 에러 : %s", err.Error())
 		return err
 	}
+	//TODO 몽고디비 대책이 필요 계속 뻑나네..
 	if err := mongodb.InitMongoDB(); err != nil {
 		fmt.Sprintf("mongoDB 초기화 에러 : %s", err.Error())
 		return err
