@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type jwtCustomClaims struct {
+type JwtCustomClaims struct {
 	Email      string `json:"email"`
 	createTime int64  `json:"createTime"`
 	jwt.StandardClaims
@@ -44,7 +44,7 @@ func GenerateToken(email string) (string, string, error) {
 
 func GenerateAccessToken(email string, now time.Time) (string, error) {
 	// Set custom claims
-	claims := &jwtCustomClaims{
+	claims := &JwtCustomClaims{
 		email,
 		envCommon.TimeToEpocMillis(now),
 		jwt.StandardClaims{
@@ -63,7 +63,7 @@ func GenerateAccessToken(email string, now time.Time) (string, error) {
 }
 
 func GenerateRefreshToken(email string, now time.Time) (string, error) {
-	claims := &jwtCustomClaims{
+	claims := &JwtCustomClaims{
 		email,
 		envCommon.TimeToEpocMillis(now),
 		jwt.StandardClaims{

@@ -20,5 +20,8 @@ func InitHandler(e *echo.Echo) error {
 
 	gApiV01Features := gApiV01.Group("/features")
 	gApiV01Features.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	gApiV01Features.GET("/test", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, true)
+	})
 	return nil
 }

@@ -24,15 +24,17 @@ func InitMiddleware(e *echo.Echo) error {
 	signingKey := jwtCommon.AccessToknenSecretKey
 
 	jwtCommon.JwtConfig = middleware.JWTConfig{
-		TokenLookup: "query:token",
+		Claims:     &jwtCommon.JwtCustomClaims{},
+		SigningKey: signingKey,
 		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
 			keyFunc := func(t *jwt.Token) (interface{}, error) {
 				if t.Method.Alg() != "HS256" {
-					return nil, fmt.Errorf("unexpected jwtCommon signing method=%v", t.Header["alg"])
+					return nil, fmt.Errorf("unexpected jwt signing method=%v", t.Header["alg"])
 				}
 				return signingKey, nil
 			}
-			// claims are of type `jwtCommon.MapClaims` when token is created with `jwtCommon.Parse`
+
+			// claims are of type `jwt.MapClaims` when token is created with `jwt.Parse`
 			token, err := jwt.Parse(auth, keyFunc)
 			if err != nil {
 				return nil, err
