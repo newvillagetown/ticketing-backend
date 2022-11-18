@@ -1,9 +1,16 @@
 definitions:
-  errorSystem.ResError:
+  errorCommon.ResError:
     properties:
       errType:
         type: string
       msg:
+        type: string
+    type: object
+  response.ResCallbackGoogleOAuth:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
         type: string
     type: object
 info:
@@ -25,11 +32,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/errorSystem.ResError'
+            $ref: '#/definitions/errorCommon.ResError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errorSystem.ResError'
+            $ref: '#/definitions/errorCommon.ResError'
       summary: google 로그인
       tags:
       - auth
@@ -45,15 +52,15 @@ paths:
         "200":
           description: OK
           schema:
-            type: boolean
+            $ref: '#/definitions/response.ResCallbackGoogleOAuth'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/errorSystem.ResError'
+            $ref: '#/definitions/errorCommon.ResError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errorSystem.ResError'
+            $ref: '#/definitions/errorCommon.ResError'
       summary: google login callback
       tags:
       - auth
