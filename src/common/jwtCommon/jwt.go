@@ -29,8 +29,7 @@ func InitJwt() error {
 	return nil
 }
 
-func GenerateToken(email string) (string, string, error) {
-	now := time.Now()
+func GenerateToken(email string, now time.Time) (string, string, error) {
 	accessToken, err := GenerateAccessToken(email, now)
 	if err != nil {
 		return "", "", err

@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
 	"io/ioutil"
+	"main/common/dbCommon/mongodb"
 	"main/common/oauthCommon/google"
 	"main/features/oauth/google/model/response"
 	"main/features/oauth/google/repository"
@@ -20,7 +21,7 @@ type CallbackGoogleOAuthHandler struct {
 }
 
 func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
-	return &CallbackGoogleOAuthHandler{UseCase: usecase.NewCallbackGoogleOAuthUseCase(repository.NewCallbackGoogleOAuthRepository())}
+	return &CallbackGoogleOAuthHandler{UseCase: usecase.NewCallbackGoogleOAuthUseCase(repository.NewCallbackGoogleOAuthRepository(mongodb.TokenCollection))}
 }
 
 // google signin callback

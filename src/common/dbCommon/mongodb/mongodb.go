@@ -12,6 +12,11 @@ import (
 )
 
 var MongoClient *mongo.Client
+var (
+	TokenCollection     *mongo.Collection
+	AccessLogCollection *mongo.Collection
+	ErrorLogCollection  *mongo.Collection
+)
 
 func InitMongoDB() error {
 	connInfos, err := GetEnvMongoDB()
@@ -26,7 +31,10 @@ func InitMongoDB() error {
 	}
 
 	//TODO 컬렉션 초기화
-	fmt.Println("mongodb connect")
+	err = InitCollection()
+	if err != nil {
+		return err
+	}
 
 	return err
 }
@@ -58,10 +66,19 @@ func ConnectMongoDB(connURI string) error {
 	if err != nil {
 		return err
 	}
-	defer MongoClient.Disconnect(ctx)
 	err = MongoClient.Ping(context.TODO(), readpref.Primary())
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func InitCollection() error {
+	dbName := fmt.Sprintf("%s_%s", envCommon.Env.Env, envCommon.Env.Project) //dev_ticketing
+	mongoDB := MongoClient.Database(dbName)
+	TokenCollection = mongoDB.Collection("token")
+	AccessLogCollection = mongoDB.Collection("accessLog")
+	ErrorLogCollection = mongoDB.Collection("errorLog")
+
 	return nil
 }
