@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 	"main/common/awsCommon/ssm"
 	"main/common/envCommon"
 )
@@ -40,5 +41,11 @@ func MakeMySQLConnURI(connInfos []string) string {
 	database := envCommon.Env.Env + "_" + envCommon.Env.Project
 	result := fmt.Sprintf("%s:%s@tcp(%s)/%s", connInfos[0], connInfos[1], connInfos[2], database)
 
+	return result
+}
+
+func PKIDGenerate() string {
+	//uuid 로 생성
+	result := (uuid.New()).String()
 	return result
 }

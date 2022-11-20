@@ -2,6 +2,7 @@ package _interface
 
 import (
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/common/oauthCommon/google"
 )
 
@@ -14,5 +15,6 @@ type ICallbackGoogleOAuthRepository interface {
 	CreateRefreshToken(token mongodbCommon.RefreshToken) error
 	DeleteAllRefreshToken(authUser google.User) error
 	FindOneUser(authUser google.User) (bool, error)
-	CreateUser(authUser google.User) error
+	CreateUser(userDTO mysqlCommon.User) error
+	CreateUserAuth(userAuthDTO mysqlCommon.UserAuth) error
 }

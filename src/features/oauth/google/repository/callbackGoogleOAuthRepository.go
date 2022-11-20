@@ -16,7 +16,6 @@ func NewCallbackGoogleOAuthRepository(tokenCollection *mongo.Collection) _interf
 }
 
 func (cc *CallbackGoogleOAuthRepository) CallbackGoogle() error {
-
 	return nil
 }
 
@@ -53,7 +52,32 @@ func (cc *CallbackGoogleOAuthRepository) FindOneUser(authUser google.User) (bool
 	return true, nil
 }
 
-func (cc *CallbackGoogleOAuthRepository) CreateUser(authUser google.User) error {
-
+func (cc *CallbackGoogleOAuthRepository) CreateUser(userDTO mysqlCommon.User) error {
+	// INSERT 문 실행
+	fmt.Println("userDTO===================")
+	fmt.Println(userDTO)
+	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO user VALUES (?, ?,?,?,?)", userDTO.ID, userDTO.Name, userDTO.Email, userDTO.Created, userDTO.IsDeleted)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	n, err := result.RowsAffected()
+	if n == 1 {
+		fmt.Println("1 row inserted.")
+	}
+	return nil
+}
+func (cc *CallbackGoogleOAuthRepository) CreateUserAuth(userAuthDTO mysqlCommon.UserAuth) error {
+	fmt.Println("userAuthDTO=================")
+	fmt.Println(userAuthDTO.Created)
+	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO userauth VALUES (?, ?,?,?,?,?)", userAuthDTO.ID, userAuthDTO.Provider, userAuthDTO.UserID, userAuthDTO.LastSignIn, userAuthDTO.Created, userAuthDTO.IsDeleted)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	n, err := result.RowsAffected()
+	if n == 1 {
+		fmt.Println("1 row inserted.")
+	}
 	return nil
 }
