@@ -10,6 +10,7 @@ import (
 type JwtCustomClaims struct {
 	Email      string `json:"email"`
 	createTime int64  `json:"createTime"`
+	UserID     string `json:"userID"`
 	jwt.StandardClaims
 }
 
@@ -29,23 +30,24 @@ func InitJwt() error {
 	return nil
 }
 
-func GenerateToken(email string, now time.Time) (string, string, error) {
-	accessToken, err := GenerateAccessToken(email, now)
+func GenerateToken(email string, now time.Time, userID string) (string, string, error) {
+	accessToken, err := GenerateAccessToken(email, now, userID)
 	if err != nil {
 		return "", "", err
 	}
-	refreshToken, err := GenerateRefreshToken(email, now)
+	refreshToken, err := GenerateRefreshToken(email, now, userID)
 	if err != nil {
 		return "", "", err
 	}
 	return accessToken, refreshToken, nil
 }
 
-func GenerateAccessToken(email string, now time.Time) (string, error) {
+func GenerateAccessToken(email string, now time.Time, userID string) (string, error) {
 	// Set custom claims
 	claims := &JwtCustomClaims{
 		email,
 		envCommon.TimeToEpocMillis(now),
+		userID,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * AccessTokenExpiredTime).Unix(),
 		},
@@ -61,10 +63,11 @@ func GenerateAccessToken(email string, now time.Time) (string, error) {
 	return accessToken, nil
 }
 
-func GenerateRefreshToken(email string, now time.Time) (string, error) {
+func GenerateRefreshToken(email string, now time.Time, userID string) (string, error) {
 	claims := &JwtCustomClaims{
 		email,
 		envCommon.TimeToEpocMillis(now),
+		userID,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * RefreshTokenExpiredTime).Unix(),
 		},
