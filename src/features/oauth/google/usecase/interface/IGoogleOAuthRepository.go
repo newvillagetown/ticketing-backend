@@ -9,6 +9,9 @@ import (
 type ISignInGoogleOAuthRepository interface {
 	SignInGoogle() error
 }
+type ISignOutGoogleOAuthRepository interface {
+	SignOutGoogle() error
+}
 
 type ICallbackGoogleOAuthRepository interface {
 	CallbackGoogle() error
