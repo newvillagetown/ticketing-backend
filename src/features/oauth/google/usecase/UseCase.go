@@ -21,9 +21,10 @@ func CallbackGoogleOAuthConvertRes(accessToken, refreshToken string) (response.R
 
 func CreateRefreshToken(authUser google.User, refreshToken string, now time.Time) mongodb.RefreshToken {
 	result := mongodb.RefreshToken{
-		Token:   refreshToken,
-		Email:   authUser.Email,
-		Created: now,
+		Token:     refreshToken,
+		Email:     authUser.Email,
+		Created:   now,
+		IsDeleted: false,
 	}
 	return result
 }
