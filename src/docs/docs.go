@@ -79,6 +79,47 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v0.1/auth/google/signout": {
+            "get": {
+                "description": "■ errCode with 500\nINTERNAL_SERVER : 내부 로직 처리 실패\nINTERNAL_DB : DB 처리 실패",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "google 로그아웃",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "accessToken",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errorCommon.ResError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errorCommon.ResError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
@@ -30,6 +31,8 @@ func NewSignOutGoogleOAuthHandler() *SignOutGoogleOAuthHandler {
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignOutGoogleOAuthHandler) SignOutGoogle(c echo.Context) error {
+
+	fmt.Println("콜")
 
 	return c.JSON(http.StatusOK, true)
 }
