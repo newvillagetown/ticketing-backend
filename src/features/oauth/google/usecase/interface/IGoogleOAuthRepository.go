@@ -11,6 +11,7 @@ type ISignInGoogleOAuthRepository interface {
 }
 type ISignOutGoogleOAuthRepository interface {
 	SignOutGoogle() error
+	DeleteRefreshToken(email string) error
 }
 
 type ICallbackGoogleOAuthRepository interface {

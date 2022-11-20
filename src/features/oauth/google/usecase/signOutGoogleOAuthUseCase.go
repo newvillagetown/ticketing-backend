@@ -12,7 +12,10 @@ func NewSignOutGoogleOAuthUseCase(repo _interface.ISignOutGoogleOAuthRepository)
 	}
 }
 
-func (s *SignOutGoogleOAuthUseCase) SignOutGoogle() error {
-
+func (s *SignOutGoogleOAuthUseCase) SignOutGoogle(email string) error {
+	err := s.Repository.DeleteRefreshToken(email)
+	if err != nil {
+		return err
+	}
 	return nil
 }

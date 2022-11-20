@@ -2,7 +2,9 @@ package handler
 
 import (
 	"fmt"
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"main/common/dbCommon/mongodbCommon"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -14,7 +16,7 @@ type SignOutGoogleOAuthHandler struct {
 }
 
 func NewSignOutGoogleOAuthHandler() *SignOutGoogleOAuthHandler {
-	return &SignOutGoogleOAuthHandler{UseCase: usecase.NewSignOutGoogleOAuthUseCase(repository.NewSignOutGoogleOAuthRepository())}
+	return &SignOutGoogleOAuthHandler{UseCase: usecase.NewSignOutGoogleOAuthUseCase(repository.NewSignOutGoogleOAuthRepository(mongodbCommon.TokenCollection))}
 }
 
 // GoogleSignOut
@@ -31,8 +33,15 @@ func NewSignOutGoogleOAuthHandler() *SignOutGoogleOAuthHandler {
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignOutGoogleOAuthHandler) SignOutGoogle(c echo.Context) error {
-
-	fmt.Println("콜")
+	//jwt 파싱해서 크레임 정보 가져온다.
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	email := claims["email"].(string)
+	fmt.Println(email)
+	err := s.UseCase.SignOutGoogle(email)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, err.Error())
+	}
 
 	return c.JSON(http.StatusOK, true)
 }
