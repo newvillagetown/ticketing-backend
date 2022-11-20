@@ -24,8 +24,9 @@ func InitMiddleware(e *echo.Echo) error {
 	signingKey := jwtCommon.AccessToknenSecretKey
 
 	jwtCommon.JwtConfig = middleware.JWTConfig{
-		Claims:     &jwtCommon.JwtCustomClaims{},
-		SigningKey: signingKey,
+		TokenLookup: "header:token",
+		Claims:      &jwtCommon.JwtCustomClaims{},
+		SigningKey:  signingKey,
 		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
 			keyFunc := func(t *jwt.Token) (interface{}, error) {
 				if t.Method.Alg() != "HS256" {
