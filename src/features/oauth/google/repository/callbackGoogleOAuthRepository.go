@@ -39,17 +39,17 @@ func (cc *CallbackGoogleOAuthRepository) DeleteAllRefreshToken(authUser google.U
 	return nil
 }
 
-func (cc *CallbackGoogleOAuthRepository) FindOneUser(authUser google.User) (bool, error) {
-	var email string
-	err := mysqlCommon.MysqlDB.QueryRow("SELECT email FROM user WHERE email = ?", authUser.Email).Scan(&email)
+func (cc *CallbackGoogleOAuthRepository) FindOneUser(authUser google.User) (string, error) {
+	var id string
+	err := mysqlCommon.MysqlDB.QueryRow("SELECT id FROM user WHERE email = ?", authUser.Email).Scan(&id)
 	if err != nil {
 		if err.Error() != "sql: no rows in result set" {
 			fmt.Println(err)
-			return false, err
+			return "", err
 		}
-		return false, nil
+		return id, nil
 	}
-	return true, nil
+	return id, nil
 }
 
 func (cc *CallbackGoogleOAuthRepository) CreateUser(userDTO mysqlCommon.User) error {

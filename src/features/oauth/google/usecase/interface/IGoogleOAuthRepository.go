@@ -18,7 +18,7 @@ type ICallbackGoogleOAuthRepository interface {
 	CallbackGoogle() error
 	CreateRefreshToken(token mongodbCommon.RefreshToken) error
 	DeleteAllRefreshToken(authUser google.User) error
-	FindOneUser(authUser google.User) (bool, error)
+	FindOneUser(authUser google.User) (string, error)
 	CreateUser(userDTO mysqlCommon.User) error
 	CreateUserAuth(userAuthDTO mysqlCommon.UserAuth) error
 }
