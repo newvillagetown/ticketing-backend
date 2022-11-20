@@ -54,7 +54,6 @@ func GetEnvMongoDB() ([]string, error) {
 func MakeMongoDBConnURI(connInfos []string) string {
 	database := envCommon.Env.Env + "_" + envCommon.Env.Project
 	result := fmt.Sprintf("mongodb://%s:%s@%s/%s?retryWrites=true&w=majority&authSource=admin", connInfos[0], connInfos[1], connInfos[2], database)
-	fmt.Println(result)
 	return result
 }
 
