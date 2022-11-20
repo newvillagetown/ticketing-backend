@@ -9,6 +9,10 @@ import (
 type ISignInGoogleOAuthRepository interface {
 	SignInGoogle() error
 }
+type ISignOutGoogleOAuthRepository interface {
+	SignOutGoogle() error
+	DeleteRefreshToken(email string) error
+}
 
 type ICallbackGoogleOAuthRepository interface {
 	CallbackGoogle() error
