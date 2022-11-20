@@ -21,8 +21,32 @@ func NewCallbackGoogleOAuthUseCase(repo _interface.ICallbackGoogleOAuthRepositor
 // TODO 트랜잭션 처리 필요
 func (cc *CallbackGoogleOAuthUseCase) CallbackGoogle(authUser google.User) (string, string, error) {
 	now := time.Now()
+	var userID string
+
+	//3. 유저 정보 저장(mysql db 저장)
+	//db에 유저 정보가 있는지 체크
+	userID, err := cc.Repository.FindOneUser(authUser)
+	if err != nil {
+		return "", "", err
+	}
+	//없다면 유저 정보를 생성한다. (user, userAuth 테이블에 생성)
+	if userID == "" {
+		//TODO 트랜잭션 처리 필요
+		userDTO := CreateMysqlUserDTO(authUser)
+		userID = userDTO.ID
+		err = cc.Repository.CreateUser(userDTO)
+		if err != nil {
+			return "", "", err
+		}
+		userAuthDTO := CreateMysqlUserAuthDTO(userDTO)
+		err = cc.Repository.CreateUserAuth(userAuthDTO)
+		if err != nil {
+			return "", "", err
+		}
+	}
+
 	//1. 토큰 생성
-	accessToken, refreshToken, err := jwtCommon.GenerateToken(authUser.Email, now)
+	accessToken, refreshToken, err := jwtCommon.GenerateToken(authUser.Email, now, userID)
 	if err != nil {
 		return "", "", err
 	}
@@ -40,27 +64,5 @@ func (cc *CallbackGoogleOAuthUseCase) CallbackGoogle(authUser google.User) (stri
 	if err != nil {
 		return "", "", err
 	}
-
-	//3. 유저 정보 저장(mysql db 저장)
-	//db에 유저 정보가 있는지 체크
-	isExists, err := cc.Repository.FindOneUser(authUser)
-	if err != nil {
-		return "", "", err
-	}
-	//없다면 유저 정보를 생성한다. (user, userAuth 테이블에 생성)
-	if isExists == false {
-		//TODO 트랜잭션 처리 필요
-		userDTO := CreateMysqlUserDTO(authUser)
-		err = cc.Repository.CreateUser(userDTO)
-		if err != nil {
-			return "", "", err
-		}
-		userAuthDTO := CreateMysqlUserAuthDTO(userDTO)
-		err = cc.Repository.CreateUserAuth(userAuthDTO)
-		if err != nil {
-			return "", "", err
-		}
-	}
-
 	return accessToken, refreshToken, nil
 }
