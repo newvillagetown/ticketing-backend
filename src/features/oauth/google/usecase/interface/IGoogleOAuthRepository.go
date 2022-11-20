@@ -1,7 +1,7 @@
 package _interface
 
 import (
-	"main/common/dbCommon/mongodb"
+	"main/common/dbCommon/mongodbCommon"
 	"main/common/oauthCommon/google"
 )
 
@@ -11,6 +11,8 @@ type ISignInGoogleOAuthRepository interface {
 
 type ICallbackGoogleOAuthRepository interface {
 	CallbackGoogle() error
-	CreateRefreshToken(token mongodb.RefreshToken) error
+	CreateRefreshToken(token mongodbCommon.RefreshToken) error
 	DeleteAllRefreshToken(authUser google.User) error
+	FindOneUser(authUser google.User) (bool, error)
+	CreateUser(authUser google.User) error
 }

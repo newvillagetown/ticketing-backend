@@ -18,6 +18,7 @@ func NewCallbackGoogleOAuthUseCase(repo _interface.ICallbackGoogleOAuthRepositor
 	}
 }
 
+// TODO 트랜잭션 처리 필요
 func (cc *CallbackGoogleOAuthUseCase) CallbackGoogle(authUser google.User) (string, string, error) {
 	now := time.Now()
 	//1. 토큰 생성
@@ -40,10 +41,17 @@ func (cc *CallbackGoogleOAuthUseCase) CallbackGoogle(authUser google.User) (stri
 		return "", "", err
 	}
 
-	//3. 유저 정보 저장(mysql db 저장)
-
+	//3. 유저 정보 저장(mysqlCommon db 저장)
 	//db에 유저 정보가 있는지 체크
 	//없다면 유저 정보를 생성한다.
+
+	isExists, err := cc.Repository.FindOneUser(authUser)
+	if err != nil {
+		return "", "", err
+	}
+	if isExists == false {
+		fmt.Println("여기 들어온다.")
+	}
 
 	return accessToken, refreshToken, nil
 }

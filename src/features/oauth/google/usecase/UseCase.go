@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"fmt"
-	"main/common/dbCommon/mongodb"
+	"main/common/dbCommon/mongodbCommon"
 	"main/common/oauthCommon/google"
 	"main/features/oauth/google/model/response"
 	"time"
@@ -19,8 +19,8 @@ func CallbackGoogleOAuthConvertRes(accessToken, refreshToken string) (response.R
 	return result, nil
 }
 
-func CreateRefreshToken(authUser google.User, refreshToken string, now time.Time) mongodb.RefreshToken {
-	result := mongodb.RefreshToken{
+func CreateRefreshToken(authUser google.User, refreshToken string, now time.Time) mongodbCommon.RefreshToken {
+	result := mongodbCommon.RefreshToken{
 		Token:     refreshToken,
 		Email:     authUser.Email,
 		Created:   now,
