@@ -74,7 +74,7 @@ func ConnectMongoDB(connURI string) error {
 }
 
 func InitCollection() error {
-	dbName := fmt.Sprintf("%s_%s", envCommon.Env.Env, envCommon.Env.Project) //dev_ticketing
+	dbName := fmt.Sprintf("%s_%s", envCommon.Env.Env, envCommon.Env.Project)
 	mongoDB := MongoClient.Database(dbName)
 	TokenCollection = mongoDB.Collection("token")
 	AccessLogCollection = mongoDB.Collection("accessLog")
