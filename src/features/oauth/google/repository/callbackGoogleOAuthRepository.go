@@ -54,8 +54,6 @@ func (cc *CallbackGoogleOAuthRepository) FindOneUser(authUser google.User) (bool
 
 func (cc *CallbackGoogleOAuthRepository) CreateUser(userDTO mysqlCommon.User) error {
 	// INSERT 문 실행
-	fmt.Println("userDTO===================")
-	fmt.Println(userDTO)
 	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO user VALUES (?, ?,?,?,?)", userDTO.ID, userDTO.Name, userDTO.Email, userDTO.Created, userDTO.IsDeleted)
 	if err != nil {
 		fmt.Println(err)
@@ -68,8 +66,6 @@ func (cc *CallbackGoogleOAuthRepository) CreateUser(userDTO mysqlCommon.User) er
 	return nil
 }
 func (cc *CallbackGoogleOAuthRepository) CreateUserAuth(userAuthDTO mysqlCommon.UserAuth) error {
-	fmt.Println("userAuthDTO=================")
-	fmt.Println(userAuthDTO.Created)
 	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO userauth VALUES (?, ?,?,?,?,?)", userAuthDTO.ID, userAuthDTO.Provider, userAuthDTO.UserID, userAuthDTO.LastSignIn, userAuthDTO.Created, userAuthDTO.IsDeleted)
 	if err != nil {
 		fmt.Println(err)
