@@ -54,6 +54,13 @@ func GetEnvMongoDB() ([]string, error) {
 func MakeMongoDBConnURI(connInfos []string) string {
 	database := envCommon.Env.Env + "_" + envCommon.Env.Project
 	result := fmt.Sprintf("mongodb://%s:%s@%s/%s?retryWrites=true&w=majority&authSource=admin", connInfos[0], connInfos[1], connInfos[2], database)
+	if envCommon.Env.IsLocal == true {
+		url, err := ssm.AwsGetParam(fmt.Sprintf("%s-%s-mongodb-local", envCommon.Env.Env, envCommon.Env.Project))
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		result = fmt.Sprintf("mongodb://%s:%s@%s/%s?retryWrites=true&w=majority&authSource=admin", connInfos[0], connInfos[1], url, database)
+	}
 	return result
 }
 
