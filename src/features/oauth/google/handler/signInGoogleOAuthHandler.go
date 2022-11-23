@@ -41,7 +41,11 @@ func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	state := google.RandToken()
 	sess.Values["state"] = state
 	sess.Save(c.Request(), c.Response())
+
 	//콜백 url을 호출
-	c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
+	err := c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
+	if err != nil {
+		return err
+	}
 	return c.JSON(http.StatusOK, true)
 }
