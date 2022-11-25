@@ -39,7 +39,6 @@ func GoogleOauthInit() error {
 	if envCommon.Env.IsLocal == true {
 		callbackURL = fmt.Sprintf("http://localhost:%s/v0.1/auth/google/signin/callback", envCommon.Env.Port)
 	}
-	fmt.Println("nat gateway test")
 	OAuthConf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
