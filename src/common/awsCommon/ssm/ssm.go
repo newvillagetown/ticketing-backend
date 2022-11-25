@@ -17,7 +17,6 @@ func AwsGetParam(path string) (string, error) {
 		Name:           aws.String(path),
 		WithDecryption: envCommon.PointTrue(),
 	})
-	fmt.Println(err)
 	if err != nil {
 		return "", fmt.Errorf("get ssm param : %s", path)
 	}
@@ -30,7 +29,6 @@ func AwsGetParams(paths []string) ([]string, error) {
 		Names:          paths,
 		WithDecryption: envCommon.PointTrue(),
 	})
-	fmt.Println(err)
 	if err != nil {
 		return nil, fmt.Errorf("get ssm params : %s", strings.Join(paths, ","))
 	}
