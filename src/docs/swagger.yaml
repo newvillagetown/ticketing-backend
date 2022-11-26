@@ -101,4 +101,78 @@ paths:
       summary: google 로그아웃
       tags:
       - auth
+  /v0.1/features/product:
+    post:
+      description: |-
+        ■ errCode with 500
+        INTERNAL_SERVER : 내부 로직 처리 실패
+        INTERNAL_DB : DB 처리 실패
+      parameters:
+      - description: accessToken
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: category
+        in: formData
+        name: category
+        required: true
+        type: string
+      - description: image
+        in: formData
+        name: image
+        type: file
+      - description: perAmount
+        in: formData
+        name: perAmount
+        required: true
+        type: integer
+      - description: totalCount
+        in: formData
+        name: totalCount
+        required: true
+        type: integer
+      - description: restCount
+        in: formData
+        name: restCount
+        required: true
+        type: integer
+      - description: startDate
+        in: formData
+        name: startDate
+        required: true
+        type: integer
+      - description: endDate
+        in: formData
+        name: endDate
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+      summary: 상품 등록
+      tags:
+      - product/register
 swagger: "2.0"

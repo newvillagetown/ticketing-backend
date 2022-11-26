@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"main/common/awsCommon/ssm"
 	"main/common/envCommon"
+	"time"
 )
 
 var MysqlDB *sql.DB
@@ -55,4 +56,20 @@ func PKIDGenerate() string {
 	//uuid 로 생성
 	result := (uuid.New()).String()
 	return result
+}
+
+func NowDateGenerate() string {
+	return time.Now().Format("2006-01-02 15:04:05")
+}
+
+func EpochToTime(t int64) time.Time {
+	return time.Unix(t, t%1000*1000000)
+}
+func EpochToTimeString(t int64) string {
+	return time.Unix(t, t%1000*1000000).String()
+}
+
+func TimeStringToEpoch(t string) int64 {
+	date, _ := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
+	return date.Unix()
 }
