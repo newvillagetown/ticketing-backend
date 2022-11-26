@@ -5,3 +5,7 @@ import "main/features/product/model/request"
 type IRegisterProductUseCase interface {
 	Register(req request.ReqRegisterProduct) error
 }
+
+type IGetProductUseCase interface {
+	Get() error
+}

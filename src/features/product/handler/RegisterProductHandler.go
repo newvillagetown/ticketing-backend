@@ -40,7 +40,7 @@ func NewRegisterProductHandler() *RegisterProductHandler {
 // @Success 200 {object} bool
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
-// @Tags product/register
+// @Tags product
 func (r *RegisterProductHandler) post(c echo.Context) error {
 
 	name := c.FormValue("name")
