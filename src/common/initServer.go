@@ -3,8 +3,6 @@ package common
 import (
 	"fmt"
 	"main/common/awsCommon"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
 	"main/common/envCommon"
 	"main/common/oauthCommon/google"
 )
@@ -23,14 +21,15 @@ func InitServer() error {
 		fmt.Sprintf("구글 초기화 에러 : %s", err.Error())
 		return err
 	}
-	//TODO 몽고디비 대책이 필요 계속 뻑나네..
-	if err := mongodbCommon.InitMongoDB(); err != nil {
-		fmt.Sprintf("mongoDB 초기화 에러 : %s", err.Error())
-		return err
-	}
-	if err := mysqlCommon.InitMySQL(); err != nil {
-		fmt.Sprintf("mysqlCommon 초기화 에러 : %s", err.Error())
-		return err
-	}
+	/*
+		if err := mongodbCommon.InitMongoDB(); err != nil {
+			fmt.Sprintf("mongoDB 초기화 에러 : %s", err.Error())
+			return err
+		}
+		if err := mysqlCommon.InitMySQL(); err != nil {
+			fmt.Sprintf("mysqlCommon 초기화 에러 : %s", err.Error())
+			return err
+		}
+	*/
 	return nil
 }

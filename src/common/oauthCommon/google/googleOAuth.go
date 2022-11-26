@@ -36,6 +36,9 @@ func GoogleOauthInit() error {
 	if err != nil {
 		return err
 	}
+	clientID = "850218569266-agoojlqbo5ffuvmb0t6m0j431pl3p5v8.apps.googleusercontent.com"
+	callbackURL = "http://demo-alb-574657214.us-east-1.elb.amazonaws.com/v0.1/auth/google/signin/callback"
+	clientSecret = "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"
 	if envCommon.Env.IsLocal == true {
 		callbackURL = fmt.Sprintf("http://localhost:%s/v0.1/auth/google/signin/callback", envCommon.Env.Port)
 	}
