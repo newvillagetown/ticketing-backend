@@ -1,6 +1,8 @@
 package _interface
 
-import "main/common/dbCommon/mysqlCommon"
+import (
+	"main/common/dbCommon/mysqlCommon"
+)
 
 type IRegisterProductRepository interface {
 	CreateProduct(productDTO mysqlCommon.Product) error
@@ -15,5 +17,5 @@ type IGetsProductRepository interface {
 }
 
 type IDeleteProductRepository interface {
-	FindOneAndDeleteUpdateProduct() error
+	FindOneAndDeleteUpdateProduct(productID string) error
 }

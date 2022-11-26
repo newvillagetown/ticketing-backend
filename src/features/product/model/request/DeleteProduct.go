@@ -1,5 +1,5 @@
 package request
 
 type ReqDeleteProduct struct {
-	ProductID string `query:"productID"`
+	ProductID string `json:"productID" validate:"required"`
 }

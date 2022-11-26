@@ -18,5 +18,5 @@ type IGetsProductUseCase interface {
 }
 
 type IDeleteProductUseCase interface {
-	Delete() error
+	Delete(req request.ReqDeleteProduct) error
 }

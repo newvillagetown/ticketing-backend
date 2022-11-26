@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"main/features/product/model/request"
 	_interface "main/features/product/usecase/interface"
 )
 
@@ -14,6 +15,10 @@ func NewDeleteProductUseCase(repo _interface.IDeleteProductRepository) _interfac
 	}
 }
 
-func (d *DeleteProductUseCase) Delete() error {
+func (d *DeleteProductUseCase) Delete(req request.ReqDeleteProduct) error {
+	err := d.Repository.FindOneAndDeleteUpdateProduct(req.ProductID)
+	if err != nil {
+		return err
+	}
 	return nil
 }
