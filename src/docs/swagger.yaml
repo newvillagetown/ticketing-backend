@@ -6,6 +6,38 @@ definitions:
       msg:
         type: string
     type: object
+  response.GetsProduct:
+    properties:
+      category:
+        description: 상품 카테고리
+        type: string
+      description:
+        description: 상품 설명
+        type: string
+      endDate:
+        description: 예매 종료 날짜 epoch time
+        type: integer
+      id:
+        type: string
+      image:
+        description: 이미지
+        type: string
+      name:
+        description: 상품이름
+        type: string
+      perAmount:
+        description: 상품 티켓 당 금액
+        type: integer
+      restCount:
+        description: 남은 수량
+        type: integer
+      startDate:
+        description: 예매 시작 날짜 epoch time
+        type: integer
+      totalCount:
+        description: 총 수량
+        type: integer
+    type: object
   response.ResCallbackGoogleOAuth:
     properties:
       accessToken:
@@ -44,6 +76,15 @@ definitions:
       totalCount:
         description: 총 수량
         type: integer
+    type: object
+  response.ResGetsProduct:
+    properties:
+      count:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/response.GetsProduct'
+        type: array
     type: object
   response.ResSignInGoogleOAuth:
     properties:
@@ -246,6 +287,43 @@ paths:
           schema:
             $ref: '#/definitions/errorCommon.ResError'
       summary: 상품 등록
+      tags:
+      - product
+  /v0.1/features/product/gets:
+    get:
+      description: |-
+        ■ errCode with 400
+        PARAM_BAD : 파라미터 오류
+
+        ■ errCode with 401
+        TOKEN_BAD : 토큰 인증 실패
+        POLICY_VIOLATION : 토큰 세션 정책 위반
+
+        ■ errCode with 500
+        INTERNAL_SERVER : 내부 로직 처리 실패
+        INTERNAL_DB : DB 처리 실패
+      parameters:
+      - description: accessToken
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResGetsProduct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+      summary: 상품 목록 가져오기
       tags:
       - product
 swagger: "2.0"

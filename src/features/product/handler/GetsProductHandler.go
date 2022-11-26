@@ -38,6 +38,11 @@ func NewGetsProductHandler() *GetsProductHandler {
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
 func (g *GetsProductHandler) gets(c echo.Context) error {
+	productList, err := g.UseCase.Gets()
+	if err != nil {
+		return err
+	}
+	res := usecase.ConvertGetsProductToRes(productList)
 
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(http.StatusOK, res)
 }

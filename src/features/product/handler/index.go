@@ -13,4 +13,5 @@ func IndexProductHandler(e *echo.Group) {
 	gApiV01Features.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
 	gApiV01Features.POST("/product", handler.RegisterProductHandler.post)
 	gApiV01Features.GET("/product", handler.GetProductHandler.get)
+	gApiV01Features.GET("/product/gets", handler.GetsProductHandler.gets)
 }

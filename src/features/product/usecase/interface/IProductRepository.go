@@ -11,5 +11,5 @@ type IGetProductRepository interface {
 }
 
 type IGetsProductRepository interface {
-	FindProduct() error
+	FindProduct() ([]mysqlCommon.Product, error)
 }
