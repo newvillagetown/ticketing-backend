@@ -12,3 +12,7 @@ type IRegisterProductUseCase interface {
 type IGetProductUseCase interface {
 	Get(req request.ReqGetProduct) (mysqlCommon.Product, error)
 }
+
+type IGetsProductUseCase interface {
+	Gets() error
+}

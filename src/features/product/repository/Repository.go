@@ -9,3 +9,7 @@ type RegisterProductRepository struct {
 type GetProductRepository struct {
 	TokenCollection *mongo.Collection
 }
+
+type GetsProductRepository struct {
+	TokenCollection *mongo.Collection
+}
