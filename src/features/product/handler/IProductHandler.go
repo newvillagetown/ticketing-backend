@@ -11,19 +11,25 @@ type IRegisterProductHandler interface {
 type IGetProductHandler interface {
 	Get(c echo.Context) error
 }
+type IGetsProductHandler interface {
+	Gets(c echo.Context) error
+}
 type IProductHandler interface {
 	NewRegisterProductHandler(UseCase _interface.IRegisterProductUseCase) *RegisterProductHandler
 	NewGetProductHandler(UseCase _interface.IGetProductUseCase) *GetProductHandler
+	NewGetsProductHandler(UseCase _interface.IGetsProductUseCase) *GetsProductHandler
 }
 
 type ProductHandler struct {
 	RegisterProductHandler RegisterProductHandler
 	GetProductHandler      GetProductHandler
+	GetsProductHandler     GetsProductHandler
 }
 
 func NewProductHandler() *ProductHandler {
 	return &ProductHandler{
 		RegisterProductHandler: *NewRegisterProductHandler(),
 		GetProductHandler:      *NewGetProductHandler(),
+		GetsProductHandler:     *NewGetsProductHandler(),
 	}
 }

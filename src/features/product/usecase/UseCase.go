@@ -44,3 +44,27 @@ func ConvertGetProductToRes(productDTO mysqlCommon.Product) response.ResGetProdu
 	}
 	return result
 }
+
+func ConvertGetsProductToRes(productList []mysqlCommon.Product) response.ResGetsProduct {
+	result := response.ResGetsProduct{
+		Count: int64(len(productList)),
+	}
+	arr := make([]response.GetsProduct, 0, len(productList))
+	for i := 0; i < len(productList); i++ {
+		cur := response.GetsProduct{
+			ID:          productList[i].ID,
+			Name:        productList[i].Name,
+			Description: productList[i].Description,
+			Category:    productList[i].Category,
+			PerAmount:   productList[i].PerAmount,
+			TotalCount:  productList[i].TotalCount,
+			RestCount:   productList[i].RestCount,
+			StartDate:   mysqlCommon.TimeStringToEpoch(productList[i].StartDate),
+			EndDate:     mysqlCommon.TimeStringToEpoch(productList[i].EndDate),
+		}
+		arr = append(arr, cur)
+	}
+	result.Products = arr
+
+	return result
+}
