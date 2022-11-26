@@ -30,7 +30,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "boolean"
+                            "$ref": "#/definitions/response.ResSignInGoogleOAuth"
                         }
                     },
                     "400": {
@@ -135,6 +135,17 @@ const docTemplate = `{
             }
         },
         "response.ResCallbackGoogleOAuth": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ResSignInGoogleOAuth": {
             "type": "object",
             "properties": {
                 "accessToken": {

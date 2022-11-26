@@ -5,7 +5,7 @@ import (
 )
 
 type ISignInGoogleOAuthUseCase interface {
-	SignInGoogle() error
+	SignInGoogle() (string, string, error)
 }
 type ISignOutGoogleOAuthUseCase interface {
 	SignOutGoogle(email string) error
