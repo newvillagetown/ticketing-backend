@@ -20,3 +20,7 @@ type IGetsProductUseCase interface {
 type IDeleteProductUseCase interface {
 	Delete(req request.ReqDeleteProduct) error
 }
+
+type IUpdateProductUseCase interface {
+	Update() error
+}

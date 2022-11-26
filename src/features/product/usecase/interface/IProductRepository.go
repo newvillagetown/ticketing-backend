@@ -19,3 +19,6 @@ type IGetsProductRepository interface {
 type IDeleteProductRepository interface {
 	FindOneAndDeleteUpdateProduct(productID string) error
 }
+type IUpdateProductRepository interface {
+	FindOneAndUpdateProduct() error
+}
