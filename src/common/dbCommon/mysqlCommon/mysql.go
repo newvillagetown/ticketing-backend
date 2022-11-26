@@ -34,6 +34,13 @@ func GetEnvMySQL() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	if envCommon.Env.IsLocal == true {
+		url, err := ssm.AwsGetParam(fmt.Sprintf("%s-%s-mysql-uri-local", envCommon.Env.Env, envCommon.Env.Project))
+		if err != nil {
+			return nil, err
+		}
+		connInfos[2] = url
+	}
 	return connInfos, nil
 }
 
