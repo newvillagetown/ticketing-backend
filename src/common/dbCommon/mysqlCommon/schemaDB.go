@@ -29,4 +29,29 @@ type Product struct {
 	ImgUrl      string `json:"imgUrl"`      //이미지
 	TotalCount  int64  `json:"totalCount"`  //총 수량
 	RestCount   int64  `json:"restCount"`   //남은 수량
+	StartDate   string `json:"startDate"`   //예매 시작 날짜
+	EndDate     string `json:"endDate"`     //예매 종료 날짜
 }
+
+/*
+product 테이블 생성
+CREATE TABLE product (
+ id        varchar(100),
+ created     VARCHAR(100),
+ lastUpdated    VARCHAR(100),
+ isDeleted   TINYINT(1),
+ name    VARCHAR(500),
+ description text,
+ category varchar(100),
+ perAmount int,
+ imgUrl varchar(1000),
+ totalCount int,
+ restCount int,
+ startDate varchar(200),
+ endDate varchar(200),
+  PRIMARY KEY(id)
+)
+
+INSERT INTO product(id, created, lastUpdated, isDeleted, name, description, category, perAmount, totalCount, restCount, startDate, endDate)
+VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+*/

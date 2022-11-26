@@ -1,5 +1,7 @@
 package _interface
 
+import "main/features/product/model/request"
+
 type IRegisterProductUseCase interface {
-	Register() error
+	Register(req request.ReqRegisterProduct) error
 }

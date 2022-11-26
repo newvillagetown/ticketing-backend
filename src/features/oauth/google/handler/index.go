@@ -6,7 +6,7 @@ import (
 	"main/common/jwtCommon"
 )
 
-func RegisterGoogleOAuthHandler(e *echo.Group) {
+func IndexGoogleOAuthHandler(e *echo.Group) {
 	handler := NewGoogleOAuthHandler()
 	gApiV01Google := e.Group("/google")
 	gApiV01Google.GET("/signin", handler.SignInGoogleOAuthHandler.SignInGoogle)

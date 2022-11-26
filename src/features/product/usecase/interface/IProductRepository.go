@@ -1,5 +1,7 @@
 package _interface
 
+import "main/common/dbCommon/mysqlCommon"
+
 type IRegisterProductRepository interface {
-	CreateProduct() error
+	CreateProduct(productDTO mysqlCommon.Product) error
 }
