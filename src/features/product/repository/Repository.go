@@ -13,3 +13,7 @@ type GetProductRepository struct {
 type GetsProductRepository struct {
 	TokenCollection *mongo.Collection
 }
+
+type DeleteProductRepository struct {
+	TokenCollection *mongo.Collection
+}
