@@ -1,13 +1,12 @@
 package handler
 
 import (
-	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
-	"main/common/oauthCommon/google"
+	"main/common/dbCommon/mongodbCommon"
+	"main/features/oauth/google/model/response"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
-	"main/middleware"
 	"net/http"
 )
 
@@ -16,7 +15,7 @@ type SignInGoogleOAuthHandler struct {
 }
 
 func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
-	return &SignInGoogleOAuthHandler{UseCase: usecase.NewSignInGoogleOAuthUseCase(repository.NewSignInGoogleOAuthRepository())}
+	return &SignInGoogleOAuthHandler{UseCase: usecase.NewSignInGoogleOAuthUseCase(repository.NewSignInGoogleOAuthRepository(mongodbCommon.TokenCollection))}
 }
 
 // GoogleSignin
@@ -27,25 +26,34 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
-// @Success 200 {object} bool
+// @Success 200 {object} response.ResSignInGoogleOAuth
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
-	sess, _ := middleware.Store.Get(c.Request(), "session")
-	sess.Options = &sessions.Options{
-		Path:     "/v0.1/auth/google/signin",
-		MaxAge:   300,
-		HttpOnly: true,
-	}
-	state := google.RandToken()
-	sess.Values["state"] = state
-	sess.Save(c.Request(), c.Response())
+	/*
+		sess, _ := middleware.Store.Get(c.Request(), "session")
+		sess.Options = &sessions.Options{
+			Path:     "/v0.1/auth/google/signin",
+			MaxAge:   300,
+			HttpOnly: true,
+		}
+		state := google.RandToken()
+		sess.Values["state"] = state
+		sess.Save(c.Request(), c.Response())
 
-	//콜백 url을 호출
-	err := c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
+
+		c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
+	*/
+
+	accessToken, refreshToken, err := s.UseCase.SignInGoogle()
 	if err != nil {
-		return err
+		return c.JSON(http.StatusInternalServerError, err)
 	}
-	return c.JSON(http.StatusOK, true)
+	result := response.ResSignInGoogleOAuth{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}
+
+	return c.JSON(http.StatusOK, result)
 }
