@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"main/common/dbCommon/mysqlCommon"
+	"main/features/product/model/request"
 	_interface "main/features/product/usecase/interface"
 )
 
@@ -14,7 +16,11 @@ func NewGetProductUseCase(repo _interface.IGetProductRepository) _interface.IGet
 	}
 }
 
-func (g *GetProductUseCase) Get() error {
+func (g *GetProductUseCase) Get(req request.ReqGetProduct) (mysqlCommon.Product, error) {
+	productDTO, err := g.Repository.FindOneProduct(req.ProductID)
+	if err != nil {
+		return mysqlCommon.Product{}, err
+	}
 
-	return nil
+	return productDTO, nil
 }
