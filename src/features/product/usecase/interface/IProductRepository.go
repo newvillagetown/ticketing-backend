@@ -13,3 +13,7 @@ type IGetProductRepository interface {
 type IGetsProductRepository interface {
 	FindProduct() ([]mysqlCommon.Product, error)
 }
+
+type IDeleteProductRepository interface {
+	FindOneAndDeleteUpdateProduct() error
+}
