@@ -1,11 +1,14 @@
 package _interface
 
-import "main/features/product/model/request"
+import (
+	"main/common/dbCommon/mysqlCommon"
+	"main/features/product/model/request"
+)
 
 type IRegisterProductUseCase interface {
 	Register(req request.ReqRegisterProduct) error
 }
 
 type IGetProductUseCase interface {
-	Get() error
+	Get(req request.ReqGetProduct) (mysqlCommon.Product, error)
 }

@@ -13,6 +13,38 @@ definitions:
       refreshToken:
         type: string
     type: object
+  response.ResGetProduct:
+    properties:
+      category:
+        description: 상품 카테고리
+        type: string
+      description:
+        description: 상품 설명
+        type: string
+      endDate:
+        description: 예매 종료 날짜 epoch time
+        type: integer
+      id:
+        type: string
+      image:
+        description: 이미지
+        type: string
+      name:
+        description: 상품이름
+        type: string
+      perAmount:
+        description: 상품 티켓 당 금액
+        type: integer
+      restCount:
+        description: 남은 수량
+        type: integer
+      startDate:
+        description: 예매 시작 날짜 epoch time
+        type: integer
+      totalCount:
+        description: 총 수량
+        type: integer
+    type: object
   response.ResSignInGoogleOAuth:
     properties:
       accessToken:
@@ -104,6 +136,13 @@ paths:
   /v0.1/features/product:
     get:
       description: |-
+        ■ errCode with 400
+        PARAM_BAD : 파라미터 오류
+
+        ■ errCode with 401
+        TOKEN_BAD : 토큰 인증 실패
+        POLICY_VIOLATION : 토큰 세션 정책 위반
+
         ■ errCode with 500
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
@@ -113,57 +152,18 @@ paths:
         name: token
         required: true
         type: string
-      - description: name
-        in: formData
-        name: name
+      - description: productID
+        in: query
+        name: productID
         required: true
         type: string
-      - description: description
-        in: formData
-        name: description
-        required: true
-        type: string
-      - description: category
-        in: formData
-        name: category
-        required: true
-        type: string
-      - description: image
-        in: formData
-        name: image
-        type: file
-      - description: perAmount
-        in: formData
-        name: perAmount
-        required: true
-        type: integer
-      - description: totalCount
-        in: formData
-        name: totalCount
-        required: true
-        type: integer
-      - description: restCount
-        in: formData
-        name: restCount
-        required: true
-        type: integer
-      - description: startDate
-        in: formData
-        name: startDate
-        required: true
-        type: integer
-      - description: endDate
-        in: formData
-        name: endDate
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: boolean
+            $ref: '#/definitions/response.ResGetProduct'
         "400":
           description: Bad Request
           schema:

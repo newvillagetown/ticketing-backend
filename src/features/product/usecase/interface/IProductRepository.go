@@ -7,5 +7,5 @@ type IRegisterProductRepository interface {
 }
 
 type IGetProductRepository interface {
-	FindOneProduct() error
+	FindOneProduct(productID string) (mysqlCommon.Product, error)
 }

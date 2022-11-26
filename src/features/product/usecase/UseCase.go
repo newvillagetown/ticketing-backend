@@ -3,6 +3,7 @@ package usecase
 import (
 	"main/common/dbCommon/mysqlCommon"
 	"main/features/product/model/request"
+	"main/features/product/model/response"
 )
 
 func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.Product {
@@ -26,5 +27,20 @@ func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.Pro
 		// s3 signed url
 	}
 
+	return result
+}
+
+func ConvertGetProductToRes(productDTO mysqlCommon.Product) response.ResGetProduct {
+	result := response.ResGetProduct{
+		ID:          productDTO.ID,
+		Name:        productDTO.Name,
+		Description: productDTO.Description,
+		Category:    productDTO.Category,
+		PerAmount:   productDTO.PerAmount,
+		TotalCount:  productDTO.TotalCount,
+		RestCount:   productDTO.RestCount,
+		StartDate:   mysqlCommon.TimeStringToEpoch(productDTO.StartDate),
+		EndDate:     mysqlCommon.TimeStringToEpoch(productDTO.EndDate),
+	}
 	return result
 }
