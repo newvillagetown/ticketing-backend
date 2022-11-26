@@ -16,3 +16,7 @@ type IGetProductUseCase interface {
 type IGetsProductUseCase interface {
 	Gets() ([]mysqlCommon.Product, error)
 }
+
+type IDeleteProductUseCase interface {
+	Delete(req request.ReqDeleteProduct) error
+}
