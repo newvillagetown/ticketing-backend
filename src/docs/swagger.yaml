@@ -101,4 +101,28 @@ paths:
       summary: google 로그아웃
       tags:
       - auth
+  /v0.1/feature/product:
+    post:
+      description: |-
+        ■ errCode with 500
+        INTERNAL_SERVER : 내부 로직 처리 실패
+        INTERNAL_DB : DB 처리 실패
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+      summary: 상품 등록
+      tags:
+      - auth
 swagger: "2.0"
