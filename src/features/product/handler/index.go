@@ -15,4 +15,5 @@ func IndexProductHandler(e *echo.Group) {
 	gApiV01Features.GET("/product", handler.GetProductHandler.get)
 	gApiV01Features.GET("/product/gets", handler.GetsProductHandler.gets)
 	gApiV01Features.DELETE("/product", handler.DeleteProductHandler.delete)
+	gApiV01Features.PUT("/product", handler.UpdateProductHandler.update)
 }
