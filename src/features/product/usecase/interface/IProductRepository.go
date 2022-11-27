@@ -20,5 +20,6 @@ type IDeleteProductRepository interface {
 	FindOneAndDeleteUpdateProduct(productID string) error
 }
 type IUpdateProductRepository interface {
-	FindOneAndUpdateProduct() error
+	FindOneProduct(productID string) (mysqlCommon.Product, error)
+	FindOneAndUpdateProduct(productDTO mysqlCommon.Product) error
 }

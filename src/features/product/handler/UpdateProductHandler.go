@@ -45,6 +45,9 @@ func (u *UpdateProductHandler) update(c echo.Context) error {
 	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
 		return iErr
 	}
-
+	err := u.UseCase.Update(*req)
+	if err != nil {
+		return err
+	}
 	return c.JSON(http.StatusOK, true)
 }

@@ -22,5 +22,5 @@ type IDeleteProductUseCase interface {
 }
 
 type IUpdateProductUseCase interface {
-	Update() error
+	Update(req request.ReqUpdateProduct) error
 }
