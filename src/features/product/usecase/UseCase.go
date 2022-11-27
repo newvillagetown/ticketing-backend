@@ -68,3 +68,63 @@ func ConvertGetsProductToRes(productList []mysqlCommon.Product) response.ResGets
 
 	return result
 }
+
+func ConvertUpdateProductNewProductDTO(req request.ReqUpdateProduct, productDTO mysqlCommon.Product) mysqlCommon.Product {
+	now := mysqlCommon.NowDateGenerate()
+	result := mysqlCommon.Product{
+		ID:          productDTO.ID,
+		Created:     productDTO.Created,
+		LastUpdated: now,
+		IsDeleted:   productDTO.IsDeleted,
+		Name:        productDTO.Name,
+		Description: productDTO.Description,
+		Category:    productDTO.Category,
+		PerAmount:   productDTO.PerAmount,
+		ImgUrl:      productDTO.ImgUrl,
+		TotalCount:  productDTO.TotalCount,
+		RestCount:   productDTO.RestCount,
+		StartDate:   productDTO.StartDate,
+		EndDate:     productDTO.EndDate,
+	}
+	//true이면 변경할 데이터가 존재한다는 의미
+	if NilCheckString(req.Name) {
+		result.Name = req.Name
+	}
+	if NilCheckString(req.Description) {
+		result.Description = req.Description
+	}
+	if NilCheckString(req.Category) {
+		result.Category = req.Category
+	}
+	if NilCheckInt64(req.PerAmount) {
+		result.PerAmount = req.PerAmount
+	}
+	if NilCheckInt64(req.TotalCount) {
+		result.TotalCount = req.TotalCount
+	}
+	if NilCheckInt64(req.RestCount) {
+		result.RestCount = req.RestCount
+	}
+	if NilCheckInt64(req.StartDate) {
+		result.StartDate = mysqlCommon.EpochToTimeString(req.StartDate)
+	}
+	if NilCheckInt64(req.EndDate) {
+		result.EndDate = mysqlCommon.EpochToTimeString(req.EndDate)
+	}
+
+	return result
+}
+
+func NilCheckString(str string) bool {
+	if str != "" {
+		return true
+	}
+	return false
+}
+
+func NilCheckInt64(num int64) bool {
+	if num != 0 {
+		return true
+	}
+	return false
+}

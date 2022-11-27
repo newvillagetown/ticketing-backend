@@ -19,3 +19,7 @@ type IGetsProductRepository interface {
 type IDeleteProductRepository interface {
 	FindOneAndDeleteUpdateProduct(productID string) error
 }
+type IUpdateProductRepository interface {
+	FindOneProduct(productID string) (mysqlCommon.Product, error)
+	FindOneAndUpdateProduct(productDTO mysqlCommon.Product) error
+}

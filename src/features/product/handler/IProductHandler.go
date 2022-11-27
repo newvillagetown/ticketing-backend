@@ -17,11 +17,15 @@ type IGetsProductHandler interface {
 type IDeleteProductHandler interface {
 	Delete(c echo.Context) error
 }
+type IUpdateProductHandler interface {
+	Update(c echo.Context) error
+}
 type IProductHandler interface {
 	NewRegisterProductHandler(UseCase _interface.IRegisterProductUseCase) *RegisterProductHandler
 	NewGetProductHandler(UseCase _interface.IGetProductUseCase) *GetProductHandler
 	NewGetsProductHandler(UseCase _interface.IGetsProductUseCase) *GetsProductHandler
 	NewDeleteProductHandler(UseCase _interface.IDeleteProductUseCase) *DeleteProductHandler
+	NewUpdateProductHandler(UseCase _interface.IUpdateProductUseCase) *UpdateProductHandler
 }
 
 type ProductHandler struct {
@@ -29,6 +33,7 @@ type ProductHandler struct {
 	GetProductHandler      GetProductHandler
 	GetsProductHandler     GetsProductHandler
 	DeleteProductHandler   DeleteProductHandler
+	UpdateProductHandler   UpdateProductHandler
 }
 
 func NewProductHandler() *ProductHandler {
@@ -37,5 +42,6 @@ func NewProductHandler() *ProductHandler {
 		GetProductHandler:      *NewGetProductHandler(),
 		GetsProductHandler:     *NewGetsProductHandler(),
 		DeleteProductHandler:   *NewDeleteProductHandler(),
+		UpdateProductHandler:   *NewUpdateProductHandler(),
 	}
 }
