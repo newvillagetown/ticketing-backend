@@ -1,7 +1,9 @@
 package usecase
 
 import (
+	"fmt"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/s3Common"
 	"main/features/product/model/request"
 	"main/features/product/model/response"
 )
@@ -25,6 +27,11 @@ func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.Pro
 	}
 	if req.Image != nil {
 		// s3 signed url
+		filename, err := s3Common.ImageUpload(req.Image, s3Common.ImgTypeProduct)
+		if err != nil {
+			fmt.Println(err)
+		}
+		result.ImgUrl = filename
 	}
 
 	return result
@@ -42,6 +49,11 @@ func ConvertGetProductToRes(productDTO mysqlCommon.Product) response.ResGetProdu
 		StartDate:   mysqlCommon.TimeStringToEpoch(productDTO.StartDate),
 		EndDate:     mysqlCommon.TimeStringToEpoch(productDTO.EndDate),
 	}
+	signedURL, err := s3Common.ImageGetSignedURL(productDTO.ImgUrl, s3Common.ImgTypeProduct)
+	if err != nil {
+		fmt.Println(err)
+	}
+	result.Image = signedURL
 	return result
 }
 
@@ -62,6 +74,11 @@ func ConvertGetsProductToRes(productList []mysqlCommon.Product) response.ResGets
 			StartDate:   mysqlCommon.TimeStringToEpoch(productList[i].StartDate),
 			EndDate:     mysqlCommon.TimeStringToEpoch(productList[i].EndDate),
 		}
+		signedURL, err := s3Common.ImageGetSignedURL(productList[i].ImgUrl, s3Common.ImgTypeProduct)
+		if err != nil {
+			fmt.Println(err)
+		}
+		cur.Image = signedURL
 		arr = append(arr, cur)
 	}
 	result.Products = arr
