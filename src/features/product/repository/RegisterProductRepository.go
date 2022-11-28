@@ -12,8 +12,8 @@ func NewRegisterProductRepository(tokenCollection *mongo.Collection) _interface.
 }
 
 func (r *RegisterProductRepository) CreateProduct(productDTO mysqlCommon.Product) error {
-	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO product(id, created, lastUpdated, isDeleted, name, description, category, perAmount, totalCount, restCount,startDate, endDate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-		productDTO.ID, productDTO.Created, productDTO.LastUpdated, productDTO.IsDeleted, productDTO.Name, productDTO.Description, productDTO.Category, productDTO.PerAmount, productDTO.TotalCount, productDTO.RestCount, productDTO.StartDate, productDTO.EndDate)
+	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO product(id, created, lastUpdated, isDeleted, name, description, category, perAmount, totalCount, restCount,startDate, endDate,imgUrl) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+		productDTO.ID, productDTO.Created, productDTO.LastUpdated, productDTO.IsDeleted, productDTO.Name, productDTO.Description, productDTO.Category, productDTO.PerAmount, productDTO.TotalCount, productDTO.RestCount, productDTO.StartDate, productDTO.EndDate, productDTO.ImgUrl)
 	if err != nil {
 		fmt.Println(err)
 		return err
