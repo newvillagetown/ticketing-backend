@@ -12,7 +12,7 @@ func NewGetsProductRepository(tokenCollection *mongo.Collection) _interface.IGet
 
 func (g *GetsProductRepository) FindProduct() ([]mysqlCommon.Product, error) {
 
-	rows, err := mysqlCommon.MysqlDB.Query("SELECT id,created,lastUpdated,isDeleted,name,description,category,perAmount,totalCount,restCount,startDate,endDate FROM product where isDeleted = false")
+	rows, err := mysqlCommon.MysqlDB.Query("SELECT id,created,lastUpdated,isDeleted,name,description,category,perAmount,totalCount,restCount,startDate,endDate,imgUrl FROM product where isDeleted = false")
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func (g *GetsProductRepository) FindProduct() ([]mysqlCommon.Product, error) {
 		productDTO := mysqlCommon.Product{}
 		err := rows.Scan(
 			&productDTO.ID, &productDTO.Created, &productDTO.LastUpdated, &productDTO.IsDeleted, &productDTO.Name, &productDTO.Description, &productDTO.Category, &productDTO.PerAmount,
-			&productDTO.TotalCount, &productDTO.RestCount, &productDTO.StartDate, &productDTO.EndDate)
+			&productDTO.TotalCount, &productDTO.RestCount, &productDTO.StartDate, &productDTO.EndDate, &productDTO.ImgUrl)
 
 		if err != nil {
 			return nil, err
