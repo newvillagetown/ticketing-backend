@@ -14,7 +14,6 @@ func InitServer() error {
 		fmt.Sprintf("서버 에러 발생 : %s", err.Error())
 		return err
 	}
-	fmt.Println(envCommon.Env)
 	if err := awsCommon.InitAws(); err != nil {
 		fmt.Sprintf("aws 초기화 에러 : %s", err.Error())
 		return err
