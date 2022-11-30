@@ -10,7 +10,7 @@ import (
 )
 
 func TestAwsGetParam(t *testing.T) {
-	t.Run("collection of 5 numbers", func(t *testing.T) {
+	t.Run("aws ssm get param", func(t *testing.T) {
 		var awsConfig aws.Config
 		var err error
 
@@ -26,7 +26,7 @@ func TestAwsGetParam(t *testing.T) {
 }
 
 func TestAwsGetParams(t *testing.T) {
-	t.Run("collection of 5 numbers", func(t *testing.T) {
+	t.Run("aws ssm get params", func(t *testing.T) {
 		var awsConfig aws.Config
 		var err error
 

@@ -24,7 +24,6 @@ func InitMongoDB() error {
 		return err
 	}
 	connURI := MakeMongoDBConnURI(connInfos)
-	fmt.Println(connURI)
 	err = ConnectMongoDB(connURI)
 	if err != nil {
 		return err
