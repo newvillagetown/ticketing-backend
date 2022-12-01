@@ -3,24 +3,32 @@ package mysqlCommon
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"main/common/awsCommon/ssm"
 	"main/common/envCommon"
 	"time"
 )
 
 var MysqlDB *sql.DB
+var GormDB *gorm.DB
 
 func InitMySQL() error {
 	connInfos, err := GetEnvMySQL()
 	connURI := MakeMySQLConnURI(connInfos)
 	MysqlDB, err = sql.Open("mysql", connURI)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
-	//	defer MysqlDB.Close()
+
+	// init gorm
+	GormDB, err = gorm.Open(mysql.New(mysql.Config{
+		Conn: MysqlDB,
+	}), &gorm.Config{})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
