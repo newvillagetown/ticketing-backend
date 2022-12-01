@@ -5,7 +5,7 @@ type User struct {
 	Name      string `json:"name"`      //이름
 	Email     string `json:"email"`     //이메일
 	Created   string `json:"created"`   //생성 날짜
-	IsDeleted bool   `json:"IsDeleted"` //활동 여부
+	IsDeleted bool   `json:"isDeleted"` //활동 여부
 }
 
 type UserAuth struct {

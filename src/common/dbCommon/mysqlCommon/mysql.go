@@ -21,11 +21,19 @@ func InitMySQL() error {
 	if err != nil {
 		return err
 	}
-
-	// init gorm
+	err = MysqlDB.Ping()
+	if err != nil {
+		return err
+	}
+	/*
+		GORM perform write (create/update/delete) operations run inside a transaction to ensure data consistency,
+		you can disable it during initialization if it is not required, you will gain about 30%+ performance improvement after that
+	*/
 	GormDB, err = gorm.Open(mysql.New(mysql.Config{
 		Conn: MysqlDB,
-	}), &gorm.Config{})
+	}), &gorm.Config{
+		SkipDefaultTransaction: true,
+	})
 	if err != nil {
 		return err
 	}
