@@ -8,23 +8,21 @@ import (
 	"main/features/product/model/response"
 )
 
-func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.Product {
-	id := mysqlCommon.PKIDGenerate()
-	now := mysqlCommon.NowDateGenerate()
-	result := mysqlCommon.Product{
-		ID:          id,
-		Created:     now,
-		LastUpdated: now,
-		IsDeleted:   false,
+func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.GormProduct {
+	result := mysqlCommon.GormProduct{
+		GormModel: mysqlCommon.GormModel{
+			ID: mysqlCommon.PKIDGenerate(),
+		},
 		Name:        req.Name,
 		Description: req.Description,
 		Category:    req.Category,
 		PerAmount:   req.PerAmount,
 		TotalCount:  req.TotalCount,
 		RestCount:   req.RestCount,
-		StartDate:   mysqlCommon.EpochToTimeString(req.StartDate),
-		EndDate:     mysqlCommon.EpochToTimeString(req.EndDate),
+		StartDate:   req.StartDate,
+		EndDate:     req.EndDate,
 	}
+
 	if req.Image != nil {
 		// s3 signed url
 		filename, err := s3Common.ImageUpload(req.Image, s3Common.ImgTypeProduct)

@@ -5,7 +5,7 @@ import (
 )
 
 type IRegisterProductRepository interface {
-	CreateProduct(productDTO mysqlCommon.Product) error
+	CreateProduct(productDTO mysqlCommon.GormProduct) error
 }
 
 type IGetProductRepository interface {

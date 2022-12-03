@@ -11,16 +11,12 @@ func NewRegisterProductRepository(tokenCollection *mongo.Collection) _interface.
 	return &RegisterProductRepository{TokenCollection: tokenCollection}
 }
 
-func (r *RegisterProductRepository) CreateProduct(productDTO mysqlCommon.Product) error {
-	result, err := mysqlCommon.MysqlDB.Exec("INSERT INTO product(id, created, lastUpdated, isDeleted, name, description, category, perAmount, totalCount, restCount,startDate, endDate,imgUrl) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-		productDTO.ID, productDTO.Created, productDTO.LastUpdated, productDTO.IsDeleted, productDTO.Name, productDTO.Description, productDTO.Category, productDTO.PerAmount, productDTO.TotalCount, productDTO.RestCount, productDTO.StartDate, productDTO.EndDate, productDTO.ImgUrl)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	n, err := result.RowsAffected()
-	if n == 1 {
-		fmt.Println("1 row inserted.")
+func (r *RegisterProductRepository) CreateProduct(productDTO mysqlCommon.GormProduct) error {
+	result := mysqlCommon.GormDB.Create(&productDTO)
+	if result.RowsAffected == 0 || result.Error != nil {
+		fmt.Println(result.RowsAffected)
+		fmt.Println(result.Error)
+		return result.Error
 	}
 	return nil
 }
