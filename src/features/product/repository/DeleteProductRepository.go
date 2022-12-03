@@ -12,13 +12,10 @@ func NewDeleteProductRepository(tokenCollection *mongo.Collection) _interface.ID
 }
 
 func (d *DeleteProductRepository) FindOneAndDeleteUpdateProduct(productID string) error {
-	result, err := mysqlCommon.MysqlDB.Exec("update product set isDeleted = ? where id = ? and isDeleted = ?", true, productID, false)
-	if err != nil {
-		return err
-	}
-	cnt, err := result.RowsAffected()
-	if cnt == 0 {
-		return fmt.Errorf("sql: no rows in result set")
+	fmt.Println(productID)
+	result := mysqlCommon.GormDB.Model(&mysqlCommon.GormProduct{}).Where("id = ?", productID).Update("is_deleted", true)
+	if result.RowsAffected == 0 || result.Error != nil {
+		return result.Error
 	}
 	return nil
 }

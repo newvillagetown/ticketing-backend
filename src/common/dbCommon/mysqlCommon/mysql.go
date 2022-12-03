@@ -21,14 +21,26 @@ func InitMySQL() error {
 	if err != nil {
 		return err
 	}
-
-	// init gorm
-	GormDB, err = gorm.Open(mysql.New(mysql.Config{
-		Conn: MysqlDB,
-	}), &gorm.Config{})
+	err = MysqlDB.Ping()
 	if err != nil {
 		return err
 	}
+	/*
+		GORM perform write (create/update/delete) operations run inside a transaction to ensure data consistency,
+		you can disable it during initialization if it is not required, you will gain about 30%+ performance improvement after that
+	*/
+	GormDB, err = gorm.Open(mysql.New(mysql.Config{
+		Conn: MysqlDB,
+	}), &gorm.Config{
+		SkipDefaultTransaction: true,
+	})
+	if err != nil {
+		return err
+	}
+
+	var products []GormProduct
+	GormDB.Find(&products)
+	fmt.Println(products)
 
 	return nil
 }
@@ -80,4 +92,8 @@ func EpochToTimeString(t int64) string {
 func TimeStringToEpoch(t string) int64 {
 	date, _ := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
 	return date.Unix()
+}
+
+func TimeToEpoch(t time.Time) int64 {
+	return t.Unix()
 }

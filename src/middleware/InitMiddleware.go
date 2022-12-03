@@ -1,12 +1,15 @@
 package middleware
 
 import (
+	"context"
 	"fmt"
 	"github.com/golang-jwt/jwt"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"main/common/dbCommon/mysqlCommon"
 	"main/common/jwtCommon"
+	"time"
 )
 
 var Store = sessions.NewCookieStore([]byte("secret"))
@@ -46,6 +49,21 @@ func InitMiddleware(e *echo.Echo) error {
 			return token, nil
 		},
 	}
+	e.Use(SetDBMiddleware)
 
 	return nil
+}
+
+/*
+Continuous session mode which might be helpful when handling API requests,
+for example, you can set up *gorm.DB with Timeout Context in middlewares,
+and then use the *gorm.DB when processing all requests
+*/
+func SetDBMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		timeoutContext, _ := context.WithTimeout(context.Background(), 8*time.Second)
+		ctx := context.WithValue(c.Request().Context(), "DB", mysqlCommon.GormDB.WithContext(timeoutContext))
+		c.Request().WithContext(ctx)
+		return next(c)
+	}
 }

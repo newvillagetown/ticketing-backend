@@ -41,8 +41,6 @@ func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 		state := google.RandToken()
 		sess.Values["state"] = state
 		sess.Save(c.Request(), c.Response())
-
-
 		c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
 	*/
 
