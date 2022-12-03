@@ -12,7 +12,7 @@ func NewGetsProductRepository(tokenCollection *mongo.Collection) _interface.IGet
 
 func (g *GetsProductRepository) FindProduct() ([]mysqlCommon.GormProduct, error) {
 	var productsDTO []mysqlCommon.GormProduct
-	result := mysqlCommon.GormDB.Find(&productsDTO)
+	result := mysqlCommon.GormDB.Where("is_deleted", false).Find(&productsDTO)
 	if result.Error != nil {
 		return nil, result.Error
 	}
