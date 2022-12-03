@@ -42,14 +42,17 @@ func InitMySQL() error {
 		GormModel: GormModel{
 			ID: PKIDGenerate(),
 		},
-		Name:  "라이언 일까?",
-		Email: "ryan@breathings.co.kr",
+		Name:  "나는 무엇일까?",
+		Email: "pkjhj485@gmail.co.kr",
 	}
 	result := GormDB.Create(&user)
 	fmt.Println(user.GormModel.ID)
 	fmt.Println(result.RowsAffected)
 	fmt.Println(result.Error)
 
+	var users []GormUser
+	GormDB.Where("is_deleted = ?", false).Find(&users)
+	fmt.Println(users)
 	return nil
 }
 
