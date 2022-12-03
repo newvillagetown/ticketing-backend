@@ -38,6 +38,18 @@ func InitMySQL() error {
 		return err
 	}
 
+	user := GormUser{
+		GormModel: GormModel{
+			ID: PKIDGenerate(),
+		},
+		Name:  "라이언 일까?",
+		Email: "ryan@breathings.co.kr",
+	}
+	result := GormDB.Create(&user)
+	fmt.Println(user.GormModel.ID)
+	fmt.Println(result.RowsAffected)
+	fmt.Println(result.Error)
+
 	return nil
 }
 

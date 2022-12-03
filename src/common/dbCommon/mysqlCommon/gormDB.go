@@ -5,13 +5,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type GormUser struct {
+type GormModel struct {
 	ID        string `json:"id" gorm:"primaryKey;column:id""`
-	CreatedAt string `json:"createdAt" gorm:"autoCreateTime;column:created_at"`
-	UpdatedAt string `json:"updatedAt" gorm:"autoUpdateTime;column:updated_at"`
-	Name      string `json:"name"  gorm:"column:name"`
-	Email     string `json:"email"  gorm:"column:email"`
+	CreatedAt int64  `json:"createdAt" gorm:"autoCreateTime;column:created_at"`
+	UpdatedAt int64  `json:"updatedAt" gorm:"autoUpdateTime;column:updated_at"`
 	IsDeleted bool   `json:"isDeleted" gorm:"default:false; column:is_deleted"`
+}
+
+type GormUser struct {
+	GormModel GormModel `gorm:"embedded"`
+	Name      string    `json:"name"  gorm:"column:name"`
+	Email     string    `json:"email"  gorm:"column:email"`
 }
 
 /*
@@ -28,15 +32,27 @@ create table gorm_users (
 */
 
 type GormUserAuth struct {
-	gorm.Model
-	Provider   string       `json:"provider" gorm:"column:provider"`
-	UserID     uint         `json:"userID" gorm:"column:user_id"`
-	LastSignIn int64        `json:"lastSignIn" gorm:"autoUpdateTime; column:last_sign_in"`
-	IsDeleted  sql.NullBool `json:"isDeleted" gorm:"default:false; column:is_deleted"`
+	ID         string `json:"id" gorm:"primaryKey; column:id"`
+	CreateAt   string `json:"createAt" gorm:"autoCreateTime; column:created_at"`
+	UpdatedAt  string `json:"updatedAt" gorm:"autoUpdateTime; column:updated_at"`
+	Provider   string `json:"provider" gorm:"column:provider"`
+	UserID     uint   `json:"userID" gorm:"column:user_id"`
+	LastSignIn int64  `json:"lastSignIn" gorm:"autoUpdateTime; column:last_sign_in"`
+	IsDeleted  bool   `json:"isDeleted" gorm:"default:false; column:is_deleted"`
 }
 
 /*
  userAuth 테이블 생성 기존꺼 일단 그대로 두고 임시로 작업
+create table gorm_users (
+	id varchar(200),
+	name varchar(200),
+	email varchar(200),
+	is_deleted TINYINT(1) not null,
+	created_at varchar(200),
+	updated_at varchar(200),
+    PRIMARY KEY (id)
+	);
+
 	create table gorm_user_auth (
 	id int,
 	provider varchar(200),
