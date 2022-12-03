@@ -38,21 +38,10 @@ func InitMySQL() error {
 		return err
 	}
 
-	user := GormUser{
-		GormModel: GormModel{
-			ID: PKIDGenerate(),
-		},
-		Name:  "나는 무엇일까?",
-		Email: "pkjhj485@gmail.co.kr",
-	}
-	result := GormDB.Create(&user)
-	fmt.Println(user.GormModel.ID)
-	fmt.Println(result.RowsAffected)
-	fmt.Println(result.Error)
+	var products []GormProduct
+	GormDB.Find(&products)
+	fmt.Println(products)
 
-	var users []GormUser
-	GormDB.Where("is_deleted = ?", false).Find(&users)
-	fmt.Println(users)
 	return nil
 }
 
@@ -103,4 +92,8 @@ func EpochToTimeString(t int64) string {
 func TimeStringToEpoch(t string) int64 {
 	date, _ := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
 	return date.Unix()
+}
+
+func TimeToEpoch(t time.Time) int64 {
+	return t.Unix()
 }
