@@ -35,17 +35,17 @@ func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.Gor
 	return result
 }
 
-func ConvertGetProductToRes(productDTO mysqlCommon.Product) response.ResGetProduct {
+func ConvertGetProductToRes(productDTO mysqlCommon.GormProduct) response.ResGetProduct {
 	result := response.ResGetProduct{
-		ID:          productDTO.ID,
+		ID:          productDTO.GormModel.ID,
 		Name:        productDTO.Name,
 		Description: productDTO.Description,
 		Category:    productDTO.Category,
 		PerAmount:   productDTO.PerAmount,
 		TotalCount:  productDTO.TotalCount,
 		RestCount:   productDTO.RestCount,
-		StartDate:   mysqlCommon.TimeStringToEpoch(productDTO.StartDate),
-		EndDate:     mysqlCommon.TimeStringToEpoch(productDTO.EndDate),
+		StartDate:   productDTO.StartDate,
+		EndDate:     productDTO.EndDate,
 	}
 	signedURL, err := s3Common.ImageGetSignedURL(productDTO.ImgUrl, s3Common.ImgTypeProduct)
 	if err != nil {
