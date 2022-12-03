@@ -10,25 +10,11 @@ func NewGetsProductRepository(tokenCollection *mongo.Collection) _interface.IGet
 	return &GetsProductRepository{TokenCollection: tokenCollection}
 }
 
-func (g *GetsProductRepository) FindProduct() ([]mysqlCommon.Product, error) {
-
-	rows, err := mysqlCommon.MysqlDB.Query("SELECT id,created,lastUpdated,isDeleted,name,description,category,perAmount,totalCount,restCount,startDate,endDate,imgUrl FROM product where isDeleted = false")
-	if err != nil {
-		return nil, err
+func (g *GetsProductRepository) FindProduct() ([]mysqlCommon.GormProduct, error) {
+	var productsDTO []mysqlCommon.GormProduct
+	result := mysqlCommon.GormDB.Find(&productsDTO)
+	if result.Error != nil {
+		return nil, result.Error
 	}
-	defer rows.Close()
-	productList := make([]mysqlCommon.Product, 0)
-	for rows.Next() {
-		productDTO := mysqlCommon.Product{}
-		err := rows.Scan(
-			&productDTO.ID, &productDTO.Created, &productDTO.LastUpdated, &productDTO.IsDeleted, &productDTO.Name, &productDTO.Description, &productDTO.Category, &productDTO.PerAmount,
-			&productDTO.TotalCount, &productDTO.RestCount, &productDTO.StartDate, &productDTO.EndDate, &productDTO.ImgUrl)
-
-		if err != nil {
-			return nil, err
-		}
-		productList = append(productList, productDTO)
-	}
-
-	return productList, nil
+	return productsDTO, nil
 }

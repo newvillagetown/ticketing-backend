@@ -14,7 +14,7 @@ type IGetProductUseCase interface {
 }
 
 type IGetsProductUseCase interface {
-	Gets() ([]mysqlCommon.Product, error)
+	Gets() ([]mysqlCommon.GormProduct, error)
 }
 
 type IDeleteProductUseCase interface {

@@ -55,28 +55,30 @@ func ConvertGetProductToRes(productDTO mysqlCommon.GormProduct) response.ResGetP
 	return result
 }
 
-func ConvertGetsProductToRes(productList []mysqlCommon.Product) response.ResGetsProduct {
+func ConvertGetsProductToRes(productList []mysqlCommon.GormProduct) response.ResGetsProduct {
 	result := response.ResGetsProduct{
 		Count: int64(len(productList)),
 	}
 	arr := make([]response.GetsProduct, 0, len(productList))
 	for i := 0; i < len(productList); i++ {
 		cur := response.GetsProduct{
-			ID:          productList[i].ID,
+			ID:          productList[i].GormModel.ID,
 			Name:        productList[i].Name,
 			Description: productList[i].Description,
 			Category:    productList[i].Category,
 			PerAmount:   productList[i].PerAmount,
 			TotalCount:  productList[i].TotalCount,
 			RestCount:   productList[i].RestCount,
-			StartDate:   mysqlCommon.TimeStringToEpoch(productList[i].StartDate),
-			EndDate:     mysqlCommon.TimeStringToEpoch(productList[i].EndDate),
+			StartDate:   productList[i].StartDate,
+			EndDate:     productList[i].EndDate,
 		}
-		signedURL, err := s3Common.ImageGetSignedURL(productList[i].ImgUrl, s3Common.ImgTypeProduct)
-		if err != nil {
-			fmt.Println(err)
+		if productList[i].ImgUrl != "" {
+			signedURL, err := s3Common.ImageGetSignedURL(productList[i].ImgUrl, s3Common.ImgTypeProduct)
+			if err != nil {
+				fmt.Println(err)
+			}
+			cur.Image = signedURL
 		}
-		cur.Image = signedURL
 		arr = append(arr, cur)
 	}
 	result.Products = arr
