@@ -86,50 +86,35 @@ func ConvertGetsProductToRes(productList []mysqlCommon.GormProduct) response.Res
 	return result
 }
 
-func ConvertUpdateProductNewProductDTO(req request.ReqUpdateProduct, productDTO mysqlCommon.Product) mysqlCommon.Product {
-	now := mysqlCommon.NowDateGenerate()
-	result := mysqlCommon.Product{
-		ID:          productDTO.ID,
-		Created:     productDTO.Created,
-		LastUpdated: now,
-		IsDeleted:   productDTO.IsDeleted,
-		Name:        productDTO.Name,
-		Description: productDTO.Description,
-		Category:    productDTO.Category,
-		PerAmount:   productDTO.PerAmount,
-		ImgUrl:      productDTO.ImgUrl,
-		TotalCount:  productDTO.TotalCount,
-		RestCount:   productDTO.RestCount,
-		StartDate:   productDTO.StartDate,
-		EndDate:     productDTO.EndDate,
-	}
+func ConvertUpdateProductNewProductDTO(req request.ReqUpdateProduct, productDTO mysqlCommon.GormProduct) mysqlCommon.GormProduct {
+
 	//true이면 변경할 데이터가 존재한다는 의미
 	if NilCheckString(req.Name) {
-		result.Name = req.Name
+		productDTO.Name = req.Name
 	}
 	if NilCheckString(req.Description) {
-		result.Description = req.Description
+		productDTO.Description = req.Description
 	}
 	if NilCheckString(req.Category) {
-		result.Category = req.Category
+		productDTO.Category = req.Category
 	}
 	if NilCheckInt64(req.PerAmount) {
-		result.PerAmount = req.PerAmount
+		productDTO.PerAmount = req.PerAmount
 	}
 	if NilCheckInt64(req.TotalCount) {
-		result.TotalCount = req.TotalCount
+		productDTO.TotalCount = req.TotalCount
 	}
 	if NilCheckInt64(req.RestCount) {
-		result.RestCount = req.RestCount
+		productDTO.RestCount = req.RestCount
 	}
 	if NilCheckInt64(req.StartDate) {
-		result.StartDate = mysqlCommon.EpochToTimeString(req.StartDate)
+		productDTO.StartDate = req.StartDate
 	}
 	if NilCheckInt64(req.EndDate) {
-		result.EndDate = mysqlCommon.EpochToTimeString(req.EndDate)
+		productDTO.EndDate = req.EndDate
 	}
 
-	return result
+	return productDTO
 }
 
 func NilCheckString(str string) bool {

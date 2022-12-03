@@ -20,8 +20,8 @@ func (u *UpdateProductUseCase) Update(req request.ReqUpdateProduct) error {
 	if err != nil {
 		return err
 	}
-	newProductDTO := ConvertUpdateProductNewProductDTO(req, productDTO)
-	err = u.Repository.FindOneAndUpdateProduct(newProductDTO)
+	updatedProductDTO := ConvertUpdateProductNewProductDTO(req, productDTO)
+	err = u.Repository.FindOneAndUpdateProduct(updatedProductDTO)
 	if err != nil {
 		return err
 	}
