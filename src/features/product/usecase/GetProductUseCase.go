@@ -16,10 +16,10 @@ func NewGetProductUseCase(repo _interface.IGetProductRepository) _interface.IGet
 	}
 }
 
-func (g *GetProductUseCase) Get(req request.ReqGetProduct) (mysqlCommon.Product, error) {
+func (g *GetProductUseCase) Get(req request.ReqGetProduct) (mysqlCommon.GormProduct, error) {
 	productDTO, err := g.Repository.FindOneProduct(req.ProductID)
 	if err != nil {
-		return mysqlCommon.Product{}, err
+		return mysqlCommon.GormProduct{}, err
 	}
 
 	return productDTO, nil

@@ -15,7 +15,7 @@ func NewGetsProductUseCase(repo _interface.IGetsProductRepository) _interface.IG
 	}
 }
 
-func (g *GetsProductUseCase) Gets() ([]mysqlCommon.Product, error) {
+func (g *GetsProductUseCase) Gets() ([]mysqlCommon.GormProduct, error) {
 	productList, err := g.Repository.FindProduct()
 	if err != nil {
 		return nil, err

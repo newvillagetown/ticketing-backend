@@ -10,11 +10,11 @@ type IRegisterProductUseCase interface {
 }
 
 type IGetProductUseCase interface {
-	Get(req request.ReqGetProduct) (mysqlCommon.Product, error)
+	Get(req request.ReqGetProduct) (mysqlCommon.GormProduct, error)
 }
 
 type IGetsProductUseCase interface {
-	Gets() ([]mysqlCommon.Product, error)
+	Gets() ([]mysqlCommon.GormProduct, error)
 }
 
 type IDeleteProductUseCase interface {

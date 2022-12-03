@@ -5,21 +5,21 @@ import (
 )
 
 type IRegisterProductRepository interface {
-	CreateProduct(productDTO mysqlCommon.Product) error
+	CreateProduct(productDTO mysqlCommon.GormProduct) error
 }
 
 type IGetProductRepository interface {
-	FindOneProduct(productID string) (mysqlCommon.Product, error)
+	FindOneProduct(productID string) (mysqlCommon.GormProduct, error)
 }
 
 type IGetsProductRepository interface {
-	FindProduct() ([]mysqlCommon.Product, error)
+	FindProduct() ([]mysqlCommon.GormProduct, error)
 }
 
 type IDeleteProductRepository interface {
 	FindOneAndDeleteUpdateProduct(productID string) error
 }
 type IUpdateProductRepository interface {
-	FindOneProduct(productID string) (mysqlCommon.Product, error)
-	FindOneAndUpdateProduct(productDTO mysqlCommon.Product) error
+	FindOneProduct(productID string) (mysqlCommon.GormProduct, error)
+	FindOneAndUpdateProduct(productDTO mysqlCommon.GormProduct) error
 }
