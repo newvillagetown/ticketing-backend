@@ -226,11 +226,6 @@ paths:
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
       parameters:
-      - description: accessToken
-        in: header
-        name: token
-        required: true
-        type: string
       - description: json body
         in: body
         name: json
@@ -268,11 +263,6 @@ paths:
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
       parameters:
-      - description: accessToken
-        in: header
-        name: token
-        required: true
-        type: string
       - description: productID
         in: query
         name: productID
@@ -302,11 +292,6 @@ paths:
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
       parameters:
-      - description: accessToken
-        in: header
-        name: token
-        required: true
-        type: string
       - description: name
         in: formData
         name: name
@@ -382,11 +367,6 @@ paths:
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
       parameters:
-      - description: accessToken
-        in: header
-        name: token
-        required: true
-        type: string
       - description: json body
         in: body
         name: json
@@ -424,11 +404,6 @@ paths:
         ■ errCode with 500
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
-      parameters:
-      - description: accessToken
-        in: header
-        name: token
-        type: string
       produces:
       - application/json
       responses:

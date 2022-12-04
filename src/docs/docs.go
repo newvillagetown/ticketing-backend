@@ -134,13 +134,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "accessToken",
-                        "name": "token",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "productID",
                         "name": "productID",
                         "in": "query",
@@ -178,13 +171,6 @@ const docTemplate = `{
                 ],
                 "summary": "상품 수정하기",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "accessToken",
-                        "name": "token",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "json body",
                         "name": "json",
@@ -226,13 +212,6 @@ const docTemplate = `{
                 ],
                 "summary": "상품 등록",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "accessToken",
-                        "name": "token",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "name",
@@ -328,13 +307,6 @@ const docTemplate = `{
                 "summary": "상품 삭제하기(소프트)",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "accessToken",
-                        "name": "token",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "json body",
                         "name": "json",
                         "in": "body",
@@ -376,14 +348,6 @@ const docTemplate = `{
                     "product"
                 ],
                 "summary": "상품 목록 가져오기",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "accessToken",
-                        "name": "token",
-                        "in": "header"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
