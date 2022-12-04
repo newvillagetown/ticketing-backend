@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"main/common/jwtCommon"
 	"main/common/oauthCommon/google"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -55,7 +54,6 @@ func (s *SignInGoogleOAuthUseCase) SignInGoogle() (string, string, error) {
 	}
 	// 토큰 만들기
 	token := CreateRefreshToken(authUser, refreshToken, now)
-	fmt.Println(token)
 	//기존 리프레시 토큰 제거
 	err = s.Repository.DeleteAllRefreshToken(authUser)
 	if err != nil {

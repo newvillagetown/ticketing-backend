@@ -22,7 +22,6 @@ func InitMiddleware(e *echo.Echo) error {
 		LogStatus:     true,
 		LogValuesFunc: RestLogger,
 	}))
-	signingKey := jwtCommon.AccessToknenSecretKey
 
 	//API sever timeout 24s
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
@@ -30,11 +29,11 @@ func InitMiddleware(e *echo.Echo) error {
 		ErrorMessage: "timeout",
 		Timeout:      24 * time.Second,
 	}))
-
+	signingKey := jwtCommon.AccessTokenSecretKey
 	jwtCommon.JwtConfig = middleware.JWTConfig{
-		TokenLookup: "header:token",
-		Claims:      &jwtCommon.JwtCustomClaims{},
-		SigningKey:  signingKey,
+		TokenLookup:   "cookie:accessToken",
+		SigningKey:    signingKey,
+		SigningMethod: "HS256",
 		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
 			keyFunc := func(t *jwt.Token) (interface{}, error) {
 				if t.Method.Alg() != "HS256" {

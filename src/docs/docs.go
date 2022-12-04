@@ -381,8 +381,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "accessToken",
                         "name": "token",
-                        "in": "header",
-                        "required": true
+                        "in": "header"
                     }
                 ],
                 "responses": {
