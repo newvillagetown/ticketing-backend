@@ -38,10 +38,6 @@ func InitMySQL() error {
 		return err
 	}
 
-	var products []GormProduct
-	GormDB.Find(&products)
-	fmt.Println(products)
-
 	return nil
 }
 
