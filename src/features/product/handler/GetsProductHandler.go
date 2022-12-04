@@ -31,7 +31,6 @@ func NewGetsProductHandler() *GetsProductHandler {
 // @Description ■ errCode with 500
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
-// @Param token header string true "accessToken"
 // @Produce json
 // @Success 200 {object} response.ResGetsProduct
 // @Failure 400 {object} errorCommon.ResError

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
@@ -37,7 +36,6 @@ func (s *SignOutGoogleOAuthHandler) SignOutGoogle(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	email := claims["email"].(string)
-	fmt.Println(claims["userID"].(string))
 	err := s.UseCase.SignOutGoogle(email)
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, err.Error())

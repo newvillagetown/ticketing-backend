@@ -26,7 +26,6 @@ func NewRegisterProductHandler() *RegisterProductHandler {
 // @Description ■ errCode with 500
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
-// @Param token header string true "accessToken"
 // @Param name formData string true "name"
 // @Param description formData string true "description"
 // @Param category formData string true "category"

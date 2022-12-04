@@ -8,7 +8,6 @@ import (
 	googleOAuthHandler "main/features/oauth/google/handler"
 	productHandler "main/features/product/handler"
 	"net/http"
-	"time"
 )
 
 func InitHandler(e *echo.Echo) error {
@@ -20,16 +19,12 @@ func InitHandler(e *echo.Echo) error {
 
 	gApiAuthV01 := gApiV01.Group("/auth")
 	googleOAuthHandler.IndexGoogleOAuthHandler(gApiAuthV01)
-	productHandler.IndexProductHandler(gApiV01)
 
 	gApiV01Features := gApiV01.Group("/features")
 	gApiV01Features.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
-	gApiV01.GET("/test", func(c echo.Context) error {
-		fmt.Println("api 서버 타이암웃 24초 설정 테스트 시작 ")
-		for i := 1; i <= 30; i++ {
-			time.Sleep(1 * time.Second) // 1s
-			fmt.Println(fmt.Sprintf("%d 초 ", i))
-		}
+	productHandler.IndexProductHandler(gApiV01Features)
+	gApiAuthV01.GET("/test", func(c echo.Context) error {
+		fmt.Println(c.Cookie("hello"))
 		return c.JSON(http.StatusOK, true)
 	})
 	return nil
