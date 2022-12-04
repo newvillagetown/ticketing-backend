@@ -33,7 +33,6 @@ func NewUpdateProductHandler() *UpdateProductHandler {
 // @Description ■ errCode with 500
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
-// @Param token header string true "accessToken"
 // @Param json body request.ReqUpdateProduct true "json body"
 // @Produce json
 // @Success 200 {object} bool

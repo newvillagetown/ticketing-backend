@@ -2,18 +2,15 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
 )
 
 func IndexProductHandler(e *echo.Group) {
 	handler := NewProductHandler()
-	gApiV01Features := e.Group("/features")
+	gApiV01Features := e.Group("/product")
 
-	gApiV01Features.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
-	gApiV01Features.POST("/product", handler.RegisterProductHandler.post)
-	gApiV01Features.GET("/product", handler.GetProductHandler.get)
-	gApiV01Features.GET("/product/gets", handler.GetsProductHandler.gets)
-	gApiV01Features.DELETE("/product", handler.DeleteProductHandler.delete)
-	gApiV01Features.PUT("/product", handler.UpdateProductHandler.update)
+	gApiV01Features.POST("", handler.RegisterProductHandler.post)
+	gApiV01Features.GET("", handler.GetProductHandler.get)
+	gApiV01Features.GET("/gets", handler.GetsProductHandler.gets)
+	gApiV01Features.DELETE("", handler.DeleteProductHandler.delete)
+	gApiV01Features.PUT("", handler.UpdateProductHandler.update)
 }

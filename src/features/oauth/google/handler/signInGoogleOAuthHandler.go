@@ -8,6 +8,7 @@ import (
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
 	"net/http"
+	"time"
 )
 
 type SignInGoogleOAuthHandler struct {
@@ -31,6 +32,7 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
+	//TODO Google OAUTH 이슈
 	/*
 		sess, _ := middleware.Store.Get(c.Request(), "session")
 		sess.Options = &sessions.Options{
@@ -48,10 +50,20 @@ func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
+
+	// cookie setting
+	cookie := &http.Cookie{}
+	cookie.Name = "accessToken"
+	cookie.Value = accessToken
+	cookie.Path = "/"
+	cookie.SameSite = http.SameSiteLaxMode
+	cookie.HttpOnly = true
+	cookie.Secure = true
+	cookie.Expires = time.Now().Add(1 * time.Hour)
+	c.SetCookie(cookie)
 	result := response.ResSignInGoogleOAuth{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}
-
 	return c.JSON(http.StatusOK, result)
 }

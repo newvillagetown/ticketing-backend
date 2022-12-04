@@ -19,7 +19,7 @@ func TestGenerateAccessToken(t *testing.T) {
 			if t.Method.Alg() != "HS256" {
 				return nil, fmt.Errorf("unexpected jwt signing method=%v", t.Header["alg"])
 			}
-			return AccessToknenSecretKey, nil
+			return AccessTokenSecretKey, nil
 		}
 		got, _ := jwt.Parse(accessToken, keyFunc)
 

@@ -14,7 +14,7 @@ type JwtCustomClaims struct {
 	jwt.StandardClaims
 }
 
-var AccessToknenSecretKey []byte
+var AccessTokenSecretKey []byte
 var RefreshTokenSecretKey []byte
 var JwtConfig middleware.JWTConfig
 
@@ -25,7 +25,7 @@ const (
 
 func InitJwt() error {
 	secret := "secret"
-	AccessToknenSecretKey = []byte(secret)
+	AccessTokenSecretKey = []byte(secret)
 	RefreshTokenSecretKey = []byte(secret)
 	return nil
 }
@@ -56,7 +56,7 @@ func GenerateAccessToken(email string, now time.Time, userID string) (string, er
 	// Create token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// Generate encoded token and send it as response.
-	accessToken, err := token.SignedString(AccessToknenSecretKey)
+	accessToken, err := token.SignedString(AccessTokenSecretKey)
 	if err != nil {
 		return "", err
 	}
