@@ -9,7 +9,7 @@ func IndexProductHandler(e *echo.Group) {
 	gApiV01Features := e.Group("/product")
 
 	gApiV01Features.POST("", handler.RegisterProductHandler.post)
-	gApiV01Features.GET("", handler.GetProductHandler.get)
+	gApiV01Features.GET("", handler.GetProductHandler.Get)
 	gApiV01Features.GET("/gets", handler.GetsProductHandler.gets)
 	gApiV01Features.DELETE("", handler.DeleteProductHandler.delete)
 	gApiV01Features.PUT("", handler.UpdateProductHandler.update)

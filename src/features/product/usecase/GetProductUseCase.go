@@ -1,23 +1,29 @@
 package usecase
 
 import (
+	"context"
 	"main/common/dbCommon/mysqlCommon"
 	"main/features/product/model/request"
 	_interface "main/features/product/usecase/interface"
+	"time"
 )
 
 type GetProductUseCase struct {
-	Repository _interface.IGetProductRepository
+	Repository     _interface.IGetProductRepository
+	ContextTimeout time.Duration
 }
 
-func NewGetProductUseCase(repo _interface.IGetProductRepository) _interface.IGetProductUseCase {
+func NewGetProductUseCase(repo _interface.IGetProductRepository, timeout time.Duration) _interface.IGetProductUseCase {
 	return &GetProductUseCase{
-		Repository: repo,
+		Repository:     repo,
+		ContextTimeout: timeout,
 	}
 }
 
-func (g *GetProductUseCase) Get(req request.ReqGetProduct) (mysqlCommon.GormProduct, error) {
-	productDTO, err := g.Repository.FindOneProduct(req.ProductID)
+func (g *GetProductUseCase) Get(c context.Context, req request.ReqGetProduct) (mysqlCommon.GormProduct, error) {
+	ctx, cancel := context.WithTimeout(c, g.ContextTimeout)
+	defer cancel()
+	productDTO, err := g.Repository.FindOneProduct(ctx, req.ProductID)
 	if err != nil {
 		return mysqlCommon.GormProduct{}, err
 	}

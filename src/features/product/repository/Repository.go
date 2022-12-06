@@ -1,12 +1,16 @@
 package repository
 
-import "go.mongodb.org/mongo-driver/mongo"
+import (
+	"go.mongodb.org/mongo-driver/mongo"
+	"gorm.io/gorm"
+)
 
 type RegisterProductRepository struct {
 	TokenCollection *mongo.Collection
 }
 
 type GetProductRepository struct {
+	Conn            *gorm.DB
 	TokenCollection *mongo.Collection
 }
 

@@ -1,6 +1,7 @@
 package _interface
 
 import (
+	"context"
 	"main/common/dbCommon/mysqlCommon"
 )
 
@@ -9,7 +10,7 @@ type IRegisterProductRepository interface {
 }
 
 type IGetProductRepository interface {
-	FindOneProduct(productID string) (mysqlCommon.GormProduct, error)
+	FindOneProduct(ctx context.Context, productID string) (mysqlCommon.GormProduct, error)
 }
 
 type IGetsProductRepository interface {

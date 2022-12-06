@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/common/valCommon"
 	"main/features/product/model/request"
 	"main/features/product/repository"
@@ -16,7 +17,7 @@ type GetProductHandler struct {
 }
 
 func NewGetProductHandler() *GetProductHandler {
-	return &GetProductHandler{UseCase: usecase.NewGetProductUseCase(repository.NewGetProductRepository(mongodbCommon.TokenCollection))}
+	return &GetProductHandler{UseCase: usecase.NewGetProductUseCase(repository.NewGetProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // Product get
@@ -39,12 +40,13 @@ func NewGetProductHandler() *GetProductHandler {
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (g *GetProductHandler) get(c echo.Context) error {
+func (g *GetProductHandler) Get(c echo.Context) error {
 	req := &request.ReqGetProduct{}
 	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
 		return iErr
 	}
-	productDTO, err := g.UseCase.Get(*req)
+	ctx := c.Request().Context()
+	productDTO, err := g.UseCase.Get(ctx, *req)
 	if err != nil {
 		return err
 	}

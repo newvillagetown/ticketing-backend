@@ -1,6 +1,7 @@
 package _interface
 
 import (
+	"context"
 	"main/common/dbCommon/mysqlCommon"
 	"main/features/product/model/request"
 )
@@ -10,7 +11,7 @@ type IRegisterProductUseCase interface {
 }
 
 type IGetProductUseCase interface {
-	Get(req request.ReqGetProduct) (mysqlCommon.GormProduct, error)
+	Get(c context.Context, req request.ReqGetProduct) (mysqlCommon.GormProduct, error)
 }
 
 type IGetsProductUseCase interface {
