@@ -5,7 +5,7 @@ import (
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/valCommon"
-	"main/features/product/model/request"
+	"main/features/product/domain/request"
 	"main/features/product/repository"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"

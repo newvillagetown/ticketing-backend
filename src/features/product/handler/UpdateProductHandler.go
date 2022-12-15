@@ -3,8 +3,9 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/common/valCommon"
-	"main/features/product/model/request"
+	"main/features/product/domain/request"
 	"main/features/product/repository"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
@@ -16,7 +17,7 @@ type UpdateProductHandler struct {
 }
 
 func NewUpdateProductHandler() *UpdateProductHandler {
-	return &UpdateProductHandler{UseCase: usecase.NewUpdateProductUseCase(repository.NewUpdateProductRepository(mongodbCommon.TokenCollection))}
+	return &UpdateProductHandler{UseCase: usecase.NewUpdateProductUseCase(repository.NewUpdateProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // Product update
@@ -44,7 +45,9 @@ func (u *UpdateProductHandler) update(c echo.Context) error {
 	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
 		return iErr
 	}
-	err := u.UseCase.Update(*req)
+	ctx := c.Request().Context()
+
+	err := u.UseCase.Update(ctx, *req)
 	if err != nil {
 		return err
 	}
