@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/s3Common"
-	"main/features/product/model/request"
-	"main/features/product/model/response"
+	"main/features/product/domain/request"
+	"main/features/product/domain/response"
 )
 
 func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.GormProduct {

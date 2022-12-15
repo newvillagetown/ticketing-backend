@@ -3,7 +3,8 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
-	"main/features/product/model/request"
+	"main/common/dbCommon/mysqlCommon"
+	"main/features/product/domain/request"
 	"main/features/product/repository"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
@@ -16,7 +17,7 @@ type RegisterProductHandler struct {
 }
 
 func NewRegisterProductHandler() *RegisterProductHandler {
-	return &RegisterProductHandler{UseCase: usecase.NewRegisterProductUseCase(repository.NewRegisterProductRepository(mongodbCommon.TokenCollection))}
+	return &RegisterProductHandler{UseCase: usecase.NewRegisterProductUseCase(repository.NewRegisterProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // Product Register
@@ -80,8 +81,9 @@ func (r *RegisterProductHandler) post(c echo.Context) error {
 		StartDate:   int64(startDate),
 		EndDate:     int64(endDate),
 	}
+	ctx := c.Request().Context()
 
-	err = r.UseCase.Register(req)
+	err = r.UseCase.Register(ctx, req)
 	if err != nil {
 		return err
 	}

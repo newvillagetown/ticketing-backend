@@ -14,6 +14,8 @@ import (
 var MysqlDB *sql.DB
 var GormDB *gorm.DB
 
+const DBTimeOut = 8 * time.Second
+
 func InitMySQL() error {
 	connInfos, err := GetEnvMySQL()
 	connURI := MakeMySQLConnURI(connInfos)

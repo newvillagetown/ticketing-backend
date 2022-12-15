@@ -3,8 +3,9 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/common/valCommon"
-	"main/features/product/model/request"
+	"main/features/product/domain/request"
 	"main/features/product/repository"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
@@ -16,7 +17,7 @@ type DeleteProductHandler struct {
 }
 
 func NewDeleteProductHandler() *DeleteProductHandler {
-	return &DeleteProductHandler{UseCase: usecase.NewDeleteProductUseCase(repository.NewDeleteProductRepository(mongodbCommon.TokenCollection))}
+	return &DeleteProductHandler{UseCase: usecase.NewDeleteProductUseCase(repository.NewDeleteProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // Product delete
@@ -44,7 +45,8 @@ func (d *DeleteProductHandler) delete(c echo.Context) error {
 	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
 		return iErr
 	}
-	err := d.UseCase.Delete(*req)
+	ctx := c.Request().Context()
+	err := d.UseCase.Delete(ctx, *req)
 	if err != nil {
 		return err
 	}

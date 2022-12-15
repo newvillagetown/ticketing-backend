@@ -3,19 +3,17 @@ package repository
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/mongo"
+	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
 	_interface "main/features/product/usecase/interface"
-	"time"
 )
 
-func NewDeleteProductRepository(tokenCollection *mongo.Collection) _interface.IDeleteProductRepository {
-	return &DeleteProductRepository{TokenCollection: tokenCollection}
+func NewDeleteProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collection) _interface.IDeleteProductRepository {
+	return &DeleteProductRepository{GormDB: gormDB, TokenCollection: tokenCollection}
 }
 
-func (d *DeleteProductRepository) FindOneAndDeleteUpdateProduct(productID string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
-	defer cancel()
-	result := mysqlCommon.GormDB.WithContext(ctx).Model(&mysqlCommon.GormProduct{}).Where("id = ?", productID).Update("is_deleted", true)
+func (d *DeleteProductRepository) FindOneAndDeleteUpdateProduct(ctx context.Context, productID string) error {
+	result := d.GormDB.WithContext(ctx).Model(&mysqlCommon.GormProduct{}).Where("id = ?", productID).Update("is_deleted", true)
 	if result.RowsAffected == 0 || result.Error != nil {
 		return result.Error
 	}

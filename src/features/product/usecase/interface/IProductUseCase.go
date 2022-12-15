@@ -1,26 +1,27 @@
 package _interface
 
 import (
+	"context"
 	"main/common/dbCommon/mysqlCommon"
-	"main/features/product/model/request"
+	"main/features/product/domain/request"
 )
 
 type IRegisterProductUseCase interface {
-	Register(req request.ReqRegisterProduct) error
+	Register(c context.Context, req request.ReqRegisterProduct) error
 }
 
 type IGetProductUseCase interface {
-	Get(req request.ReqGetProduct) (mysqlCommon.GormProduct, error)
+	Get(c context.Context, req request.ReqGetProduct) (mysqlCommon.GormProduct, error)
 }
 
 type IGetsProductUseCase interface {
-	Gets() ([]mysqlCommon.GormProduct, error)
+	Gets(c context.Context) ([]mysqlCommon.GormProduct, error)
 }
 
 type IDeleteProductUseCase interface {
-	Delete(req request.ReqDeleteProduct) error
+	Delete(c context.Context, req request.ReqDeleteProduct) error
 }
 
 type IUpdateProductUseCase interface {
-	Update(req request.ReqUpdateProduct) error
+	Update(c context.Context, req request.ReqUpdateProduct) error
 }

@@ -3,18 +3,16 @@ package repository
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/mongo"
+	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
 	_interface "main/features/product/usecase/interface"
-	"time"
 )
 
-func NewUpdateProductRepository(tokenCollection *mongo.Collection) _interface.IUpdateProductRepository {
-	return &UpdateProductRepository{TokenCollection: tokenCollection}
+func NewUpdateProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collection) _interface.IUpdateProductRepository {
+	return &UpdateProductRepository{GormDB: gormDB, TokenCollection: tokenCollection}
 }
 
-func (u *UpdateProductRepository) FindOneProduct(productID string) (mysqlCommon.GormProduct, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
-	defer cancel()
+func (u *UpdateProductRepository) FindOneProduct(ctx context.Context, productID string) (mysqlCommon.GormProduct, error) {
 	var productDTO mysqlCommon.GormProduct
 	result := mysqlCommon.GormDB.WithContext(ctx).Where("id = ?", productID).Find(&productDTO)
 	if result.RowsAffected == 0 || result.Error != nil {
@@ -23,9 +21,7 @@ func (u *UpdateProductRepository) FindOneProduct(productID string) (mysqlCommon.
 	return productDTO, nil
 }
 
-func (u *UpdateProductRepository) FindOneAndUpdateProduct(updatedProductDTO mysqlCommon.GormProduct) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
-	defer cancel()
+func (u *UpdateProductRepository) FindOneAndUpdateProduct(ctx context.Context, updatedProductDTO mysqlCommon.GormProduct) error {
 	result := mysqlCommon.GormDB.WithContext(ctx).Save(&updatedProductDTO)
 	if result.RowsAffected == 0 || result.Error != nil {
 		return result.Error

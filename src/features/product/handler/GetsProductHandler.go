@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/features/product/repository"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
@@ -14,7 +15,7 @@ type GetsProductHandler struct {
 }
 
 func NewGetsProductHandler() *GetsProductHandler {
-	return &GetsProductHandler{UseCase: usecase.NewGetsProductUseCase(repository.NewGetsProductRepository(mongodbCommon.TokenCollection))}
+	return &GetsProductHandler{UseCase: usecase.NewGetsProductUseCase(repository.NewGetsProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // Product gets
@@ -37,7 +38,8 @@ func NewGetsProductHandler() *GetsProductHandler {
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
 func (g *GetsProductHandler) gets(c echo.Context) error {
-	productList, err := g.UseCase.Gets()
+	ctx := c.Request().Context()
+	productList, err := g.UseCase.Gets(ctx)
 	if err != nil {
 		return err
 	}
