@@ -1,27 +1,33 @@
 package usecase
 
 import (
-	"main/features/product/model/request"
+	"context"
+	"main/features/product/domain/request"
 	_interface "main/features/product/usecase/interface"
+	"time"
 )
 
 type UpdateProductUseCase struct {
-	Repository _interface.IUpdateProductRepository
+	Repository     _interface.IUpdateProductRepository
+	ContextTimeout time.Duration
 }
 
-func NewUpdateProductUseCase(repo _interface.IUpdateProductRepository) _interface.IUpdateProductUseCase {
+func NewUpdateProductUseCase(repo _interface.IUpdateProductRepository, timeout time.Duration) _interface.IUpdateProductUseCase {
 	return &UpdateProductUseCase{
-		Repository: repo,
+		Repository:     repo,
+		ContextTimeout: timeout,
 	}
 }
 
-func (u *UpdateProductUseCase) Update(req request.ReqUpdateProduct) error {
-	productDTO, err := u.Repository.FindOneProduct(req.ProductID)
+func (u *UpdateProductUseCase) Update(c context.Context, req request.ReqUpdateProduct) error {
+	ctx, cancel := context.WithTimeout(c, u.ContextTimeout)
+	defer cancel()
+	productDTO, err := u.Repository.FindOneProduct(ctx, req.ProductID)
 	if err != nil {
 		return err
 	}
 	updatedProductDTO := ConvertUpdateProductNewProductDTO(req, productDTO)
-	err = u.Repository.FindOneAndUpdateProduct(updatedProductDTO)
+	err = u.Repository.FindOneAndUpdateProduct(ctx, updatedProductDTO)
 	if err != nil {
 		return err
 	}
