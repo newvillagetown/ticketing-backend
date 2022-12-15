@@ -124,13 +124,6 @@ definitions:
           $ref: '#/definitions/response.GetsProduct'
         type: array
     type: object
-  response.ResSignInGoogleOAuth:
-    properties:
-      accessToken:
-        type: string
-      refreshToken:
-        type: string
-    type: object
 info:
   contact: {}
 paths:
@@ -146,7 +139,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.ResSignInGoogleOAuth'
+            type: boolean
         "400":
           description: Bad Request
           schema:
