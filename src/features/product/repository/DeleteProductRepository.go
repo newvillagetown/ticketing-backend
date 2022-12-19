@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
@@ -15,7 +16,7 @@ func NewDeleteProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collecti
 func (d *DeleteProductRepository) FindOneAndDeleteUpdateProduct(ctx context.Context, productID string) error {
 	result := d.GormDB.WithContext(ctx).Model(&mysqlCommon.GormProduct{}).Where("id = ?", productID).Update("is_deleted", true)
 	if result.RowsAffected == 0 || result.Error != nil {
-		return result.Error
+		return fmt.Errorf("no row data")
 	}
 	return nil
 }

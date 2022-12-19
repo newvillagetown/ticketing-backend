@@ -7,6 +7,7 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"main/common"
 	"main/common/envCommon"
+	"main/common/pubsubCommon"
 	_ "main/docs"
 	swaggerDocs "main/docs"
 	"main/features"
@@ -28,6 +29,13 @@ func main() {
 	}
 	//핸드러 초기화
 	err = features.InitHandler(e)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// pubsub 초기화
+	err = pubsubCommon.InitPubSub()
 	if err != nil {
 		fmt.Println(err)
 		return
