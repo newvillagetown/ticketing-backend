@@ -41,6 +41,7 @@ func (l *Log) MakeLog(userID string, url string, method string, startTime time.T
 	l.Latency = time.Since(startTime).Milliseconds()
 	l.HttpCode = httpCode
 	l.RequestID = requestID
+
 	return nil
 }
 func (l *Log) MakeErrorLog(requestParam map[string]interface{}, resError errorCommon.Err) error {
