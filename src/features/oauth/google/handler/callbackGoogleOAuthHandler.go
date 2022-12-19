@@ -8,12 +8,12 @@ import (
 	"io/ioutil"
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/oauthCommon/google"
-	"main/features/oauth/google/model/response"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
 	"main/middleware"
 	"net/http"
+	"time"
 )
 
 type CallbackGoogleOAuthHandler struct {
@@ -32,7 +32,7 @@ func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
 // @Description INTERNAL_SERVER : 내부 로직 처리 실패
 // @Description INTERNAL_DB : DB 처리 실패
 // @Produce json
-// @Success 200 {object} response.ResCallbackGoogleOAuth
+// @Success 200 {object} bool
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
@@ -64,9 +64,19 @@ func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error
 	var authUser google.User
 	json.Unmarshal(userInfo, &authUser)
 
-	accessToken, refreshToken, err := cc.UseCase.CallbackGoogle(authUser)
+	accessToken, _, err := cc.UseCase.CallbackGoogle(authUser)
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, response.ResCallbackGoogleOAuth{AccessToken: accessToken, RefreshToken: refreshToken})
+	//쿠키 셋팅
+	cookie := &http.Cookie{}
+	cookie.Name = "accessToken"
+	cookie.Value = accessToken
+	cookie.Path = "/"
+	cookie.SameSite = http.SameSiteLaxMode
+	cookie.HttpOnly = true
+	cookie.Secure = true
+	cookie.Expires = time.Now().Add(1 * time.Hour)
+	c.SetCookie(cookie)
+	return c.JSON(http.StatusOK, true)
 }

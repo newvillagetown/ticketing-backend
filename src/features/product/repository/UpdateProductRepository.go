@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
@@ -24,7 +25,7 @@ func (u *UpdateProductRepository) FindOneProduct(ctx context.Context, productID 
 func (u *UpdateProductRepository) FindOneAndUpdateProduct(ctx context.Context, updatedProductDTO mysqlCommon.GormProduct) error {
 	result := mysqlCommon.GormDB.WithContext(ctx).Save(&updatedProductDTO)
 	if result.RowsAffected == 0 || result.Error != nil {
-		return result.Error
+		return fmt.Errorf("no row data")
 	}
 	return nil
 }

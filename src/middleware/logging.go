@@ -19,22 +19,25 @@ func RestLogger(c echo.Context, v middleware.RequestLoggerValues) error {
 	startTime := time.Now()
 	req := c.Request()
 	url := req.URL.Path
-	fmt.Println(url)
 	if req.Method == "GET" && url == "/health" {
 		return nil
 	}
 	rID := random.String(32)
 	c.Set("rID", rID)
-
 	//로그 데이터 생성한다.
 	logData := loggingCommon.Log{}
-	//TODO 추후 userID 어떤식으로 관리할지 정해지면 그때 넣는걸로
-	logData.MakeLog("", url, req.Method, startTime, c.Response().Status, rID)
-	//여기 나와야 로그를 찍을 수 있으니 로그 데이터를 만든다.
-	//로그 찍는다. (local 일때만 찍는걸로 데이터 쌓이면 돈 많이 나가니..)
-	logger.Info().Err(v.Error).
-		Str("URI", v.URI).
-		Int("status", v.Status).
-		Msg("request")
+	if c.Response().Status >= 400 {
+		//에러 로그 처리
+		logger.Info().Err(v.Error).
+			Str("URI", v.URI).
+			Int("status", v.Status).
+			Msg("request")
+	} else {
+		//엑세스 로그 처리
+		logData.MakeLog("", url, req.Method, startTime, c.Response().Status, rID)
+		logData.InfoLog()
+		fmt.Println(logData)
+	}
+
 	return nil
 }

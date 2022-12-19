@@ -13,9 +13,8 @@ import (
 
 var MongoClient *mongo.Client
 var (
-	TokenCollection     *mongo.Collection
-	AccessLogCollection *mongo.Collection
-	ErrorLogCollection  *mongo.Collection
+	TokenCollection *mongo.Collection
+	LogCollection   *mongo.Collection
 )
 
 func InitMongoDB() error {
@@ -82,8 +81,7 @@ func InitCollection() error {
 	dbName := fmt.Sprintf("%s_%s", envCommon.Env.Env, envCommon.Env.Project)
 	mongoDB := MongoClient.Database(dbName)
 	TokenCollection = mongoDB.Collection("token")
-	AccessLogCollection = mongoDB.Collection("accessLog")
-	ErrorLogCollection = mongoDB.Collection("errorLog")
+	LogCollection = mongoDB.Collection("log")
 
 	return nil
 }

@@ -45,29 +45,4 @@ func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
 	sess.Save(c.Request(), c.Response())
 	c.Redirect(http.StatusMovedPermanently, google.GetLoginURL(state))
 	return c.JSON(http.StatusOK, true)
-
-	/*
-				accessToken, refreshToken, err := s.UseCase.SignInGoogle()
-				if err != nil {
-					return c.JSON(http.StatusInternalServerError, err)
-				}
-
-				// cookie setting
-				cookie := &http.Cookie{}
-				cookie.Name = "accessToken"
-				cookie.Value = accessToken
-				cookie.Path = "/"
-				cookie.SameSite = http.SameSiteLaxMode
-				cookie.HttpOnly = true
-				cookie.Secure = true
-				cookie.Expires = time.Now().Add(1 * time.Hour)
-				c.SetCookie(cookie)
-				result := response.ResSignInGoogleOAuth{
-					AccessToken:  accessToken,
-					RefreshToken: refreshToken,
-				}
-			// @Success 200 {object} response.ResSignInGoogleOAuth
-
-		return c.JSON(http.StatusOK, result)
-	*/
 }
