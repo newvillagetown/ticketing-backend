@@ -18,7 +18,7 @@ func (r *RegisterProductRepository) CreateProduct(ctx context.Context, productDT
 	if result.RowsAffected == 0 || result.Error != nil {
 		fmt.Println(result.RowsAffected)
 		fmt.Println(result.Error)
-		return result.Error
+		return fmt.Errorf("no row data")
 	}
 	return nil
 }
