@@ -50,7 +50,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.ResCallbackGoogleOAuth"
+                            "type": "boolean"
                         }
                     },
                     "400": {
@@ -363,9 +363,6 @@
         "errorCommon.ResError": {
             "type": "object",
             "properties": {
-                "errType": {
-                    "type": "string"
-                },
                 "msg": {
                     "type": "string"
                 }
@@ -466,17 +463,6 @@
                 "totalCount": {
                     "description": "총 수량",
                     "type": "integer"
-                }
-            }
-        },
-        "response.ResCallbackGoogleOAuth": {
-            "type": "object",
-            "properties": {
-                "accessToken": {
-                    "type": "string"
-                },
-                "refreshToken": {
-                    "type": "string"
                 }
             }
         },

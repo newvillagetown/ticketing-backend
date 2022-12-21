@@ -2,10 +2,10 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/errorCommon"
 	_interface "main/features/product/usecase/interface"
 )
 
@@ -17,8 +17,11 @@ func (g *GetProductRepository) FindOneProduct(ctx context.Context, productID str
 
 	var productDTO mysqlCommon.GormProduct
 	result := g.GormDB.WithContext(ctx).Where("id = ?", productID).Find(&productDTO)
-	if result.RowsAffected == 0 || result.Error != nil {
-		return mysqlCommon.GormProduct{}, fmt.Errorf("no row data")
+	if result.RowsAffected == 0 {
+		return mysqlCommon.GormProduct{}, errorCommon.ErrBadParamInput
+	}
+	if result.Error != nil {
+		return mysqlCommon.GormProduct{}, result.Error
 	}
 	return productDTO, nil
 }

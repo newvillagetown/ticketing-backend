@@ -1,23 +1,34 @@
 package errorCommon
 
 import (
-	"fmt"
-	"strings"
+	"errors"
+	"net/http"
 )
 
-// 에러 메시지 생성할 때 사용
-func NewError(errType ErrType, trace string, msg string, from IErrFrom) error {
-	return fmt.Errorf("%s|%s|%s|%s", errType, trace, msg, from)
-}
+var (
+	// ErrInternalServerError will throw if any the Internal Server Error happen
+	ErrInternalServerError = errors.New("internal Server Error")
+	// ErrNotFound will throw if the requested item is not exists
+	ErrNotFound = errors.New("your requested Item is not found")
+	// ErrConflict will throw if the current action already exists
+	ErrConflict = errors.New("your Item already exist")
+	// ErrBadParamInput will throw if the given request-body or params is not valid
+	ErrBadParamInput = errors.New("given Param is not valid")
+)
 
-func ErrorParsing(data string) Err {
-	slice := strings.Split(data, "|")
-	result := Err{
-		HttpCode: ErrHttpCode[slice[0]],
-		ErrType:  slice[0],
-		Trace:    slice[1],
-		Msg:      slice[2],
-		From:     slice[3],
+func GetStatusCode(err error) int {
+	if err == nil {
+		return http.StatusOK
 	}
-	return result
+
+	switch err {
+	case ErrInternalServerError:
+		return http.StatusInternalServerError
+	case ErrBadParamInput:
+		return http.StatusBadRequest
+	case ErrConflict:
+		return http.StatusConflict
+	default:
+		return http.StatusInternalServerError
+	}
 }

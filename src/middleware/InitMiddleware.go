@@ -20,6 +20,9 @@ func InitMiddleware(e *echo.Echo) error {
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:        true,
 		LogStatus:     true,
+		LogError:      true,
+		LogLatency:    true,
+		LogMethod:     true,
 		LogValuesFunc: RestLogger,
 	}))
 

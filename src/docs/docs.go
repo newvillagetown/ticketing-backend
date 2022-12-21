@@ -62,7 +62,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.ResCallbackGoogleOAuth"
+                            "type": "boolean"
                         }
                     },
                     "400": {
@@ -375,9 +375,6 @@ const docTemplate = `{
         "errorCommon.ResError": {
             "type": "object",
             "properties": {
-                "errType": {
-                    "type": "string"
-                },
                 "msg": {
                     "type": "string"
                 }
@@ -478,17 +475,6 @@ const docTemplate = `{
                 "totalCount": {
                     "description": "총 수량",
                     "type": "integer"
-                }
-            }
-        },
-        "response.ResCallbackGoogleOAuth": {
-            "type": "object",
-            "properties": {
-                "accessToken": {
-                    "type": "string"
-                },
-                "refreshToken": {
-                    "type": "string"
                 }
             }
         },
