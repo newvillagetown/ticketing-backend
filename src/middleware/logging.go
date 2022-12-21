@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/random"
 	"github.com/rs/zerolog"
+	"main/common/errorCommon"
 	"main/common/loggingCommon"
 	"os"
 	"time"
@@ -27,10 +28,11 @@ func RestLogger(c echo.Context, v middleware.RequestLoggerValues) error {
 	//로그 데이터 생성한다.
 	logData := loggingCommon.Log{}
 	if c.Response().Status >= 400 {
+		fmt.Println("여기 들어올텐데")
 		//에러 로그 처리
 		logger.Info().Err(v.Error).
 			Str("URI", v.URI).
-			Int("status", v.Status).
+			Int("status", errorCommon.GetStatusCode(v.Error)).
 			Msg("request")
 	} else {
 		//엑세스 로그 처리

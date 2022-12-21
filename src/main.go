@@ -33,14 +33,12 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-
 	// pubsub 초기화
 	err = pubsubCommon.InitPubSub()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
 	// swagger 초기화
 	if envCommon.Env.IsLocal {
 		swaggerDocs.SwaggerInfo.Host = "localhost:3000"

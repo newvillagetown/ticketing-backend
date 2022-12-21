@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/errorCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
 	"main/features/product/repository"
@@ -42,13 +43,13 @@ func NewGetProductHandler() *GetProductHandler {
 // @Tags product
 func (g *GetProductHandler) Get(c echo.Context) error {
 	req := &request.ReqGetProduct{}
-	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
-		return iErr
+	if err := valCommon.ValidateReq(c, req); err != nil {
+		return c.JSON(errorCommon.GetStatusCode(err), errorCommon.ResError{Msg: err.Error()})
 	}
 	ctx := c.Request().Context()
 	productDTO, err := g.UseCase.Get(ctx, *req)
 	if err != nil {
-		return err
+		return c.JSON(errorCommon.GetStatusCode(err), errorCommon.ResError{Msg: err.Error()})
 	}
 	res := usecase.ConvertGetProductToRes(productDTO)
 	return c.JSON(http.StatusOK, res)
