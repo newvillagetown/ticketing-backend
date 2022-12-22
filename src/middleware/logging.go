@@ -1,45 +1,64 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/random"
-	"github.com/rs/zerolog"
 	"main/common/errorCommon"
 	"main/common/loggingCommon"
-	"os"
+	"main/common/pubsubCommon"
+	"strings"
 	"time"
 )
 
-func RestLogger(c echo.Context, v middleware.RequestLoggerValues) error {
-	logger := zerolog.New(os.Stdout)
-	if v.URI == "/health" {
-		return nil
-	}
-	startTime := time.Now()
-	req := c.Request()
-	url := req.URL.Path
-	if req.Method == "GET" && url == "/health" {
-		return nil
-	}
-	rID := random.String(32)
-	c.Set("rID", rID)
-	//로그 데이터 생성한다.
-	logData := loggingCommon.Log{}
-	if c.Response().Status >= 400 {
-		fmt.Println("여기 들어올텐데")
-		//에러 로그 처리
-		logger.Info().Err(v.Error).
-			Str("URI", v.URI).
-			Int("status", errorCommon.GetStatusCode(v.Error)).
-			Msg("request")
-	} else {
-		//엑세스 로그 처리
-		logData.MakeLog("", url, req.Method, startTime, c.Response().Status, rID)
-		logData.InfoLog()
-		fmt.Println(logData)
-	}
+// RestLogger : log REST API
+func RestLogger(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		//로깅 초기 세팅
+		startTime := time.Now()
+		req := c.Request()
+		url := req.URL.Path
+		requestID := random.String(32)
+		c.Set("requestID", requestID)
+		if req.Method == "GET" && url == "/health" {
+			return next(c)
+		}
 
-	return nil
+		err := next(c)
+		//에러 파싱
+		resError := errorCommon.Err{}
+		var resCode int
+		if err != nil {
+			resError = ErrorParsing(err.Error())
+			resCode = resError.HttpCode
+		} else {
+			resCode = c.Response().Status
+		}
+
+		// 로깅
+		logging := loggingCommon.Log{}
+		logging.MakeLog("", url, req.Method, startTime, resCode, requestID)
+		if resCode >= 400 {
+			//에러 로깅
+			logging.MakeErrorLog(resError)
+			loggingCommon.LogError(logging)
+			//DB 부하를 생각해서 에러만 쌓는걸로
+			pubsubCommon.PublishMessages(pubsubCommon.SubMongoDBLog, logging, pubsubCommon.PubSubCh)
+			return echo.NewHTTPError(resError.HttpCode, errorCommon.ErrType(resError.ErrType).New(resError.ErrType, resError.Msg))
+		} else {
+			loggingCommon.LogInfo(logging)
+		}
+		return err
+	}
+}
+
+func ErrorParsing(data string) errorCommon.Err {
+	slice := strings.Split(data, "|")
+	result := errorCommon.Err{
+		HttpCode: errorCommon.ErrHttpCode[slice[0]],
+		ErrType:  slice[0],
+		Trace:    slice[1],
+		Msg:      slice[2],
+		From:     slice[3],
+	}
+	return result
 }

@@ -1,6 +1,8 @@
 definitions:
   errorCommon.ResError:
     properties:
+      errType:
+        type: string
       msg:
         type: string
     type: object

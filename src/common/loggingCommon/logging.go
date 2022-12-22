@@ -1,10 +1,18 @@
 package loggingCommon
 
 import (
-	"github.com/rs/zerolog/log"
+	"encoding/json"
+	"fmt"
 	"main/common/envCommon"
 	"main/common/errorCommon"
+	"reflect"
 	"time"
+)
+
+const (
+	colorInfo    = "\033[1;36m%s\033[0m"
+	colorWarning = "\033[1;33m%s\033[0m"
+	colorError   = "\033[1;31m%s\033[0m"
 )
 
 type Logging interface {
@@ -25,11 +33,10 @@ type Log struct {
 }
 
 type ErrorInfo struct {
-	Stack        string                 `json:"stack"`
-	ErrorType    string                 `json:"errorType"`
-	Msg          string                 `json:"msg"`
-	From         string                 `json:"from"`
-	RequestParam map[string]interface{} `json:"requestParam"`
+	Stack     string `json:"stack,omitempty"`
+	ErrorType string `json:"errorType,omitempty"`
+	Msg       string `json:"msg,omitempty"`
+	From      string `json:"from,omitempty"`
 }
 
 func (l *Log) MakeLog(userID string, url string, method string, startTime time.Time, httpCode int, requestID string) error {
@@ -44,38 +51,45 @@ func (l *Log) MakeLog(userID string, url string, method string, startTime time.T
 
 	return nil
 }
-func (l *Log) MakeErrorLog(requestParam map[string]interface{}, resError errorCommon.Err) error {
+func (l *Log) MakeErrorLog(res errorCommon.Err) error {
 	l.Type = "error"
 	errInfo := ErrorInfo{
-		RequestParam: requestParam,
-		Stack:        resError.Trace,
-		ErrorType:    resError.ErrType,
-		From:         resError.From,
-		Msg:          resError.Msg,
+		Stack:     res.Trace,
+		Msg:       res.Msg,
+		ErrorType: res.ErrType,
+		From:      res.From,
 	}
 	l.ErrorInfo = errInfo
 	return nil
 }
 
-func (l *Log) InfoLog() error {
-	log.Info().Str("project", l.Project).
-		Str("type", l.Type).
-		Str("userID", l.UserID).
-		Str("url", l.Url).
-		Str("method", l.Method).
-		Int64("latency", l.Latency).
-		Int("httpCode", l.HttpCode).
-		Str("requestID", l.RequestID)
-	return nil
+// LogInfo : info level log
+func LogInfo(logContent interface{}) {
+	fmt.Printf("%s %s\n", fmt.Sprintf(colorInfo, "[INFO]"), getStringFromInterface(logContent))
 }
-func (l *Log) ErrorLog() error {
-	log.Error().Str("project", l.Project).
-		Str("type", l.Type).
-		Str("userID", l.UserID).
-		Str("url", l.Url).
-		Str("method", l.Method).
-		Int64("latency", l.Latency).
-		Int("httpCode", l.HttpCode).
-		Str("requestID", l.RequestID)
-	return nil
+
+// LogWarning : warning level log
+func LogWarning(logContent interface{}) {
+	fmt.Printf("%s %s\n", fmt.Sprintf(colorWarning, "[WARNING]"), getStringFromInterface(logContent))
+}
+
+// LogError : error level log
+func LogError(logContent interface{}) {
+	fmt.Printf("%s %s\n", fmt.Sprintf(colorError, "[ERROR]"), getStringFromInterface(logContent))
+}
+
+// get string from any type.
+func getStringFromInterface(logContent interface{}) string {
+	var result string
+	// if its struct, convert to json string
+	if reflect.Indirect(reflect.ValueOf(logContent)).Kind() == reflect.Struct {
+		raw, err := json.Marshal(logContent)
+		if err != nil {
+			return fmt.Sprintf("%v", logContent)
+		}
+		result = string(raw)
+	} else {
+		result = fmt.Sprintf("%v", logContent)
+	}
+	return result
 }

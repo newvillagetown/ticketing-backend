@@ -6,7 +6,8 @@ import (
 
 // 프론트엔드 받을 에러 형식
 type ResError struct {
-	Msg string `json:"msg,omitempty"`
+	ErrType string `json:"errType,omitempty"`
+	Msg     string `json:"msg,omitempty"`
 }
 
 // 에러 로깅을 위한 에러 형식

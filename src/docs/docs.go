@@ -375,6 +375,9 @@ const docTemplate = `{
         "errorCommon.ResError": {
             "type": "object",
             "properties": {
+                "errType": {
+                    "type": "string"
+                },
                 "msg": {
                     "type": "string"
                 }
