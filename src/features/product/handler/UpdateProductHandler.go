@@ -42,8 +42,8 @@ func NewUpdateProductHandler() *UpdateProductHandler {
 // @Tags product
 func (u *UpdateProductHandler) update(c echo.Context) error {
 	req := &request.ReqUpdateProduct{}
-	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
-		return iErr
+	if err := valCommon.ValidateReq(c, req); err != nil {
+		return err
 	}
 	ctx := c.Request().Context()
 

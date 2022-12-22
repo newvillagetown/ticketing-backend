@@ -21,7 +21,7 @@ func (d *DeleteProductRepository) FindOneAndDeleteUpdateProduct(ctx context.Cont
 		return errorCommon.ErrorMsg(errorCommon.ErrBadParameter, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromClient)
 	}
 	if result.Error != nil {
-		return errorCommon.ErrorMsg(errorCommon.ErrInternalDB, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromMysqlDB)
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalDB, errorCommon.Trace(), result.Error.Error(), errorCommon.ErrFromMysqlDB)
 	}
 	return nil
 }
