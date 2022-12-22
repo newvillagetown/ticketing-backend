@@ -38,7 +38,7 @@ func (s *SignOutGoogleOAuthHandler) SignOutGoogle(c echo.Context) error {
 	email := claims["email"].(string)
 	err := s.UseCase.SignOutGoogle(email)
 	if err != nil {
-		return c.JSON(http.StatusUnauthorized, err.Error())
+		return err
 	}
 
 	return c.JSON(http.StatusOK, true)
