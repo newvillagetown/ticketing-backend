@@ -22,7 +22,7 @@ func (g *GetProductRepository) FindOneProduct(ctx context.Context, productID str
 		return mysqlCommon.GormProduct{}, errorCommon.ErrorMsg(errorCommon.ErrBadParameter, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromClient)
 	}
 	if result.Error != nil {
-		return mysqlCommon.GormProduct{}, result.Error
+		return mysqlCommon.GormProduct{}, errorCommon.ErrorMsg(errorCommon.ErrInternalDB, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromMysqlDB)
 	}
 	return productDTO, nil
 }

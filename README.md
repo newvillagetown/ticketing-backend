@@ -25,10 +25,9 @@
 - [사이드 프로젝트 진행하는 목적](#Goals)
 - [프로젝트 기능들](#Features)
 - [클릭 아키텍처](#Clean Architecture)
-- [디렉토리 구조](#Directory layout)
-- [기능 리스트](#Features)
-- [AWS 인프라 설계도](#Infrastructure Design)
-- [Getting started](#Getting started)
+- [디렉토리 구조](#Directory_layout)
+- [AWS 인프라 설계도](#Infrastructure_Design)
+- [Getting started](#Getting_started)
 - [Installation](#Installation)
 
 
@@ -64,7 +63,7 @@ The diagram
     <img width="990" alt="스크린샷 2022-12-22 오후 7 46 07" src="https://user-images.githubusercontent.com/35329247/209118510-3153c568-0d17-43de-a778-210dd53002c5.png">
 </p>
 
-## Directory layout
+## Directory_layout
 
     .
     ├── common                  # 서버 공통 모듈
@@ -90,7 +89,7 @@ These are the back-end work done on the project:
 * 배치 시스템 (결제 전 알림)
 
 
-## Infrastructure Design
+## Infrastructure_Design
 
 The figure below shows the entire infrastructure.
 
@@ -98,7 +97,7 @@ The figure below shows the entire infrastructure.
     <img width="1307" alt="스크린샷 2022-11-12 오전 3 41 26" src="https://user-images.githubusercontent.com/85932211/201409200-a7a69173-e255-4150-a148-9ee41ec6890c.png">
 </p>
 
-## Getting started
+## Getting_started
 
 <pre>
 $ air -c .air.toml
