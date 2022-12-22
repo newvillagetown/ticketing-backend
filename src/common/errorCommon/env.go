@@ -29,6 +29,7 @@ const (
 	ErrFromClient   = IErrFrom("client")
 	ErrFromInternal = IErrFrom("internal")
 	ErrFromMongoDB  = IErrFrom("mongoDB")
+	ErrFromMysqlDB  = IErrFrom("mysqlDB")
 	ErrFromAws      = IErrFrom("aws")
 	ErrFromAwsS3    = IErrFrom("aws_s3")
 	ErrFromAwsSsm   = IErrFrom("aws_ssm")

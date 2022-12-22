@@ -42,8 +42,8 @@ func NewDeleteProductHandler() *DeleteProductHandler {
 // @Tags product
 func (d *DeleteProductHandler) delete(c echo.Context) error {
 	req := &request.ReqDeleteProduct{}
-	if iErr := valCommon.ValidateReq(c, req); iErr != nil {
-		return iErr
+	if err := valCommon.ValidateReq(c, req); err != nil {
+		return err
 	}
 	ctx := c.Request().Context()
 	err := d.UseCase.Delete(ctx, *req)

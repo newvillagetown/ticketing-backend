@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/errorCommon"
 	"main/common/oauthCommon/google"
 	_interface "main/features/oauth/google/usecase/interface"
 )
@@ -23,7 +24,7 @@ func (cc *CallbackGoogleOAuthRepository) CreateRefreshToken(token mongodbCommon.
 	ctx := context.TODO()
 	_, err := cc.TokenCollection.InsertOne(ctx, token)
 	if err != nil {
-		return err
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalDB, errorCommon.Trace(), err.Error(), errorCommon.ErrFromMongoDB)
 	}
 	return nil
 }
@@ -33,7 +34,7 @@ func (cc *CallbackGoogleOAuthRepository) DeleteAllRefreshToken(authUser google.U
 	findData := bson.D{{"email", authUser.Email}}
 	result, err := cc.TokenCollection.DeleteMany(ctx, findData)
 	if err != nil && err != mongo.ErrNoDocuments {
-		return err
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalDB, errorCommon.Trace(), err.Error(), errorCommon.ErrFromMongoDB)
 	}
 	fmt.Println(result.DeletedCount)
 	return nil
