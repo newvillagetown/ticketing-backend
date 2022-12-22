@@ -42,6 +42,41 @@
 * Go 컨벤션 작업을 통한 Go스럽게 사용해보기
 * 데이터 스트리밍 파이프라인 구축 (Goroutine + channel)
 
+## Clean Architecture
+
+아키텍처 적용시 고려사항
+- 계층을 분리하여 관심사를 분리한다.
+- 특정 소프트웨어 라이브러리에 의존하지 않는다.
+- 비즈니스 규칙은 UI, 데이터베이스, 웹 서버 또는 기타 외부 요소 없이 테스트 할 수 있어야 한다.
+- 비즈니스 로직은 외부 세계와 무관하게 작동할 수 있어야 한다.
+
+This project has 4 Domain layer :
+- Models Layer
+- Repository Layer
+- Usecase Layer
+- Delivery Layer (Controller/Handler)
+
+The diagram
+<p align="center">
+    <img width="990" alt="스크린샷 2022-12-22 오후 7 46 07" src="https://user-images.githubusercontent.com/35329247/209118510-3153c568-0d17-43de-a778-210dd53002c5.png">
+</p>
+
+## Directory layout
+
+    .
+    ├── common                  # 서버 공통 모듈
+    ├── deployment              # 배포 폴더 (Dockerfile, taskfile)
+    ├── docs                    # swagger 폴더
+    ├── features                # 기능 폴더
+    │   ├── ....
+    │   ├── product                     
+    │   │   ├── domain                  # 도메인은 엔티티와 동일하며 모든 레이어에서 사용
+    │   │   ├── handler                 # 프리젠테이션을 담당하는 영역으로 데이터가 표시되는 방식을 결정
+    │   │   ├── repository              # 데이터를 관리
+    │   │   └── usecase                 # 비즈니스 프로세스를 처리
+    │   ├── ....
+    └── ....
+
 ## Features
 
 These are the back-end work done on the project:
