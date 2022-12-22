@@ -24,6 +24,9 @@
 
 - [사이드 프로젝트 진행하는 목적](#Goals)
 - [프로젝트 기능들](#Features)
+- [클릭 아키텍처](#Clean Architecture)
+- [디렉토리 구조](#Directory layout)
+- [기능 리스트](#Features)
 - [AWS 인프라 설계도](#Infrastructure Design)
 - [Getting started](#Getting started)
 - [Installation](#Installation)

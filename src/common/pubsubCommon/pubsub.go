@@ -52,8 +52,12 @@ func LogProcess(messages <-chan *message.Message) {
 
 // 메시지 발송 함수
 // topic , msg 문자열로 받는다?
-func PublishMessages(topic ISubscribeTopicType, msg []byte, publisher message.Publisher) {
-	payload := message.NewMessage(watermill.NewUUID(), msg)
+func PublishMessages(topic ISubscribeTopicType, msg interface{}, publisher message.Publisher) {
+	jsonMsg, err := json.Marshal(msg)
+	if err != nil {
+		fmt.Println(err)
+	}
+	payload := message.NewMessage(watermill.NewUUID(), jsonMsg)
 	if err := publisher.Publish(string(topic), payload); err != nil {
 		fmt.Println(err)
 	}

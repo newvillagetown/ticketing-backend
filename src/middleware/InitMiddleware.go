@@ -17,15 +17,8 @@ func InitMiddleware(e *echo.Echo) error {
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
-	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
-		LogURI:        true,
-		LogStatus:     true,
-		LogError:      true,
-		LogLatency:    true,
-		LogMethod:     true,
-		LogValuesFunc: RestLogger,
-	}))
-
+	//RestLogger : 로깅 미들웨어
+	e.Use(RestLogger)
 	//API sever timeout 24s
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 		Skipper:      middleware.DefaultTimeoutConfig.Skipper,
