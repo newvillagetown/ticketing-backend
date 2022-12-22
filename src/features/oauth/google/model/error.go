@@ -11,4 +11,6 @@ var (
 	ErrConflict = fmt.Sprint("your Item already exist")
 	// ErrBadParamInput will throw if the given request-body or params is not valid
 	ErrBadParamInput = fmt.Sprint("given Param is not valid")
+	//
+	ErrAuthFailed = fmt.Sprint("authentication failed.")
 )
