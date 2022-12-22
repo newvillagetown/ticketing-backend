@@ -2,12 +2,13 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
 	"io/ioutil"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/errorCommon"
 	"main/common/oauthCommon/google"
+	"main/features/oauth/google/model"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -43,23 +44,23 @@ func (cc *CallbackGoogleOAuthHandler) GoogleSignInCallback(c echo.Context) error
 	delete(session.Values, "state")
 	session.Save(c.Request(), c.Response())
 	if state != c.FormValue("state") {
-		return fmt.Errorf("Invalid session state")
+		return errorCommon.ErrorMsg(errorCommon.ErrAuthFailed, errorCommon.Trace(), model.ErrAuthFailed, errorCommon.ErrFromInternal)
 	}
 	//인증서버에 액세스 토큰 요청
 	token, err := google.OAuthConf.Exchange(oauth2.NoContext, c.FormValue("code"))
 	if err != nil {
-		return err
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), err.Error(), errorCommon.ErrFromInternal)
 	}
 
 	client := google.OAuthConf.Client(oauth2.NoContext, token)
 	userInfoResp, err := client.Get(google.UserInfoAPIEndpoint)
 	if err != nil {
-		return err
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), err.Error(), errorCommon.ErrFromInternal)
 	}
 	defer userInfoResp.Body.Close()
 	userInfo, err := ioutil.ReadAll(userInfoResp.Body)
 	if err != nil {
-		return err
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), err.Error(), errorCommon.ErrFromInternal)
 	}
 	var authUser google.User
 	json.Unmarshal(userInfo, &authUser)

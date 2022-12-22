@@ -2,10 +2,11 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/errorCommon"
+	"main/features/product/domain"
 	_interface "main/features/product/usecase/interface"
 )
 
@@ -15,10 +16,11 @@ func NewRegisterProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collec
 
 func (r *RegisterProductRepository) CreateProduct(ctx context.Context, productDTO mysqlCommon.GormProduct) error {
 	result := mysqlCommon.GormDB.WithContext(ctx).Create(&productDTO)
-	if result.RowsAffected == 0 || result.Error != nil {
-		fmt.Println(result.RowsAffected)
-		fmt.Println(result.Error)
-		return fmt.Errorf("no row data")
+	if result.RowsAffected == 0 {
+		return errorCommon.ErrorMsg(errorCommon.ErrBadParameter, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromClient)
+	}
+	if result.Error != nil {
+		return errorCommon.ErrorMsg(errorCommon.ErrInternalDB, errorCommon.Trace(), result.Error.Error(), errorCommon.ErrFromMysqlDB)
 	}
 	return nil
 }
