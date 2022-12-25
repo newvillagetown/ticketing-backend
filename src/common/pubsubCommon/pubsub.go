@@ -8,10 +8,19 @@ import (
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/noticeCommon/productNotice"
+	"time"
 )
 
 const (
-	SubMongoDBLog = ISubscribeTopicType("mongodb.log")
+	SubMongoDBLog    = ISubscribeTopicType("mongodb.log")
+	SubProductNotice = ISubscribeTopicType("product.notice")
+)
+
+type EventType string
+
+const (
+	ProductRegisterEventType = EventType("PRODUCT_REGISTER")
 )
 
 var PubSubCh *gochannel.GoChannel
@@ -28,9 +37,42 @@ func InitPubSub() error {
 	if err != nil {
 		panic(err)
 	}
+	productNoticeCh, err := PubSubCh.Subscribe(context.Background(), string(SubProductNotice))
 	go LogProcess(mongodbLogCh)
+	go GoogleRegisterNoticeProcess(productNoticeCh)
 
 	return nil
+}
+
+// 구글 챗 노티 함수
+func GoogleRegisterNoticeProcess(messages <-chan *message.Message) {
+	for msg := range messages {
+		data := &productNotice.ProductRegisterNotice{}
+		now := time.Now()
+		event := &mongodbCommon.Event{
+			State:      true,
+			OccurredAt: now.String(),
+			Type:       string(ProductRegisterEventType),
+		}
+		err := json.Unmarshal(msg.Payload, data)
+		if err != nil {
+			event.ErrorMsg = err.Error()
+			event.State = false
+		}
+		err = data.Send()
+		if err != nil {
+			event.ErrorMsg = err.Error()
+			event.State = false
+		}
+
+		//이벤트 등록
+		ctx := context.TODO()
+		_, err = mongodbCommon.EventCollection.InsertOne(ctx, event)
+		if err != nil {
+			fmt.Println(err)
+		}
+		msg.Ack()
+	}
 }
 
 // 메시지 처리 함수
@@ -58,7 +100,7 @@ func PublishMessages(topic ISubscribeTopicType, msg interface{}, publisher messa
 		fmt.Println(err)
 	}
 	payload := message.NewMessage(watermill.NewUUID(), jsonMsg)
-	if err := publisher.Publish(string(topic), payload); err != nil {
+	if err = publisher.Publish(string(topic), payload); err != nil {
 		fmt.Println(err)
 	}
 }

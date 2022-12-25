@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"main/common/pubsubCommon"
 	"main/features/product/domain/request"
 	_interface "main/features/product/usecase/interface"
 	"time"
@@ -27,5 +28,7 @@ func (r *RegisterProductUseCase) Register(c context.Context, req request.ReqRegi
 	if err != nil {
 		return err
 	}
+	googleSend := MakeProductRegisterNotice(productDTO)
+	pubsubCommon.PublishMessages(pubsubCommon.SubProductNotice, googleSend, pubsubCommon.PubSubCh)
 	return nil
 }
