@@ -8,10 +8,10 @@ assignees: ''
 ---
 
 ### 새로운 기능
-요청자 :   
-What :   
-Why :  
-How :  
+- 요청자 :   
+- What :   
+- Why :  
+- How :  
 
 ### Tasks
 - [ ] task1

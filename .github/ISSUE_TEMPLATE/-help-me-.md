@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ### 도움이 필요해요
-도와줄 귀인 :   
-What :  
-Why :   
-How :  
+- 도와줄 귀인 :   
+- What :  
+- Why :   
+- How :  
