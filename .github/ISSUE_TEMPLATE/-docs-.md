@@ -1,13 +1,17 @@
 ---
 name: "[Docs]"
-about: 문서 작성 및 수정
+about: 위키 문서 작성
 title: "[Docs]"
 labels: ''
 assignees: ''
 
 ---
+### 요청자
 
-### 문서 내용
+### Title
+
+### What 
+
+### Why 
 
 
-### 참고 문서
