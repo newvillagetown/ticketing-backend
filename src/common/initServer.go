@@ -7,6 +7,7 @@ import (
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/envCommon"
 	"main/common/oauthCommon/google"
+	"main/common/pubsubCommon"
 )
 
 func InitServer() error {
@@ -28,6 +29,11 @@ func InitServer() error {
 	}
 	if err := mysqlCommon.InitMySQL(); err != nil {
 		fmt.Sprintf("mysqlCommon 초기화 에러 : %s", err.Error())
+		return err
+	}
+	// pubsub 초기화
+	if err := pubsubCommon.InitPubSub(); err != nil {
+		fmt.Sprintf("pubsub 초기화 에러 : %s", err.Error())
 		return err
 	}
 	return nil

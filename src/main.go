@@ -7,7 +7,6 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"main/common"
 	"main/common/envCommon"
-	"main/common/pubsubCommon"
 	_ "main/docs"
 	swaggerDocs "main/docs"
 	"main/features"
@@ -33,12 +32,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	// pubsub 초기화
-	err = pubsubCommon.InitPubSub()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+
 	// swagger 초기화
 	if envCommon.Env.IsLocal {
 		swaggerDocs.SwaggerInfo.Host = "localhost:3000"
