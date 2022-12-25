@@ -6,6 +6,7 @@ import (
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/envCommon"
+	"main/common/noticeCommon"
 	"main/common/oauthCommon/google"
 	"main/common/pubsubCommon"
 )
@@ -31,10 +32,14 @@ func InitServer() error {
 		fmt.Sprintf("mysqlCommon 초기화 에러 : %s", err.Error())
 		return err
 	}
-	// pubsub 초기화
 	if err := pubsubCommon.InitPubSub(); err != nil {
 		fmt.Sprintf("pubsub 초기화 에러 : %s", err.Error())
 		return err
 	}
+	if err := noticeCommon.GoogleChatInit(); err != nil {
+		fmt.Sprintf("googleChat 초기화 에러 : %s", err.Error())
+		return err
+	}
+
 	return nil
 }

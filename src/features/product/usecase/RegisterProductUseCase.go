@@ -27,5 +27,8 @@ func (r *RegisterProductUseCase) Register(c context.Context, req request.ReqRegi
 	if err != nil {
 		return err
 	}
+	//TODO 제품 등록시 구글 챗으로 전송
+	googleSend := MakeProductRegisterNotice(productDTO)
+	googleSend.Send()
 	return nil
 }

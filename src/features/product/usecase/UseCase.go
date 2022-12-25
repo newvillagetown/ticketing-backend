@@ -3,9 +3,12 @@ package usecase
 import (
 	"fmt"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/envCommon"
+	"main/common/noticeCommon/productNotice"
 	"main/common/s3Common"
 	"main/features/product/domain/request"
 	"main/features/product/domain/response"
+	"strconv"
 )
 
 func ConvertToRegisterProductDTO(req request.ReqRegisterProduct) mysqlCommon.GormProduct {
@@ -129,4 +132,18 @@ func NilCheckInt64(num int64) bool {
 		return true
 	}
 	return false
+}
+
+func MakeProductRegisterNotice(productDTO mysqlCommon.GormProduct) productNotice.ProductRegisterNotice {
+	result := productNotice.ProductRegisterNotice{
+		ProductID:  productDTO.GormModel.ID,
+		Name:       productDTO.Name,
+		PerAmount:  strconv.Itoa(int(productDTO.PerAmount)),
+		RestCount:  strconv.Itoa(int(productDTO.RestCount)),
+		TotalCount: strconv.Itoa(int(productDTO.TotalCount)),
+		StartDate:  envCommon.EpochToTime(productDTO.StartDate).String(),
+		EndDate:    envCommon.EpochToTime(productDTO.EndDate).String(),
+	}
+
+	return result
 }

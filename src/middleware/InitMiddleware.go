@@ -13,18 +13,23 @@ import (
 var Store = sessions.NewCookieStore([]byte("secret"))
 
 func InitMiddleware(e *echo.Echo) error {
+	//cors 미들웨어 설정
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
+
 	//RestLogger : 로깅 미들웨어
 	e.Use(RestLogger)
+
 	//API sever timeout 24s
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 		Skipper:      middleware.DefaultTimeoutConfig.Skipper,
 		ErrorMessage: "timeout",
 		Timeout:      24 * time.Second,
 	}))
+
+	//jwt 검증 미들웨어
 	signingKey := jwtCommon.AccessTokenSecretKey
 	jwtCommon.JwtConfig = middleware.JWTConfig{
 		TokenLookup:   "cookie:accessToken",

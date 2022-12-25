@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+	//서버 필요한 공통 모듈 초기화
 	if err := common.InitServer(); err != nil {
 		fmt.Println(err)
 		return
