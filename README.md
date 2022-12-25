@@ -24,9 +24,10 @@
 
 - [사이드 프로젝트 진행하는 목적](#Goals)
 - [프로젝트 기능들](#Features)
-- [클릭 아키텍처](#Clean Architecture)
+- [클릭 아키텍처](#Clean_Architecture)
 - [디렉토리 구조](#Directory_layout)
 - [AWS 인프라 설계도](#Infrastructure_Design)
+- [메시지큐 모델 디자인](#Message_Queue_Model_Design)
 - [Getting started](#Getting_started)
 - [Installation](#Installation)
 
@@ -44,7 +45,7 @@
 * Go 컨벤션 작업을 통한 Go스럽게 사용해보기
 * 데이터 스트리밍 파이프라인 구축 (Goroutine + channel)
 
-## Clean Architecture
+## Clean_Architecture
 
 아키텍처 적용시 고려사항
 - 계층을 분리하여 관심사를 분리한다.
@@ -95,6 +96,13 @@ The figure below shows the entire infrastructure.
 
 <p align="center">
     <img width="1307" alt="스크린샷 2022-11-12 오전 3 41 26" src="https://user-images.githubusercontent.com/85932211/201409200-a7a69173-e255-4150-a148-9ee41ec6890c.png">
+</p>
+
+## Message_Queue_Model_Design
+
+비동기 이벤트 처리를 위한 메시지큐 디자인
+<p align="center">
+<img width="635" alt="message queue model" src="https://user-images.githubusercontent.com/85932211/209458485-dd7f3b62-291a-464e-9ef4-e91e3005bb05.png">
 </p>
 
 ## Getting_started
