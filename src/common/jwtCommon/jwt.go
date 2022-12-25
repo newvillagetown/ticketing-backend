@@ -46,7 +46,7 @@ func GenerateAccessToken(email string, now time.Time, userID string) (string, er
 	// Set custom claims
 	claims := &JwtCustomClaims{
 		email,
-		envCommon.TimeToEpocMillis(now),
+		envCommon.TimeToEpochMillis(now),
 		userID,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * AccessTokenExpiredTime).Unix(),
@@ -66,7 +66,7 @@ func GenerateAccessToken(email string, now time.Time, userID string) (string, er
 func GenerateRefreshToken(email string, now time.Time, userID string) (string, error) {
 	claims := &JwtCustomClaims{
 		email,
-		envCommon.TimeToEpocMillis(now),
+		envCommon.TimeToEpochMillis(now),
 		userID,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * RefreshTokenExpiredTime).Unix(),

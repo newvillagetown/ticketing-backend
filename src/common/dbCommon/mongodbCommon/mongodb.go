@@ -15,6 +15,7 @@ var MongoClient *mongo.Client
 var (
 	TokenCollection *mongo.Collection
 	LogCollection   *mongo.Collection
+	EventCollection *mongo.Collection
 )
 
 func InitMongoDB() error {
@@ -82,6 +83,6 @@ func InitCollection() error {
 	mongoDB := MongoClient.Database(dbName)
 	TokenCollection = mongoDB.Collection("token")
 	LogCollection = mongoDB.Collection("log")
-
+	EventCollection = mongoDB.Collection("event")
 	return nil
 }

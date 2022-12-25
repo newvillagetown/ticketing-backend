@@ -10,6 +10,7 @@ type RefreshToken struct {
 }
 
 type Log struct {
+	ID        string    `json:"id" bson:"_id,omitempty"`
 	Project   string    `json:"project"bson:"project"`
 	Type      string    `json:"type" bson:"type"`
 	UserID    string    `json:"userID" bson:"user_id"`
@@ -27,4 +28,12 @@ type ErrorInfo struct {
 	Msg          string                 `json:"msg" bson:"msg"`
 	From         string                 `json:"from" bson:"from"`
 	RequestParam map[string]interface{} `json:"requestParam" bson:"request_param"`
+}
+
+type Event struct {
+	ID         string `json:"id" bson:"_id,omitempty"`
+	State      bool   `json:"state" bson:"state"`
+	Type       string `json:"type" bson:"type"`
+	OccurredAt string `json:"occurredAt" bson:"occurred_at"`
+	ErrorMsg   string `json:"errorMsg" bson:"error_msg,omitempty"`
 }

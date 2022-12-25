@@ -71,8 +71,12 @@ func getOSLookupEnv(envVarNames []string) (map[string]string, error) {
 	return result, nil
 }
 
-func TimeToEpocMillis(time time.Time) int64 {
+func TimeToEpochMillis(time time.Time) int64 {
 	nanos := time.UnixNano()
 	millis := nanos / 1000000
 	return millis
+}
+
+func EpochToTime(date int64) time.Time {
+	return time.Unix(date, 0)
 }
