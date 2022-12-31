@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/common/oauthCommon/google"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
@@ -17,7 +18,7 @@ type SignInGoogleOAuthHandler struct {
 }
 
 func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
-	return &SignInGoogleOAuthHandler{UseCase: usecase.NewSignInGoogleOAuthUseCase(repository.NewSignInGoogleOAuthRepository(mongodbCommon.TokenCollection))}
+	return &SignInGoogleOAuthHandler{UseCase: usecase.NewSignInGoogleOAuthUseCase(repository.NewSignInGoogleOAuthRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // GoogleSignin
@@ -33,7 +34,6 @@ func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
 // @Failure 500 {object} errorCommon.ResError
 // @Tags auth
 func (s *SignInGoogleOAuthHandler) SignInGoogle(c echo.Context) error {
-	//TODO Google OAUTH 이슈
 	sess, _ := middleware.Store.Get(c.Request(), "session")
 	sess.Options = &sessions.Options{
 		Path:     "/v0.1/auth/google/signin",

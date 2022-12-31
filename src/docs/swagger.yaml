@@ -44,6 +44,11 @@ definitions:
     required:
     - productID
     type: object
+  request.ReqWithdrawalUser:
+    properties:
+      userID:
+        type: string
+    type: object
   response.GetsProduct:
     properties:
       category:
@@ -204,6 +209,13 @@ paths:
         ■ errCode with 500
         INTERNAL_SERVER : 내부 로직 처리 실패
         INTERNAL_DB : DB 처리 실패
+      parameters:
+      - description: json body
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/request.ReqWithdrawalUser'
       produces:
       - application/json
       responses:

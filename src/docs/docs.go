@@ -131,6 +131,17 @@ const docTemplate = `{
                     "auth"
                 ],
                 "summary": "회원 탈퇴",
+                "parameters": [
+                    {
+                        "description": "json body",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ReqWithdrawalUser"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -466,6 +477,14 @@ const docTemplate = `{
                 "totalCount": {
                     "description": "총 수량",
                     "type": "integer"
+                }
+            }
+        },
+        "request.ReqWithdrawalUser": {
+            "type": "object",
+            "properties": {
+                "userID": {
+                    "type": "string"
                 }
             }
         },
