@@ -1,5 +1,7 @@
 package _interface
 
+import "context"
+
 type IWithdrawalUserUseCase interface {
-	WithdrawalUser() error
+	WithdrawalUser(c context.Context, userID string) error
 }
