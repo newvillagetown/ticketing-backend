@@ -47,6 +47,4 @@ func (s *Suite) SetupSuite() {
 	var tokenCollection *mongo.Collection
 	s.GetRepository = NewGetProductRepository(s.DB, tokenCollection)
 	s.GetsRepository = NewGetsProductRepository(s.DB, tokenCollection)
-	//s.UpdateRepository = NewUpdateProductRepository(s.DB, tokenCollection)
-	//s.RegisterRepository = NewRegisterProductRepository(s.DB, tokenCollection)
 }

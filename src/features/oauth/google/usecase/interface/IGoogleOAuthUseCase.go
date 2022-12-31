@@ -1,15 +1,17 @@
 package _interface
 
 import (
-	"main/common/oauthCommon/google"
+	"context"
+	"main/common/dbCommon/mysqlCommon"
+	"net/http"
 )
 
 type ISignInGoogleOAuthUseCase interface {
-	SignInGoogle() (string, string, error)
+	SignInGoogle(c context.Context) error
 }
 type ISignOutGoogleOAuthUseCase interface {
-	SignOutGoogle(email string) error
+	SignOutGoogle(c context.Context, email string) error
 }
 type ICallbackGoogleOAuthUseCase interface {
-	CallbackGoogle(authUser google.User) (string, string, error)
+	CallbackGoogle(c context.Context, authUser mysqlCommon.GormUser) (*http.Cookie, error)
 }
