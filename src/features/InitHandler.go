@@ -7,6 +7,7 @@ import (
 	"main/common/jwtCommon"
 	googleOAuthHandler "main/features/oauth/google/handler"
 	productHandler "main/features/product/handler"
+	userHandler "main/features/user/handler"
 	"net/http"
 )
 
@@ -21,11 +22,11 @@ func InitHandler(e *echo.Echo) error {
 	gApiAuthV01 := gApiV01.Group("/auth")
 	googleOAuthHandler.IndexGoogleOAuthHandler(gApiAuthV01)
 
-	//기능별 핸들러 초기화
+	//기능 핸들러 초기화
 	gApiV01Features := gApiV01.Group("/features")
 	gApiV01Features.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
-
 	productHandler.IndexProductHandler(gApiV01Features)
+	userHandler.IndexUserHandler(gApiV01Features)
 
 	//테스트
 	gApiAuthV01.GET("/test", func(c echo.Context) error {
