@@ -1,19 +1,23 @@
 package usecase
 
-import _interface "main/features/user/usecase/interface"
+import (
+	_interface "main/features/user/usecase/interface"
+	"time"
+)
 
 type WithdrawalUserUseCase struct {
-	Repository _interface.IWithdrawalUserRepository
+	Repository     _interface.IWithdrawalUserRepository
+	ContextTimeout time.Duration
 }
 
-func NewWithdrawalUserUseCase(repo _interface.IWithdrawalUserRepository) _interface.IWithdrawalUserUseCase {
+func NewWithdrawalUserUseCase(repo _interface.IWithdrawalUserRepository, timeout time.Duration) _interface.IWithdrawalUserUseCase {
 	return &WithdrawalUserUseCase{
-		Repository: repo,
+		Repository:     repo,
+		ContextTimeout: timeout,
 	}
 }
 
-// TODO 트랜잭션 처리 필요
 func (w *WithdrawalUserUseCase) WithdrawalUser() error {
-	return nil
 
+	return nil
 }

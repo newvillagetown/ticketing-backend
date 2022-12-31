@@ -38,7 +38,7 @@ type GormUserAuth struct {
 /*
  userAuth 테이블 생성 기존꺼 일단 그대로 두고 임시로 작업
 
-create table gorm_users (
+create table gorm_user_auths (
 	id varchar(200),
 	provider varchar(200) not null,
 	user_id varchar(200) not null,

@@ -1,5 +1,8 @@
 package _interface
 
+import "context"
+
 type IWithdrawalUserRepository interface {
-	WithdrawalUser() error
+	WithdrawalUser(ctx context.Context, userID string) error
+	WithdrawalUserAuth(ctx context.Context, userID string) error
 }

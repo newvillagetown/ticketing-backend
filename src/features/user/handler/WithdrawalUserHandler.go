@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/features/user/repository"
 	"main/features/user/usecase"
 
@@ -15,7 +16,7 @@ type WithdrawalUserHandler struct {
 }
 
 func NewWithdrawalUserHandler() *WithdrawalUserHandler {
-	return &WithdrawalUserHandler{UseCase: usecase.NewWithdrawalUserUseCase(repository.NewWithdrawalUserRepository(mongodbCommon.TokenCollection))}
+	return &WithdrawalUserHandler{UseCase: usecase.NewWithdrawalUserUseCase(repository.NewWithdrawalUserRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // withdrawal user
