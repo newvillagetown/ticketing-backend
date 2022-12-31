@@ -28,8 +28,9 @@ func RestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		//에러 파싱
 		resError := errorCommon.Err{}
 		var resCode int
-		fmt.Println(url)
-		fmt.Println(err)
+		if c.Response().Status == 404 {
+			err = errorCommon.ErrorMsg(errorCommon.ErrNotFound, "", fmt.Sprintf("Invalid url call : %s", url), errorCommon.ErrFromClient)
+		}
 		if err != nil {
 			resError = ErrorParsing(err.Error())
 			resCode = resError.HttpCode
