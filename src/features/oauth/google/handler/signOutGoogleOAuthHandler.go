@@ -4,6 +4,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
 	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
@@ -15,7 +16,7 @@ type SignOutGoogleOAuthHandler struct {
 }
 
 func NewSignOutGoogleOAuthHandler() *SignOutGoogleOAuthHandler {
-	return &SignOutGoogleOAuthHandler{UseCase: usecase.NewSignOutGoogleOAuthUseCase(repository.NewSignOutGoogleOAuthRepository(mongodbCommon.TokenCollection))}
+	return &SignOutGoogleOAuthHandler{UseCase: usecase.NewSignOutGoogleOAuthUseCase(repository.NewSignOutGoogleOAuthRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
 }
 
 // GoogleSignOut
@@ -36,7 +37,8 @@ func (s *SignOutGoogleOAuthHandler) SignOutGoogle(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	email := claims["email"].(string)
-	err := s.UseCase.SignOutGoogle(email)
+	ctx := c.Request().Context()
+	err := s.UseCase.SignOutGoogle(ctx, email)
 	if err != nil {
 		return err
 	}

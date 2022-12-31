@@ -1,11 +1,16 @@
 package usecase
 
 import (
+	"encoding/json"
 	"fmt"
+	"golang.org/x/oauth2"
+	"io/ioutil"
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/dbCommon/mysqlCommon"
+	"main/common/errorCommon"
 	"main/common/oauthCommon/google"
 	"main/features/oauth/google/model/response"
+	"net/http"
 	"time"
 )
 
@@ -20,7 +25,7 @@ func CallbackGoogleOAuthConvertRes(accessToken, refreshToken string) (response.R
 	return result, nil
 }
 
-func CreateRefreshToken(authUser google.User, refreshToken string, now time.Time) mongodbCommon.RefreshToken {
+func CreateRefreshToken(authUser mysqlCommon.GormUser, refreshToken string, now time.Time) mongodbCommon.RefreshToken {
 	result := mongodbCommon.RefreshToken{
 		Token:     refreshToken,
 		Email:     authUser.Email,
@@ -30,29 +35,58 @@ func CreateRefreshToken(authUser google.User, refreshToken string, now time.Time
 	return result
 }
 
-func CreateMysqlUserDTO(authUser google.User) mysqlCommon.User {
+func CreateMysqlUserDTO(authUser mysqlCommon.GormUser) mysqlCommon.GormUser {
 	id := mysqlCommon.PKIDGenerate()
-	now := time.Now().Format("2006-01-02 15:04:05")
-	result := mysqlCommon.User{
-		ID:        id,
-		Email:     authUser.Email,
-		Name:      authUser.Name,
-		Created:   now,
-		IsDeleted: false,
+	authUser.GormModel.ID = id
+	return authUser
+}
+
+func CreateMysqlUserAuthDTO(userDTO mysqlCommon.GormUser) mysqlCommon.GormUserAuth {
+	id := mysqlCommon.PKIDGenerate()
+	result := mysqlCommon.GormUserAuth{
+		GormModel:  mysqlCommon.GormModel{ID: id},
+		Provider:   "google",
+		UserID:     userDTO.GormModel.ID,
+		LastSignIn: time.Now().Unix(),
 	}
 	return result
 }
 
-func CreateMysqlUserAuthDTO(userDTO mysqlCommon.User) mysqlCommon.UserAuth {
-	id := mysqlCommon.PKIDGenerate()
-	now := time.Now().Format("2006-01-02 15:04:05")
-	result := mysqlCommon.UserAuth{
-		ID:         id,
-		Provider:   "google",
-		UserID:     userDTO.ID,
-		LastSignIn: now,
-		Created:    userDTO.Created,
-		IsDeleted:  false,
+func CreateCookie(accessToken string) *http.Cookie {
+	cookie := &http.Cookie{}
+	cookie.Name = "accessToken"
+	cookie.Value = accessToken
+	cookie.Path = "/"
+	cookie.SameSite = http.SameSiteLaxMode
+	cookie.HttpOnly = true
+	cookie.Secure = true
+	cookie.Expires = time.Now().Add(1 * time.Hour)
+	return cookie
+}
+
+func CallGoogleOAuth(code string) (mysqlCommon.GormUser, error) {
+	token, err := google.OAuthConf.Exchange(oauth2.NoContext, code)
+	if err != nil {
+		return mysqlCommon.GormUser{}, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), err.Error(), errorCommon.ErrFromInternal)
 	}
-	return result
+
+	client := google.OAuthConf.Client(oauth2.NoContext, token)
+	userInfoResp, err := client.Get(google.UserInfoAPIEndpoint)
+	if err != nil {
+		return mysqlCommon.GormUser{}, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), err.Error(), errorCommon.ErrFromInternal)
+	}
+	defer userInfoResp.Body.Close()
+	userInfo, err := ioutil.ReadAll(userInfoResp.Body)
+	if err != nil {
+		return mysqlCommon.GormUser{}, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), err.Error(), errorCommon.ErrFromInternal)
+	}
+	var authUser google.User
+	json.Unmarshal(userInfo, &authUser)
+
+	result := mysqlCommon.GormUser{
+		Email: authUser.Email,
+		Name:  authUser.Name,
+	}
+
+	return result, nil
 }

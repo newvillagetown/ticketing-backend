@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/random"
 	"main/common/errorCommon"
@@ -27,6 +28,8 @@ func RestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		//에러 파싱
 		resError := errorCommon.Err{}
 		var resCode int
+		fmt.Println(url)
+		fmt.Println(err)
 		if err != nil {
 			resError = ErrorParsing(err.Error())
 			resCode = resError.HttpCode
