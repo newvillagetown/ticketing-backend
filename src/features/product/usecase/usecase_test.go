@@ -12,12 +12,21 @@ import (
 
 type UseCaseSuite struct {
 	suite.Suite
-	mock sqlmock.Sqlmock
-	repo *mocks.Repository
+	mock   sqlmock.Sqlmock
+	DBTime time.Duration
+	ctx    context.Context
 
-	DBTime            time.Duration
-	ctx               context.Context
-	GetProductUseCase _interface.IGetProductUseCase
+	GetProductRepo      *mocks.GetProductRepository
+	GetsProductRepo     *mocks.GetsProductRepository
+	DeleteProductRepo   *mocks.DeleteProductRepository
+	RegisterProductRepo *mocks.RegisterProductRepository
+	UpdateProductRepo   *mocks.UpdateProductRepository
+
+	GetProductUseCase      _interface.IGetProductUseCase
+	GetsProductUseCase     _interface.IGetsProductUseCase
+	DeleteProductUseCase   _interface.IDeleteProductUseCase
+	RegisterProductUseCase _interface.IRegisterProductUseCase
+	UpdateProductUseCase   _interface.IUpdateProductUseCase
 }
 
 func TestInit(t *testing.T) {
@@ -26,8 +35,18 @@ func TestInit(t *testing.T) {
 
 func (s *UseCaseSuite) SetupSuite() {
 	s.DBTime = 8 * time.Second
-	s.repo = new(mocks.Repository)
 	ctx, _ := context.WithTimeout(context.TODO(), s.DBTime)
 	s.ctx = ctx
-	s.GetProductUseCase = NewGetProductUseCase(s.repo, s.DBTime)
+
+	s.GetProductRepo = new(mocks.GetProductRepository)
+	s.GetsProductRepo = new(mocks.GetsProductRepository)
+	s.DeleteProductRepo = new(mocks.DeleteProductRepository)
+	s.RegisterProductRepo = new(mocks.RegisterProductRepository)
+	s.UpdateProductRepo = new(mocks.UpdateProductRepository)
+
+	s.GetProductUseCase = NewGetProductUseCase(s.GetProductRepo, s.DBTime)
+	s.GetsProductUseCase = NewGetsProductUseCase(s.GetsProductRepo, s.DBTime)
+	s.DeleteProductUseCase = NewDeleteProductUseCase(s.DeleteProductRepo, s.DBTime)
+	s.RegisterProductUseCase = NewRegisterProductUseCase(s.RegisterProductRepo, s.DBTime)
+	s.UpdateProductUseCase = NewUpdateProductUseCase(s.UpdateProductRepo, s.DBTime)
 }

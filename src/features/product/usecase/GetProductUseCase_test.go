@@ -16,11 +16,13 @@ func (s *UseCaseSuite) Test_usecase_Get() {
 	var productDTO mysqlCommon.GormProduct
 	err = faker.FakeData(&productDTO)
 	s.NoError(err)
-	s.repo.On("FindOneProduct", s.ctx, req.ProductID).Return(productDTO, nil).Once()
+	s.GetProductRepo.On("FindOneProduct", s.ctx, req.ProductID).Return(productDTO, nil).Once()
 
 	//when
-	result, err := s.repo.FindOneProduct(s.ctx, req.ProductID)
+	result, err := s.GetProductRepo.FindOneProduct(s.ctx, req.ProductID)
 
 	//then
+	s.NoError(err)
 	require.Equal(s.T(), result, productDTO)
+
 }
