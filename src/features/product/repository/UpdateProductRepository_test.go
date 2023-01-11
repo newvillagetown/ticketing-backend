@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (s *Suite) Test_repository_update_FindOneProduct() {
+func (s *RepositorySuite) Test_repository_update_FindOneProduct() {
 	var mockDBProduct mysqlCommon.GormProduct
 	err := faker.FakeData(&mockDBProduct)
 	if err != nil {
@@ -26,7 +26,7 @@ func (s *Suite) Test_repository_update_FindOneProduct() {
 	require.Equal(s.T(), mockDBProduct.Name, res.Name)
 }
 
-func (s *Suite) Test_repository_update_FindOneAndUpdateProduct() {
+func (s *RepositorySuite) Test_repository_update_FindOneAndUpdateProduct() {
 	var mockDBProduct mysqlCommon.GormProduct
 	err := faker.FakeData(&mockDBProduct)
 	if err != nil {

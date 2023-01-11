@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-type Suite struct {
+type RepositorySuite struct {
 	suite.Suite
 	DB   *gorm.DB
 	mock sqlmock.Sqlmock
@@ -27,10 +27,10 @@ type Suite struct {
 }
 
 func TestInit(t *testing.T) {
-	suite.Run(t, new(Suite))
+	suite.Run(t, new(RepositorySuite))
 }
 
-func (s *Suite) SetupSuite() {
+func (s *RepositorySuite) SetupSuite() {
 	var (
 		db  *sql.DB
 		err error

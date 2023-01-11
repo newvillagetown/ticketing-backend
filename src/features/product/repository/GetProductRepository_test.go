@@ -10,7 +10,7 @@ import (
 	"regexp"
 )
 
-func (s *Suite) Test_repository_FindOneProduct() {
+func (s *RepositorySuite) Test_repository_FindOneProduct() {
 	var mockDBProduct mysqlCommon.GormProduct
 	err := faker.FakeData(&mockDBProduct)
 	if err != nil {
