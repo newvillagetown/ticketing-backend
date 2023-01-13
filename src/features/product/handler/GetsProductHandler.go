@@ -2,9 +2,8 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
-	"main/features/product/repository"
+	"github.com/labstack/echo/v4/middleware"
+	"main/common/jwtCommon"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
 	"net/http"
@@ -14,8 +13,11 @@ type GetsProductHandler struct {
 	UseCase _interface.IGetsProductUseCase
 }
 
-func NewGetsProductHandler() *GetsProductHandler {
-	return &GetsProductHandler{UseCase: usecase.NewGetsProductUseCase(repository.NewGetsProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewGetsProductHandler(c *echo.Echo, useCase _interface.IGetsProductUseCase) {
+	handler := &GetsProductHandler{
+		UseCase: useCase,
+	}
+	c.GET("/v0.1/features/product/gets", handler.Gets, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 }
 
 // Product gets
@@ -37,7 +39,7 @@ func NewGetsProductHandler() *GetsProductHandler {
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (g *GetsProductHandler) gets(c echo.Context) error {
+func (g *GetsProductHandler) Gets(c echo.Context) error {
 	ctx := c.Request().Context()
 	productList, err := g.UseCase.Gets(ctx)
 	if err != nil {

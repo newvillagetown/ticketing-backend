@@ -27,21 +27,3 @@ type IProductHandler interface {
 	NewDeleteProductHandler(UseCase _interface.IDeleteProductUseCase) *DeleteProductHandler
 	NewUpdateProductHandler(UseCase _interface.IUpdateProductUseCase) *UpdateProductHandler
 }
-
-type ProductHandler struct {
-	RegisterProductHandler RegisterProductHandler
-	GetProductHandler      GetProductHandler
-	GetsProductHandler     GetsProductHandler
-	DeleteProductHandler   DeleteProductHandler
-	UpdateProductHandler   UpdateProductHandler
-}
-
-func NewProductHandler() *ProductHandler {
-	return &ProductHandler{
-		RegisterProductHandler: *NewRegisterProductHandler(),
-		GetProductHandler:      *NewGetProductHandler(),
-		GetsProductHandler:     *NewGetsProductHandler(),
-		DeleteProductHandler:   *NewDeleteProductHandler(),
-		UpdateProductHandler:   *NewUpdateProductHandler(),
-	}
-}

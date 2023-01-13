@@ -3,10 +3,6 @@ package handler
 import (
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
-	"main/features/oauth/google/repository"
-	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
 	"net/http"
 )
@@ -15,8 +11,11 @@ type SignOutGoogleOAuthHandler struct {
 	UseCase _interface.ISignOutGoogleOAuthUseCase
 }
 
-func NewSignOutGoogleOAuthHandler() *SignOutGoogleOAuthHandler {
-	return &SignOutGoogleOAuthHandler{UseCase: usecase.NewSignOutGoogleOAuthUseCase(repository.NewSignOutGoogleOAuthRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewSignOutGoogleOAuthHandler(c *echo.Echo, useCase _interface.ISignOutGoogleOAuthUseCase) {
+	handler := &SignOutGoogleOAuthHandler{
+		UseCase: useCase,
+	}
+	c.GET("/v0.1/auth/google/signout", handler.SignOutGoogle)
 }
 
 // GoogleSignOut

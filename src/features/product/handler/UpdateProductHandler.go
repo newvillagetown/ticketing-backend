@@ -2,12 +2,10 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
+	"github.com/labstack/echo/v4/middleware"
+	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
-	"main/features/product/repository"
-	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
 	"net/http"
 )
@@ -16,8 +14,11 @@ type UpdateProductHandler struct {
 	UseCase _interface.IUpdateProductUseCase
 }
 
-func NewUpdateProductHandler() *UpdateProductHandler {
-	return &UpdateProductHandler{UseCase: usecase.NewUpdateProductUseCase(repository.NewUpdateProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewUpdateProductHandler(c *echo.Echo, useCase _interface.IUpdateProductUseCase) {
+	handler := &UpdateProductHandler{
+		UseCase: useCase,
+	}
+	c.PUT("/v0.1/features/product", handler.update, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 }
 
 // Product update
