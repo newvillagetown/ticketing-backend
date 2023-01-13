@@ -11,13 +11,3 @@ type IWithdrawalUserHandler interface {
 type IUserHandler interface {
 	NewWithdrawalUserHandler(UseCase _interface.IWithdrawalUserUseCase) *WithdrawalUserHandler
 }
-
-type UserHandler struct {
-	WithdrawalUserHandler WithdrawalUserHandler
-}
-
-func NewUserHandler() *UserHandler {
-	return &UserHandler{
-		WithdrawalUserHandler: *NewWithdrawalUserHandler(),
-	}
-}

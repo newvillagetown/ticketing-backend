@@ -2,11 +2,9 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
+	"github.com/labstack/echo/v4/middleware"
+	"main/common/jwtCommon"
 	"main/features/product/domain/request"
-	"main/features/product/repository"
-	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
 	"net/http"
 	"strconv"
@@ -16,8 +14,11 @@ type RegisterProductHandler struct {
 	UseCase _interface.IRegisterProductUseCase
 }
 
-func NewRegisterProductHandler() *RegisterProductHandler {
-	return &RegisterProductHandler{UseCase: usecase.NewRegisterProductUseCase(repository.NewRegisterProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewRegisterProductHandler(c *echo.Echo, useCase _interface.IRegisterProductUseCase) {
+	handler := &RegisterProductHandler{
+		UseCase: useCase,
+	}
+	c.POST("/v0.1/features/product", handler.post, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 }
 
 // Product Register
