@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (s *Suite) Test_repository_FindOneAndDeleteUpdateProduct() {
+func (s *RepositorySuite) Test_repository_FindOneAndDeleteUpdateProduct() {
 	var mockDBProduct mysqlCommon.GormProduct
 	err := faker.FakeData(&mockDBProduct)
 	if err != nil {

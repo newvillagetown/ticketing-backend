@@ -2,12 +2,10 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
+	"github.com/labstack/echo/v4/middleware"
+	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
-	"main/features/product/repository"
-	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
 	"net/http"
 )
@@ -16,8 +14,11 @@ type DeleteProductHandler struct {
 	UseCase _interface.IDeleteProductUseCase
 }
 
-func NewDeleteProductHandler() *DeleteProductHandler {
-	return &DeleteProductHandler{UseCase: usecase.NewDeleteProductUseCase(repository.NewDeleteProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewDeleteProductHandler(c *echo.Echo, useCase _interface.IDeleteProductUseCase) {
+	handler := &DeleteProductHandler{
+		UseCase: useCase,
+	}
+	c.DELETE("/v0.1/features/product", handler.delete, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 }
 
 // Product delete

@@ -2,11 +2,8 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
 	"main/common/errorCommon"
 	"main/features/oauth/google/model"
-	"main/features/oauth/google/repository"
 	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
 	"main/middleware"
@@ -17,8 +14,11 @@ type CallbackGoogleOAuthHandler struct {
 	UseCase _interface.ICallbackGoogleOAuthUseCase
 }
 
-func NewCallbackGoogleOAuthHandler() *CallbackGoogleOAuthHandler {
-	return &CallbackGoogleOAuthHandler{UseCase: usecase.NewCallbackGoogleOAuthUseCase(repository.NewCallbackGoogleOAuthRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewCallbackGoogleOAuthHandler(c *echo.Echo, useCase _interface.ICallbackGoogleOAuthUseCase) {
+	handler := &CallbackGoogleOAuthHandler{
+		UseCase: useCase,
+	}
+	c.GET("/v0.1/auth/google/signin/callback", handler.GoogleSignInCallback)
 }
 
 // google signin callback

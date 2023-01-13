@@ -2,11 +2,10 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
+	"github.com/labstack/echo/v4/middleware"
+	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
-	"main/features/product/repository"
 	"main/features/product/usecase"
 	_interface "main/features/product/usecase/interface"
 	"net/http"
@@ -16,8 +15,11 @@ type GetProductHandler struct {
 	UseCase _interface.IGetProductUseCase
 }
 
-func NewGetProductHandler() *GetProductHandler {
-	return &GetProductHandler{UseCase: usecase.NewGetProductUseCase(repository.NewGetProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewGetProductHandler(c *echo.Echo, useCase _interface.IGetProductUseCase) {
+	handler := &GetProductHandler{
+		UseCase: useCase,
+	}
+	c.GET("/v0.1/features/product", handler.Get, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 }
 
 // Product get

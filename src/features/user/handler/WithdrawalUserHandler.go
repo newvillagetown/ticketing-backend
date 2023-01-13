@@ -2,13 +2,10 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
+	"github.com/labstack/echo/v4/middleware"
+	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/user/model/request"
-	"main/features/user/repository"
-	"main/features/user/usecase"
-
 	_interface "main/features/user/usecase/interface"
 	"net/http"
 )
@@ -17,8 +14,11 @@ type WithdrawalUserHandler struct {
 	UseCase _interface.IWithdrawalUserUseCase
 }
 
-func NewWithdrawalUserHandler() *WithdrawalUserHandler {
-	return &WithdrawalUserHandler{UseCase: usecase.NewWithdrawalUserUseCase(repository.NewWithdrawalUserRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewWithdrawalUserHandler(c *echo.Echo, useCase _interface.IWithdrawalUserUseCase) {
+	handler := &WithdrawalUserHandler{
+		UseCase: useCase,
+	}
+	c.GET("/v0.1/auth/user/withdrawal", handler.WithdrawalUser, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 }
 
 // withdrawal user

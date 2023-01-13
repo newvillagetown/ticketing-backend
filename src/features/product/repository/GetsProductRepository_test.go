@@ -9,7 +9,7 @@ import (
 	"regexp"
 )
 
-func (s *Suite) Test_repository_FindProduct() {
+func (s *RepositorySuite) Test_repository_FindProduct() {
 	mockProducts := make([]mysqlCommon.GormProduct, 2, 2)
 	for i := 0; i < len(mockProducts); i++ {
 		err := faker.FakeData(&mockProducts[i])
