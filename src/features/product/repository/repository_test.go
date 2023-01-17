@@ -9,7 +9,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"testing"
 )
 

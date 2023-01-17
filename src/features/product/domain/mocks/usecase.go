@@ -5,7 +5,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"main/common/dbCommon/mysqlCommon"
 	"main/features/product/domain/request"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 )
 
 var (

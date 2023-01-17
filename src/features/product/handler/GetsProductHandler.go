@@ -2,10 +2,8 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
 	"main/features/product/usecase"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"net/http"
 )
 
@@ -17,7 +15,8 @@ func NewGetsProductHandler(c *echo.Echo, useCase _interface.IGetsProductUseCase)
 	handler := &GetsProductHandler{
 		UseCase: useCase,
 	}
-	c.GET("/v0.1/features/product/gets", handler.Gets, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	//	c.GET("/v0.1/features/product/gets", handler.Gets, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	c.GET("/v0.1/features/product/gets", handler.Gets)
 }
 
 // Product gets

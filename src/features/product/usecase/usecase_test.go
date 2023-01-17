@@ -5,7 +5,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"gopkg.in/DATA-DOG/go-sqlmock.v2"
 	"main/features/product/domain/mocks"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"testing"
 	"time"
 )
