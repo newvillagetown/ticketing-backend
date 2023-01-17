@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/errorCommon"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 )
 
 func NewGetsProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collection) _interface.IGetsProductRepository {

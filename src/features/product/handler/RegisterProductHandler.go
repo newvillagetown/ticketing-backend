@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"main/common/jwtCommon"
 	"main/features/product/domain/request"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"net/http"
 	"strconv"
 )

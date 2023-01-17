@@ -7,7 +7,7 @@ import (
 	"main/common/valCommon"
 	"main/features/product/domain/request"
 	"main/features/product/usecase"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"net/http"
 )
 

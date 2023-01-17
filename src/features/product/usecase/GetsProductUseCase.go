@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"main/common/dbCommon/mysqlCommon"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"time"
 )
 

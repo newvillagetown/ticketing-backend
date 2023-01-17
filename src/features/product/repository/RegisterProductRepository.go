@@ -7,7 +7,7 @@ import (
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/errorCommon"
 	"main/features/product/domain"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 )
 
 func NewRegisterProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collection) _interface.IRegisterProductRepository {

@@ -6,7 +6,7 @@ import (
 	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"net/http"
 )
 
