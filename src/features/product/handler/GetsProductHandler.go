@@ -11,12 +11,15 @@ type GetsProductHandler struct {
 	UseCase _interface.IGetsProductUseCase
 }
 
-func NewGetsProductHandler(c *echo.Echo, useCase _interface.IGetsProductUseCase) {
+func NewGetsProductHandler(c *echo.Echo, useCase _interface.IGetsProductUseCase) _interface.IGetsProductHandler {
 	handler := &GetsProductHandler{
 		UseCase: useCase,
 	}
-	//	c.GET("/v0.1/features/product/gets", handler.Gets, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	//c.GET("/v0.1/features/product/gets", handler.Gets, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 	c.GET("/v0.1/features/product/gets", handler.Gets)
+	return &GetsProductHandler{
+		UseCase: useCase,
+	}
 }
 
 // Product gets
