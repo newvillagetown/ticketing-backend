@@ -1,9 +1,8 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
 	"main/features/product/usecase/interface"
@@ -14,11 +13,15 @@ type DeleteProductHandler struct {
 	UseCase _interface.IDeleteProductUseCase
 }
 
-func NewDeleteProductHandler(c *echo.Echo, useCase _interface.IDeleteProductUseCase) {
+func NewDeleteProductHandler(c *echo.Echo, useCase _interface.IDeleteProductUseCase) _interface.IDeleteProductHandler {
 	handler := &DeleteProductHandler{
 		UseCase: useCase,
 	}
-	c.DELETE("/v0.1/features/product", handler.delete, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	//	c.DELETE("/v0.1/features/product", handler.Delete, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	c.DELETE("/v0.1/features/product", handler.Delete)
+	return &DeleteProductHandler{
+		UseCase: useCase,
+	}
 }
 
 // Product delete
@@ -41,11 +44,12 @@ func NewDeleteProductHandler(c *echo.Echo, useCase _interface.IDeleteProductUseC
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (d *DeleteProductHandler) delete(c echo.Context) error {
+func (d *DeleteProductHandler) Delete(c echo.Context) error {
 	req := &request.ReqDeleteProduct{}
 	if err := valCommon.ValidateReq(c, req); err != nil {
 		return err
 	}
+	fmt.Println(req.ProductID)
 	ctx := c.Request().Context()
 	err := d.UseCase.Delete(ctx, *req)
 	if err != nil {

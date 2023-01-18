@@ -8,8 +8,6 @@ import (
 	_ "main/features/product/usecase/interface"
 	_interface "main/features/product/usecase/interface"
 	mw "main/middleware"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -17,9 +15,13 @@ type HandlerSuite struct {
 	suite.Suite
 	engine *echo.Echo
 
-	GetsProductUseCase *mocks.GetsProductUseCase
+	GetsProductUseCase   *mocks.GetsProductUseCase
+	GetProductUseCase    *mocks.GetProductUseCase
+	DeleteProductUseCase *mocks.DeleteProductUseCase
 
-	GetsProductHandler _interface.IGetsProductHandler
+	GetsProductHandler   _interface.IGetsProductHandler
+	GetProductHandler    _interface.IGetProductHandler
+	DeleteProductHandler _interface.IDeleteProductHandler
 }
 
 // Write test definition with TestSuite.
@@ -30,16 +32,14 @@ func TestHandlerSuite(t *testing.T) {
 func (s *HandlerSuite) SetupTest() {
 	s.engine = echo.New()
 	s.GetsProductUseCase = new(mocks.GetsProductUseCase)
+	s.GetProductUseCase = new(mocks.GetProductUseCase)
+	s.DeleteProductUseCase = new(mocks.DeleteProductUseCase)
 
-	NewGetsProductHandler(s.engine, s.GetsProductUseCase)
+	s.GetsProductHandler = NewGetsProductHandler(s.engine, s.GetsProductUseCase)
+	s.GetProductHandler = NewGetProductHandler(s.engine, s.GetProductUseCase)
+	s.DeleteProductHandler = NewDeleteProductHandler(s.engine, s.DeleteProductUseCase)
 
 	awsCommon.InitAws()
 	mw.InitMiddleware(s.engine)
 
-}
-
-func (s *HandlerSuite) buildContextAndRecorder(httpRequest *http.Request) (ctx echo.Context, rec *httptest.ResponseRecorder) {
-	rec = httptest.NewRecorder()
-	ctx = s.engine.NewContext(httpRequest, rec)
-	return
 }

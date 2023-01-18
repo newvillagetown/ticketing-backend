@@ -3,20 +3,39 @@ package mocks
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/mock"
-	"main/features/product/domain/response"
 	_ "main/features/product/usecase/interface"
 	_interface "main/features/product/usecase/interface"
 )
 
 var (
-	_ _interface.IGetsProductHandler = &GetsProductHandler{}
+	_ _interface.IGetsProductHandler   = &GetsProductHandler{}
+	_ _interface.IGetProductHandler    = &GetProductHandler{}
+	_ _interface.IDeleteProductHandler = &DeleteProductHandler{}
 )
 
+type DeleteProductHandler struct {
+	mock.Mock
+}
 type GetsProductHandler struct {
 	mock.Mock
 }
 
-func (r *GetsProductHandler) Gets(c echo.Context) ([]*response.ResGetsProduct, error) {
-	ret := r.Called(c)
-	return ret.Get(0).([]*response.ResGetsProduct), ret.Error(1)
+type GetProductHandler struct {
+	mock.Mock
+}
+
+func (d *DeleteProductHandler) Delete(c echo.Context) error {
+	ret := d.Called(c)
+	return ret.Error(1)
+}
+
+func (g *GetsProductHandler) Gets(c echo.Context) error {
+	ret := g.Called(c)
+	return ret.Error(1)
+}
+
+func (g *GetProductHandler) Get(c echo.Context) error {
+	ret := g.Called(c, "dd")
+
+	return ret.Error(1)
 }
