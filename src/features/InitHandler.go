@@ -17,9 +17,10 @@ func InitHandler(e *echo.Echo) error {
 
 	e.GET("/test", func(c echo.Context) error {
 		msg := pubsubCommon.NaverSms{
-			PhoneList:   []string{"01051105508"},
+			PhoneList:   []string{"01051105508", "01029121993"},
 			ContentType: "COMM",
-			Content:     "네이버 메시지 테스트입니다.",
+			Content:     "메시지 오니? -테스트",
+			SmsType:     "SMS",
 		}
 		pubsubCommon.PublishMessages(pubsubCommon.SubNaverSms, msg, pubsubCommon.PubSubCh)
 		return c.NoContent(http.StatusOK)
