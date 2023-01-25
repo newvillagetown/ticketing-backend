@@ -2,8 +2,6 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
 	"main/features/product/usecase/interface"
@@ -14,11 +12,13 @@ type UpdateProductHandler struct {
 	UseCase _interface.IUpdateProductUseCase
 }
 
-func NewUpdateProductHandler(c *echo.Echo, useCase _interface.IUpdateProductUseCase) {
+func NewUpdateProductHandler(c *echo.Echo, useCase _interface.IUpdateProductUseCase) _interface.IUpdateProductHandler {
 	handler := &UpdateProductHandler{
 		UseCase: useCase,
 	}
-	c.PUT("/v0.1/features/product", handler.update, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	//c.PUT("/v0.1/features/product", handler.update, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	c.PUT("/v0.1/features/product", handler.Update)
+	return handler
 }
 
 // Product update
@@ -41,7 +41,7 @@ func NewUpdateProductHandler(c *echo.Echo, useCase _interface.IUpdateProductUseC
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (u *UpdateProductHandler) update(c echo.Context) error {
+func (u *UpdateProductHandler) Update(c echo.Context) error {
 	req := &request.ReqUpdateProduct{}
 	if err := valCommon.ValidateReq(c, req); err != nil {
 		return err

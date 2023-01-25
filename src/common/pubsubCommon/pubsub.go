@@ -8,24 +8,11 @@ import (
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/nCloudSmsCommon"
 	"main/common/noticeCommon/productNotice"
+	"sync"
 	"time"
 )
-
-const (
-	SubMongoDBLog    = ISubscribeTopicType("mongodb.log")
-	SubProductNotice = ISubscribeTopicType("product.notice")
-)
-
-type EventType string
-
-const (
-	ProductRegisterEventType = EventType("PRODUCT_REGISTER")
-)
-
-var PubSubCh *gochannel.GoChannel
-
-type ISubscribeTopicType string
 
 func InitPubSub() error {
 	PubSubCh = gochannel.NewGoChannel(
@@ -35,12 +22,48 @@ func InitPubSub() error {
 	// 받을 채널을 만든거다
 	mongodbLogCh, err := PubSubCh.Subscribe(context.Background(), string(SubMongoDBLog))
 	if err != nil {
-		panic(err)
+		fmt.Println(err.Error())
 	}
 	productNoticeCh, err := PubSubCh.Subscribe(context.Background(), string(SubProductNotice))
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	//kakaoNotificationCh, err := PubSubCh.Subscribe(context.Background(), string(SubKakaoNotificationTalk))
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	naverSmsCh, err := PubSubCh.Subscribe(context.Background(), string(SubNaverSms))
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	go NaverSmsService(naverSmsCh)
 	go LogProcess(mongodbLogCh)
 	go GoogleRegisterNoticeProcess(productNoticeCh)
 
+	return nil
+}
+func NaverSmsService(messages <-chan *message.Message) {
+	for msg := range messages {
+		data := &NaverSms{}
+		err := json.Unmarshal(msg.Payload, data)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		err = data.send()
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+	}
+}
+func (n *NaverSms) send() error {
+	var wait sync.WaitGroup
+	wait.Add(len(n.PhoneList))
+	for i := 0; i < len(n.PhoneList); i++ {
+		go nCloudSmsCommon.NSmsSend(&wait, n.PhoneList[i], n.Content, n.ContentType)
+	}
+	wait.Wait()
 	return nil
 }
 
