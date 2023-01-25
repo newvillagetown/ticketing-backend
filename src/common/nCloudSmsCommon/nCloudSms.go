@@ -13,7 +13,6 @@ import (
 	"main/common/errorCommon"
 	"net/http"
 	"strconv"
-	"sync"
 	"time"
 )
 
@@ -44,12 +43,14 @@ func InitNSms() error {
 
 	return nil
 }
-func NSmsSend(wait *sync.WaitGroup, phoneNumber, content string, contentType string) error {
+func NSmsSend(phoneNumber, smsType, contentType, content string) (map[string]interface{}, error) {
 	fmt.Println(phoneNumber)
-	defer wait.Done()
+	if phoneNumber == "01029121993" {
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), fmt.Sprintf("fail to create SMS send body - %+v", "test"), errorCommon.ErrFromInternal)
+	}
 	ctx := context.TODO()
 	body := map[string]interface{}{
-		"type":        "SMS",
+		"type":        smsType,
 		"contentType": contentType,
 		"countryCode": "82",
 		"from":        nSmsSenderNumber,
@@ -57,11 +58,10 @@ func NSmsSend(wait *sync.WaitGroup, phoneNumber, content string, contentType str
 			{"to": phoneNumber},
 		},
 		"content": content,
-		//"subject": smsMeta[smsType].subject,
 	}
 	bodyStr, err := json.Marshal(body)
 	if err != nil {
-		return errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), fmt.Sprintf("fail to create SMS send body - %+v", body), errorCommon.ErrFromInternal)
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), fmt.Sprintf("fail to create SMS send body - %+v", body), errorCommon.ErrFromInternal)
 	}
 
 	sigTimestamp := time.Now().UnixNano() / 1000000
@@ -74,7 +74,7 @@ func NSmsSend(wait *sync.WaitGroup, phoneNumber, content string, contentType str
 	defer ctxHttpCancel()
 	req, err := http.NewRequestWithContext(ctxHttp, http.MethodPost, nSmsSendUrlFull, bytes.NewBuffer(bodyStr))
 	if err != nil {
-		return errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), "fail to create SMS send request", errorCommon.ErrFromInternal)
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), "fail to create SMS send request", errorCommon.ErrFromInternal)
 	}
 	req.Header.Add("Content-Type", "application/json; charset=utf-8")
 	req.Header.Add("x-ncp-apigw-timestamp", strconv.FormatInt(sigTimestamp, 10))
@@ -83,21 +83,20 @@ func NSmsSend(wait *sync.WaitGroup, phoneNumber, content string, contentType str
 
 	res, err := httpClient.Do(req)
 	if err != nil {
-		return errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("SMS send http call fail - %s", nSmsSendUrl), errorCommon.ErrFromNaver)
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("SMS send http call fail - %s", nSmsSendUrl), errorCommon.ErrFromNaver)
 	}
 	defer res.Body.Close()
 
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("SMS send http response parse fail - %s", nSmsSendUrl), errorCommon.ErrFromNaver)
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("SMS send http response parse fail - %s", nSmsSendUrl), errorCommon.ErrFromNaver)
 	}
 	resBodyMap := make(map[string]interface{})
 	if err := json.Unmarshal(resBody, &resBodyMap); err != nil {
-		return errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("fail to parse SMS send response - %s", string(resBody)), errorCommon.ErrFromNaver)
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("fail to parse SMS send response - %s", string(resBody)), errorCommon.ErrFromNaver)
 	}
 	if resCode, ok := resBodyMap["statusCode"]; !ok || resCode != "202" {
-		return errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("seems fail to send SMS - %s", string(resBody)), errorCommon.ErrFromNaver)
+		return nil, errorCommon.ErrorMsg(errorCommon.ErrPartner, errorCommon.Trace(), fmt.Sprintf("seems fail to send SMS - %s", string(resBody)), errorCommon.ErrFromNaver)
 	}
-
-	return nil
+	return resBodyMap, nil
 }
