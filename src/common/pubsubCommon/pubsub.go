@@ -7,10 +7,11 @@ import (
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+	"golang.org/x/sync/errgroup"
 	"main/common/dbCommon/mongodbCommon"
+	"main/common/envCommon"
 	"main/common/nCloudSmsCommon"
 	"main/common/noticeCommon/productNotice"
-	"sync"
 	"time"
 )
 
@@ -57,13 +58,44 @@ func NaverSmsService(messages <-chan *message.Message) {
 
 	}
 }
+
+// 이도영
 func (n *NaverSms) send() error {
-	var wait sync.WaitGroup
-	wait.Add(len(n.PhoneList))
+	g := new(errgroup.Group)
+	now := time.Now()
 	for i := 0; i < len(n.PhoneList); i++ {
-		go nCloudSmsCommon.NSmsSend(&wait, n.PhoneList[i], n.Content, n.ContentType)
+		i := i
+		g.Go(func() error {
+			res, err := nCloudSmsCommon.NSmsSend(n.PhoneList[i], n.SmsType, n.ContentType, n.Content)
+			fmt.Println(res)
+			// DB 데이터 생성
+			msgEvent := mongodbCommon.MessageEvent{
+				Type:     string(SubNaverSms),
+				State:    2,
+				Occurred: envCommon.TimeToEpochMillis(now),
+				NaverSms: mongodbCommon.NaverSms{
+					Phone:       n.PhoneList[i],
+					SmsType:     n.SmsType,
+					Title:       n.Title,
+					ContentType: n.ContentType,
+					Content:     n.Content,
+				},
+				ResInfo: res,
+			}
+			if err != nil {
+				//에러 처리
+				fmt.Println("에러 처리 ㄱㄱ")
+			}
+			// DB 등록
+			mongodbCommon.EventCollection.InsertOne(context.TODO(), msgEvent)
+
+			return err
+		})
 	}
-	wait.Wait()
+	if err := g.Wait(); err != nil {
+		fmt.Println(err)
+		return err
+	}
 	return nil
 }
 
