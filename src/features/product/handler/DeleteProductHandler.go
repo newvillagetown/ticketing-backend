@@ -19,9 +19,7 @@ func NewDeleteProductHandler(c *echo.Echo, useCase _interface.IDeleteProductUseC
 	}
 	//	c.DELETE("/v0.1/features/product", handler.Delete, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 	c.DELETE("/v0.1/features/product", handler.Delete)
-	return &DeleteProductHandler{
-		UseCase: useCase,
-	}
+	return handler
 }
 
 // Product delete

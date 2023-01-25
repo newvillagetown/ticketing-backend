@@ -19,9 +19,7 @@ func NewGetProductHandler(c *echo.Echo, useCase _interface.IGetProductUseCase) _
 	}
 	//c.GET("/v0.1/features/product", handler.Get, middleware.JWTWithConfig(jwtCommon.JwtConfig))
 	c.GET("/v0.1/features/product", handler.Get)
-	return &GetProductHandler{
-		UseCase: useCase,
-	}
+	return handler
 }
 
 // Product get

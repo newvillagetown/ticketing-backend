@@ -2,8 +2,6 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
 	"main/features/product/domain/request"
 	"main/features/product/usecase/interface"
 	"net/http"
@@ -14,11 +12,13 @@ type RegisterProductHandler struct {
 	UseCase _interface.IRegisterProductUseCase
 }
 
-func NewRegisterProductHandler(c *echo.Echo, useCase _interface.IRegisterProductUseCase) {
+func NewRegisterProductHandler(c *echo.Echo, useCase _interface.IRegisterProductUseCase) _interface.IRegisterProductHandler {
 	handler := &RegisterProductHandler{
 		UseCase: useCase,
 	}
-	c.POST("/v0.1/features/product", handler.post, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	//c.POST("/v0.1/features/product", handler.post, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	c.POST("/v0.1/features/product", handler.Post)
+	return handler
 }
 
 // Product Register
@@ -42,7 +42,7 @@ func NewRegisterProductHandler(c *echo.Echo, useCase _interface.IRegisterProduct
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (r *RegisterProductHandler) post(c echo.Context) error {
+func (r *RegisterProductHandler) Post(c echo.Context) error {
 
 	name := c.FormValue("name")
 	description := c.FormValue("description")

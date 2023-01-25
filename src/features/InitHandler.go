@@ -2,6 +2,7 @@ package features
 
 import (
 	"github.com/labstack/echo/v4"
+	"main/common/pubsubCommon"
 	googleOAuthHandler "main/features/oauth/google/handler"
 	productHandler "main/features/product/handler"
 	userHandler "main/features/user/handler"
@@ -11,6 +12,16 @@ import (
 func InitHandler(e *echo.Echo) error {
 	//elb 헬스체크용
 	e.GET("/health", func(c echo.Context) error {
+		return c.NoContent(http.StatusOK)
+	})
+
+	e.GET("/test", func(c echo.Context) error {
+		msg := pubsubCommon.NaverSms{
+			PhoneList:   []string{"01051105508"},
+			ContentType: "COMM",
+			Content:     "네이버 메시지 테스트입니다.",
+		}
+		pubsubCommon.PublishMessages(pubsubCommon.SubNaverSms, msg, pubsubCommon.PubSubCh)
 		return c.NoContent(http.StatusOK)
 	})
 

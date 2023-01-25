@@ -15,13 +15,17 @@ type HandlerSuite struct {
 	suite.Suite
 	engine *echo.Echo
 
-	GetsProductUseCase   *mocks.GetsProductUseCase
-	GetProductUseCase    *mocks.GetProductUseCase
-	DeleteProductUseCase *mocks.DeleteProductUseCase
+	GetsProductUseCase     *mocks.GetsProductUseCase
+	GetProductUseCase      *mocks.GetProductUseCase
+	DeleteProductUseCase   *mocks.DeleteProductUseCase
+	RegisterProductUseCase *mocks.RegisterProductUseCase
+	UpdateProductUseCase   *mocks.UpdateProductUseCase
 
-	GetsProductHandler   _interface.IGetsProductHandler
-	GetProductHandler    _interface.IGetProductHandler
-	DeleteProductHandler _interface.IDeleteProductHandler
+	GetsProductHandler     _interface.IGetsProductHandler
+	GetProductHandler      _interface.IGetProductHandler
+	DeleteProductHandler   _interface.IDeleteProductHandler
+	RegisterProductHandler _interface.IRegisterProductHandler
+	UpdateProductHandler   _interface.IUpdateProductHandler
 }
 
 // Write test definition with TestSuite.
@@ -34,10 +38,14 @@ func (s *HandlerSuite) SetupTest() {
 	s.GetsProductUseCase = new(mocks.GetsProductUseCase)
 	s.GetProductUseCase = new(mocks.GetProductUseCase)
 	s.DeleteProductUseCase = new(mocks.DeleteProductUseCase)
+	s.RegisterProductUseCase = new(mocks.RegisterProductUseCase)
+	s.UpdateProductUseCase = new(mocks.UpdateProductUseCase)
 
 	s.GetsProductHandler = NewGetsProductHandler(s.engine, s.GetsProductUseCase)
 	s.GetProductHandler = NewGetProductHandler(s.engine, s.GetProductUseCase)
 	s.DeleteProductHandler = NewDeleteProductHandler(s.engine, s.DeleteProductUseCase)
+	s.RegisterProductHandler = NewRegisterProductHandler(s.engine, s.RegisterProductUseCase)
+	s.UpdateProductHandler = NewUpdateProductHandler(s.engine, s.UpdateProductUseCase)
 
 	awsCommon.InitAws()
 	mw.InitMiddleware(s.engine)
