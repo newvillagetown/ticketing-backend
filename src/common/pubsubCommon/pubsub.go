@@ -7,10 +7,13 @@ import (
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/sync/errgroup"
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/envCommon"
 	"main/common/nCloudSmsCommon"
+	"main/common/noticeCommon/naverSms"
 	"main/common/noticeCommon/productNotice"
 	"time"
 )
@@ -63,37 +66,59 @@ func NaverSmsService(messages <-chan *message.Message) {
 func (n *NaverSms) send() error {
 	g := new(errgroup.Group)
 	now := time.Now()
+	failedList := []string{}
 	for i := 0; i < len(n.PhoneList); i++ {
 		i := i
 		g.Go(func() error {
 			res, err := nCloudSmsCommon.NSmsSend(n.PhoneList[i], n.SmsType, n.ContentType, n.Content)
-			fmt.Println(res)
+
 			// DB 데이터 생성
-			msgEvent := mongodbCommon.MessageEvent{
+			msgEvent := mongodbCommon.NaverSmsEventDTO{
 				Type:     string(SubNaverSms),
 				State:    2,
 				Occurred: envCommon.TimeToEpochMillis(now),
 				NaverSms: mongodbCommon.NaverSms{
 					Phone:       n.PhoneList[i],
 					SmsType:     n.SmsType,
-					Title:       n.Title,
 					ContentType: n.ContentType,
 					Content:     n.Content,
 				},
-				ResInfo: res,
 			}
 			if err != nil {
-				//에러 처리
-				fmt.Println("에러 처리 ㄱㄱ")
+				msgEvent.Error = err.Error()
+				failedList = append(failedList, n.PhoneList[i])
+				return err
+			}
+			msgEvent.ResInfo = mongodbCommon.NaverSmsResDTO{
+				StatusName:  res["statusName"].(string),
+				RequestId:   res["requestId"].(string),
+				RequestTime: res["requestTime"].(string),
+				StatusCode:  res["statusCode"].(string),
 			}
 			// DB 등록
-			mongodbCommon.EventCollection.InsertOne(context.TODO(), msgEvent)
-
+			result, err := mongodbCommon.EventCollection.InsertOne(context.TODO(), msgEvent)
+			if err != nil {
+				return err
+			}
+			eID := result.InsertedID.(primitive.ObjectID)
+			findData := bson.D{{"_id", eID}}
+			fmt.Println(eID)
+			tmp := mongodbCommon.NaverSmsEventDTO{}
+			err = mongodbCommon.EventCollection.FindOne(context.TODO(), findData).Decode(&tmp)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+			fmt.Println(tmp)
 			return err
 		})
 	}
 	if err := g.Wait(); err != nil {
 		fmt.Println(err)
+		googleChat := naverSms.NaverSmsFailedNotice{
+			Content:   n.Content,
+			PhoneList: failedList,
+		}
+		go googleChat.Send()
 		return err
 	}
 	return nil

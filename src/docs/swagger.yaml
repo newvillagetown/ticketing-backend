@@ -234,6 +234,72 @@ paths:
       summary: 회원 탈퇴
       tags:
       - auth
+  /v0.1/features/message/naver/sms:
+    post:
+      description: |-
+        ■ errCode with 400
+        PARAM_BAD : 파라미터 오류
+
+        ■ errCode with 401
+        TOKEN_BAD : 토큰 인증 실패
+        POLICY_VIOLATION : 토큰 세션 정책 위반
+
+        ■ errCode with 500
+        INTERNAL_SERVER : 내부 로직 처리 실패
+        INTERNAL_DB : DB 처리 실패
+      parameters:
+      - description: phoneList
+        in: formData
+        items:
+          type: string
+        name: phoneList
+        required: true
+        type: array
+      - description: contentType
+        in: formData
+        name: contentType
+        required: true
+        type: string
+      - description: content
+        in: formData
+        name: content
+        required: true
+        type: string
+      - description: smsType
+        in: formData
+        name: smsType
+        required: true
+        type: string
+      - description: reserveTime
+        in: formData
+        name: reserveTime
+        type: string
+      - description: scheduleCode
+        in: formData
+        name: scheduleCode
+        type: string
+      - description: image
+        in: formData
+        name: image
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorCommon.ResError'
+      summary: 네이버 sms 메시지 전송
+      tags:
+      - message
   /v0.1/features/product:
     delete:
       description: |-
