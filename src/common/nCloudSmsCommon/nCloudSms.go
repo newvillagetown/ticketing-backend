@@ -44,10 +44,6 @@ func InitNSms() error {
 	return nil
 }
 func NSmsSend(phoneNumber, smsType, contentType, content string) (map[string]interface{}, error) {
-	fmt.Println(phoneNumber)
-	if phoneNumber == "01029121993" {
-		return nil, errorCommon.ErrorMsg(errorCommon.ErrInternalServer, errorCommon.Trace(), fmt.Sprintf("fail to create SMS send body - %+v", "test"), errorCommon.ErrFromInternal)
-	}
 	ctx := context.TODO()
 	body := map[string]interface{}{
 		"type":        smsType,
