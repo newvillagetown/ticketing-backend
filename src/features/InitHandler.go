@@ -3,6 +3,7 @@ package features
 import (
 	"github.com/labstack/echo/v4"
 	"main/common/pubsubCommon"
+	messageHandler "main/features/message/handler"
 	googleOAuthHandler "main/features/oauth/google/handler"
 	productHandler "main/features/product/handler"
 	userHandler "main/features/user/handler"
@@ -32,6 +33,7 @@ func InitHandler(e *echo.Echo) error {
 	//기능 핸들러 초기화
 	productHandler.NewProductHandler(e)
 	userHandler.NewUserHandler(e)
+	messageHandler.NewNaverSmsHandler(e)
 
 	return nil
 }

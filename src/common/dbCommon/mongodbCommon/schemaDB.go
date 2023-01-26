@@ -40,29 +40,35 @@ type Event struct {
 	ErrorMsg   string `json:"errorMsg" bson:"error_msg,omitempty"`
 }
 
-type MessageEvent struct {
+type NaverSmsEventDTO struct {
 	ID       string                 `json:"id" bson:"_id,omitempty"`
 	Type     string                 `json:"type" bson:"type"`
 	State    int                    `json:"state" bson:"state"`
 	Occurred int64                  `json:"occurred" bson:"occurred"`
 	NaverSms NaverSms               `json:"naverSms,omitempty" bson:"naverSms,omitempty"`
 	ReqInfo  map[string]interface{} `json:"reqInfo" bson:"reqInfo"`
-	ResInfo  map[string]interface{} `json:"resInfo" bson:"resInfo"`
+	ResInfo  NaverSmsResDTO         `json:"resInfo" bson:"resInfo"`
 	Error    string                 `json:"error,omitempty" bson:"error,omitempty"`
+}
+type NaverSmsResDTO struct {
+	StatusName  string `json:"statusName" bson:"statusName"`
+	RequestId   string `json:"requestId" bson:"requestId"`
+	RequestTime string `json:"requestTime" bson:"requestTime"`
+	StatusCode  string `json:"statusCode" bson:"statusCode"`
 }
 
 type NaverSms struct {
-	Phone           string
-	SmsType         string // sms/lms/mms
-	Title           string // subject	Optional	String	기본 메시지 제목	LMS, MMS에서만 사용 가능
-	ContentType     string // COMM 일반 메시지, AD 광고 메시지
-	Content         string // Content
+	Phone           string `json:"phone" bson:"phone"`             //
+	SmsType         string `json:"smsType" bson:"smsType"`         // sms/lms/mms
+	Title           string `json:"title" bson:"title"`             // subject	Optional	String	기본 메시지 제목	LMS, MMS에서만 사용 가능
+	ContentType     string `json:"contentType" bson:"contentType"` // COMM 일반 메시지, AD 광고 메시지
+	Content         string `json:"content" bson:"content"`         // Content
 	File            File   //mms에서만 가능
-	ReserveTime     string //메시지 발송 예약 일시 (yyyy-MM-dd HH:mm)
-	ReserveTimeZone string // 예약 일시
-	ScheduleCode    string // 문자 메시지 주기
+	ReserveTime     string `json:"reserveTime" bson:"reserveTime"`         //메시지 발송 예약 일시 (yyyy-MM-dd HH:mm)
+	ReserveTimeZone string `json:"reserveTimeZone" bson:"reserveTimeZone"` // 예약 일시
+	ScheduleCode    string `json:"scheduleCode" bson:"scheduleCode"`       // 문자 메시지 주기
 }
 type File struct {
-	Name string //.jpg, jpeg 확장자 가능, 최대 40자, 공백 x
-	Body string // 최대 300kbyte, base64인코딩한 값
+	Name string `json:"name" bson:"name"` //.jpg, jpeg 확장자 가능, 최대 40자, 공백 x
+	Body string `json:"body" bson:"body"` // 최대 300kbyte, base64인코딩한 값
 }
