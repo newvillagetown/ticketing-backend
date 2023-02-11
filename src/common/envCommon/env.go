@@ -80,3 +80,7 @@ func TimeToEpochMillis(time time.Time) int64 {
 func EpochToTime(date int64) time.Time {
 	return time.Unix(date, 0)
 }
+
+func EpochToTimeMillis(t int64) time.Time {
+	return time.Unix(t/1000, t%1000*1000000)
+}
