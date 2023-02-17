@@ -50,7 +50,6 @@ func getAllUsers() ([]UserData, error) {
 	ctx := context.TODO()
 	firebaseInfo, err := ssm.AwsGetParam("dev_firebase_credential")
 	sa := option.WithCredentialsJSON([]byte(firebaseInfo))
-	//sa := option.WithCredentialsFile(currentDir + "/common/firebaseCommon/serviceAccountKey.json")
 
 	app, err := firebase.NewApp(ctx, nil, sa)
 	if err != nil {
