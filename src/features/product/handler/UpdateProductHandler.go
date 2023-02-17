@@ -2,13 +2,9 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
 	"main/common/valCommon"
 	"main/features/product/domain/request"
-	"main/features/product/repository"
-	"main/features/product/usecase"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"net/http"
 )
 
@@ -16,8 +12,13 @@ type UpdateProductHandler struct {
 	UseCase _interface.IUpdateProductUseCase
 }
 
-func NewUpdateProductHandler() *UpdateProductHandler {
-	return &UpdateProductHandler{UseCase: usecase.NewUpdateProductUseCase(repository.NewUpdateProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewUpdateProductHandler(c *echo.Echo, useCase _interface.IUpdateProductUseCase) _interface.IUpdateProductHandler {
+	handler := &UpdateProductHandler{
+		UseCase: useCase,
+	}
+	//c.PUT("/v0.1/features/product", handler.update, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	c.PUT("/v0.1/features/product", handler.Update)
+	return handler
 }
 
 // Product update
@@ -40,7 +41,7 @@ func NewUpdateProductHandler() *UpdateProductHandler {
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (u *UpdateProductHandler) update(c echo.Context) error {
+func (u *UpdateProductHandler) Update(c echo.Context) error {
 	req := &request.ReqUpdateProduct{}
 	if err := valCommon.ValidateReq(c, req); err != nil {
 		return err

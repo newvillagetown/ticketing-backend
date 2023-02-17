@@ -7,7 +7,7 @@ import (
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/errorCommon"
 	"main/features/product/domain"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 )
 
 func NewRegisterProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collection) _interface.IRegisterProductRepository {
@@ -15,7 +15,7 @@ func NewRegisterProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collec
 }
 
 func (r *RegisterProductRepository) CreateProduct(ctx context.Context, productDTO mysqlCommon.GormProduct) error {
-	result := mysqlCommon.GormDB.WithContext(ctx).Create(&productDTO)
+	result := r.GormDB.WithContext(ctx).Create(&productDTO)
 	if result.RowsAffected == 0 {
 		return errorCommon.ErrorMsg(errorCommon.ErrBadParameter, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromClient)
 	}

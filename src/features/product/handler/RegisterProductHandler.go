@@ -2,12 +2,8 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
 	"main/features/product/domain/request"
-	"main/features/product/repository"
-	"main/features/product/usecase"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"net/http"
 	"strconv"
 )
@@ -16,8 +12,13 @@ type RegisterProductHandler struct {
 	UseCase _interface.IRegisterProductUseCase
 }
 
-func NewRegisterProductHandler() *RegisterProductHandler {
-	return &RegisterProductHandler{UseCase: usecase.NewRegisterProductUseCase(repository.NewRegisterProductRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewRegisterProductHandler(c *echo.Echo, useCase _interface.IRegisterProductUseCase) _interface.IRegisterProductHandler {
+	handler := &RegisterProductHandler{
+		UseCase: useCase,
+	}
+	//c.POST("/v0.1/features/product", handler.post, middleware.JWTWithConfig(jwtCommon.JwtConfig))
+	c.POST("/v0.1/features/product", handler.Post)
+	return handler
 }
 
 // Product Register
@@ -41,7 +42,7 @@ func NewRegisterProductHandler() *RegisterProductHandler {
 // @Failure 400 {object} errorCommon.ResError
 // @Failure 500 {object} errorCommon.ResError
 // @Tags product
-func (r *RegisterProductHandler) post(c echo.Context) error {
+func (r *RegisterProductHandler) Post(c echo.Context) error {
 
 	name := c.FormValue("name")
 	description := c.FormValue("description")

@@ -33,11 +33,13 @@ const (
 	ErrFromAws      = IErrFrom("aws")
 	ErrFromAwsS3    = IErrFrom("aws_s3")
 	ErrFromAwsSsm   = IErrFrom("aws_ssm")
+	ErrFromNaver    = IErrFrom("naver")
 )
 
 const (
 	ErrBadParameter         = ErrType("PARAM_BAD")
 	ErrAuthFailed           = ErrType("AUTH_FAILED")
+	ErrNotFound             = ErrType("NOT_FOUND")
 	ErrAuthInActive         = ErrType("AUTH_INACTIVE")
 	ErrUserNotExisted       = ErrType("USR_NOT_EXISTED")
 	ErrUserAlreadyExisted   = ErrType("USR_ALREADY_EXISTED")
@@ -55,6 +57,7 @@ const (
 // 에러 타입에 따라서 httpCode 맵핑
 var ErrHttpCode = map[string]int{
 	"PARAM_BAD":               http.StatusBadRequest,
+	"NOT_FOUND":               http.StatusNotFound,
 	"AUTH_FAILED":             http.StatusUnauthorized,
 	"AUTH_INACTIVE":           http.StatusForbidden,
 	"USR_NOT_EXISTED":         http.StatusBadRequest,

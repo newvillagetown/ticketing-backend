@@ -1,10 +1,9 @@
 package features
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
+	"main/common/pubsubCommon"
+	messageHandler "main/features/message/handler"
 	googleOAuthHandler "main/features/oauth/google/handler"
 	productHandler "main/features/product/handler"
 	userHandler "main/features/user/handler"
@@ -16,22 +15,25 @@ func InitHandler(e *echo.Echo) error {
 	e.GET("/health", func(c echo.Context) error {
 		return c.NoContent(http.StatusOK)
 	})
-	gApiV01 := e.Group("/v0.1")
+
+	e.GET("/test", func(c echo.Context) error {
+		msg := pubsubCommon.NaverSms{
+			PhoneList:   []string{"01051105508", "01029121993"},
+			ContentType: "COMM",
+			Content:     "메시지 오니? -테스트",
+			SmsType:     "SMS",
+		}
+		pubsubCommon.PublishMessages(pubsubCommon.SubNaverSms, msg, pubsubCommon.PubSubCh)
+		return c.NoContent(http.StatusOK)
+	})
 
 	//인증 핸들러 초기화
-	gApiAuthV01 := gApiV01.Group("/auth")
-	googleOAuthHandler.IndexGoogleOAuthHandler(gApiAuthV01)
+	googleOAuthHandler.NewGoogleOAuthHandler(e)
 
 	//기능 핸들러 초기화
-	gApiV01Features := gApiV01.Group("/features")
-	gApiV01Features.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
-	productHandler.IndexProductHandler(gApiV01Features)
-	userHandler.IndexUserHandler(gApiV01Features)
+	productHandler.NewProductHandler(e)
+	userHandler.NewUserHandler(e)
+	messageHandler.NewNaverSmsHandler(e)
 
-	//테스트
-	gApiAuthV01.GET("/test", func(c echo.Context) error {
-		fmt.Println(c.Cookie("hello"))
-		return c.JSON(http.StatusOK, true)
-	})
 	return nil
 }

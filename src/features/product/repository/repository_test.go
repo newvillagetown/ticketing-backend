@@ -9,11 +9,11 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"main/common/dbCommon/mysqlCommon"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 	"testing"
 )
 
-type Suite struct {
+type RepositorySuite struct {
 	suite.Suite
 	DB   *gorm.DB
 	mock sqlmock.Sqlmock
@@ -27,10 +27,10 @@ type Suite struct {
 }
 
 func TestInit(t *testing.T) {
-	suite.Run(t, new(Suite))
+	suite.Run(t, new(RepositorySuite))
 }
 
-func (s *Suite) SetupSuite() {
+func (s *RepositorySuite) SetupSuite() {
 	var (
 		db  *sql.DB
 		err error
@@ -47,4 +47,8 @@ func (s *Suite) SetupSuite() {
 	var tokenCollection *mongo.Collection
 	s.GetRepository = NewGetProductRepository(s.DB, tokenCollection)
 	s.GetsRepository = NewGetsProductRepository(s.DB, tokenCollection)
+	s.DeleteRepository = NewDeleteProductRepository(s.DB, tokenCollection)
+	s.UpdateRepository = NewUpdateProductRepository(s.DB, tokenCollection)
+	s.RegisterRepository = NewRegisterProductRepository(s.DB, tokenCollection)
+
 }

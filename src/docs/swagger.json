@@ -152,6 +152,89 @@
                 }
             }
         },
+        "/v0.1/features/message/naver/sms": {
+            "post": {
+                "description": "■ errCode with 400\nPARAM_BAD : 파라미터 오류\n\n■ errCode with 401\nTOKEN_BAD : 토큰 인증 실패\nPOLICY_VIOLATION : 토큰 세션 정책 위반\n\n■ errCode with 500\nINTERNAL_SERVER : 내부 로직 처리 실패\nINTERNAL_DB : DB 처리 실패",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message"
+                ],
+                "summary": "네이버 sms 메시지 전송",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "phoneList",
+                        "name": "phoneList",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "contentType",
+                        "name": "contentType",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "content",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "smsType",
+                        "name": "smsType",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "reserveTime",
+                        "name": "reserveTime",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "scheduleCode",
+                        "name": "scheduleCode",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "image",
+                        "name": "image",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errorCommon.ResError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errorCommon.ResError"
+                        }
+                    }
+                }
+            }
+        },
         "/v0.1/features/product": {
             "get": {
                 "description": "■ errCode with 400\nPARAM_BAD : 파라미터 오류\n\n■ errCode with 401\nTOKEN_BAD : 토큰 인증 실패\nPOLICY_VIOLATION : 토큰 세션 정책 위반\n\n■ errCode with 500\nINTERNAL_SERVER : 내부 로직 처리 실패\nINTERNAL_DB : DB 처리 실패",

@@ -6,6 +6,8 @@ import (
 	"main/common/dbCommon/mongodbCommon"
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/envCommon"
+	"main/common/firebaseCommon"
+	"main/common/nCloudSmsCommon"
 	"main/common/noticeCommon"
 	"main/common/oauthCommon/google"
 	"main/common/pubsubCommon"
@@ -36,8 +38,16 @@ func InitServer() error {
 		fmt.Sprintf("pubsub 초기화 에러 : %s", err.Error())
 		return err
 	}
+	if err := nCloudSmsCommon.InitNSms(); err != nil {
+		fmt.Sprintf("nCloudSms 초기화 에러 : %s", err.Error())
+		return err
+	}
 	if err := noticeCommon.GoogleChatInit(); err != nil {
 		fmt.Sprintf("googleChat 초기화 에러 : %s", err.Error())
+		return err
+	}
+	if err := firebaseCommon.Init(); err != nil {
+		fmt.Sprintf("firebase 초기화 에러 : %s", err.Error())
 		return err
 	}
 

@@ -7,7 +7,7 @@ import (
 	"main/common/dbCommon/mysqlCommon"
 	"main/common/errorCommon"
 	"main/features/product/domain"
-	_interface "main/features/product/usecase/interface"
+	"main/features/product/usecase/interface"
 )
 
 func NewUpdateProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collection) _interface.IUpdateProductRepository {
@@ -16,7 +16,7 @@ func NewUpdateProductRepository(gormDB *gorm.DB, tokenCollection *mongo.Collecti
 
 func (u *UpdateProductRepository) FindOneProduct(ctx context.Context, productID string) (mysqlCommon.GormProduct, error) {
 	var productDTO mysqlCommon.GormProduct
-	result := mysqlCommon.GormDB.WithContext(ctx).Where("id = ?", productID).Find(&productDTO)
+	result := u.GormDB.WithContext(ctx).Where("id = ?", productID).Find(&productDTO)
 	if result.RowsAffected == 0 {
 		return mysqlCommon.GormProduct{}, errorCommon.ErrorMsg(errorCommon.ErrBadParameter, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromClient)
 	}
@@ -27,7 +27,7 @@ func (u *UpdateProductRepository) FindOneProduct(ctx context.Context, productID 
 }
 
 func (u *UpdateProductRepository) FindOneAndUpdateProduct(ctx context.Context, updatedProductDTO mysqlCommon.GormProduct) error {
-	result := mysqlCommon.GormDB.WithContext(ctx).Save(&updatedProductDTO)
+	result := u.GormDB.WithContext(ctx).Save(&updatedProductDTO)
 	if result.RowsAffected == 0 {
 		return errorCommon.ErrorMsg(errorCommon.ErrBadParameter, errorCommon.Trace(), domain.ErrBadParamInput, errorCommon.ErrFromClient)
 	}

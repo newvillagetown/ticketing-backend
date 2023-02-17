@@ -3,11 +3,7 @@ package handler
 import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
-	"main/common/dbCommon/mongodbCommon"
-	"main/common/dbCommon/mysqlCommon"
 	"main/common/oauthCommon/google"
-	"main/features/oauth/google/repository"
-	"main/features/oauth/google/usecase"
 	_interface "main/features/oauth/google/usecase/interface"
 	"main/middleware"
 	"net/http"
@@ -17,8 +13,11 @@ type SignInGoogleOAuthHandler struct {
 	UseCase _interface.ISignInGoogleOAuthUseCase
 }
 
-func NewSignInGoogleOAuthHandler() *SignInGoogleOAuthHandler {
-	return &SignInGoogleOAuthHandler{UseCase: usecase.NewSignInGoogleOAuthUseCase(repository.NewSignInGoogleOAuthRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut)}
+func NewSignInGoogleOAuthHandler(c *echo.Echo, useCase _interface.ISignInGoogleOAuthUseCase) {
+	handler := &SignInGoogleOAuthHandler{
+		UseCase: useCase,
+	}
+	c.GET("/v0.1/auth/google/signin", handler.SignInGoogle)
 }
 
 // GoogleSignin

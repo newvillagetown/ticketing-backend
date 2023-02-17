@@ -20,17 +20,3 @@ type IGoogleOAuthHandler interface {
 	NewSignOutGoogleOAuthHandler(UseCase _interface.ISignOutGoogleOAuthUseCase) *SignOutGoogleOAuthHandler
 	NewCallbackGoogleOAuthHandler(UseCase _interface.ICallbackGoogleOAuthUseCase) *CallbackGoogleOAuthHandler
 }
-
-type GoogleOAuthHandler struct {
-	SignInGoogleOAuthHandler   SignInGoogleOAuthHandler
-	SignOutGoogleOAuthHandler  SignOutGoogleOAuthHandler
-	CallbackGoogleOAuthHandler CallbackGoogleOAuthHandler
-}
-
-func NewGoogleOAuthHandler() *GoogleOAuthHandler {
-	return &GoogleOAuthHandler{
-		SignInGoogleOAuthHandler:   *NewSignInGoogleOAuthHandler(),
-		SignOutGoogleOAuthHandler:  *NewSignOutGoogleOAuthHandler(),
-		CallbackGoogleOAuthHandler: *NewCallbackGoogleOAuthHandler(),
-	}
-}

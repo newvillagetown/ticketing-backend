@@ -95,7 +95,7 @@ These are the back-end work done on the project:
 The figure below shows the entire infrastructure.
 
 <p align="center">
-    <img width="1307" alt="스크린샷 2022-11-12 오전 3 41 26" src="https://user-images.githubusercontent.com/85932211/201409200-a7a69173-e255-4150-a148-9ee41ec6890c.png">
+    <img width="1303" alt="스크린샷 2023-01-11 오전 2 19 39" src="https://user-images.githubusercontent.com/35329247/211793326-76e52dc4-9295-4ee0-b70a-dc553280b625.png">
 </p>
 
 ## Message_Queue_Model_Design

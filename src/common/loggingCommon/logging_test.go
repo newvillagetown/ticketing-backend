@@ -39,11 +39,10 @@ func TestMakeErrorLog(t *testing.T) {
 			From:     "client",
 		}
 		errInfo := ErrorInfo{
-			RequestParam: requestParam,
-			Stack:        resError.Trace,
-			ErrorType:    resError.ErrType,
-			From:         resError.From,
-			Msg:          resError.Msg,
+			Stack:     resError.Trace,
+			ErrorType: resError.ErrType,
+			From:      resError.From,
+			Msg:       resError.Msg,
 		}
 		want := Log{
 			Type:      "error",
@@ -51,7 +50,7 @@ func TestMakeErrorLog(t *testing.T) {
 		}
 
 		got := Log{}
-		got.MakeErrorLog(requestParam, resError)
+		got.MakeErrorLog(resError)
 		assert.Equal(t, got, want)
 
 	})

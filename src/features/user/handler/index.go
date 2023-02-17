@@ -2,13 +2,12 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"main/common/jwtCommon"
+	"main/common/dbCommon/mongodbCommon"
+	"main/common/dbCommon/mysqlCommon"
+	"main/features/user/repository"
+	"main/features/user/usecase"
 )
 
-func IndexUserHandler(e *echo.Group) {
-	handler := NewUserHandler()
-	gApiV01User := e.Group("/user")
-	gApiV01User.Use(middleware.JWTWithConfig(jwtCommon.JwtConfig))
-	gApiV01User.POST("/withdrawal", handler.WithdrawalUserHandler.WithdrawalUser)
+func NewUserHandler(c *echo.Echo) {
+	NewWithdrawalUserHandler(c, usecase.NewWithdrawalUserUseCase(repository.NewWithdrawalUserRepository(mysqlCommon.GormDB, mongodbCommon.TokenCollection), mysqlCommon.DBTimeOut))
 }
