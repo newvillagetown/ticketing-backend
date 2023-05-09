@@ -6,6 +6,7 @@ import (
 	messageHandler "main/features/message/handler"
 	googleOAuthHandler "main/features/oauth/google/handler"
 	productHandler "main/features/product/handler"
+	testHandler "main/features/system/test/handler"
 	userHandler "main/features/user/handler"
 	"net/http"
 )
@@ -34,6 +35,7 @@ func InitHandler(e *echo.Echo) error {
 	productHandler.NewProductHandler(e)
 	userHandler.NewUserHandler(e)
 	messageHandler.NewNaverSmsHandler(e)
+	testHandler.NewTestHandler(e)
 
 	return nil
 }
